@@ -16,7 +16,6 @@ Version: \tab 1.0\cr
 Date: \tab 2015-05-10\cr
 License: \tab What license is it under?\cr
 }
-~~ An overview of how to use the package, including the most important functions ~~
 }
 \author{
 Stéphane Laurent
