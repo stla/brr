@@ -1,5 +1,5 @@
-#' @name Beta2 
-#' @rdname Beta2
+#' @name Beta2Dist 
+#' @rdname Beta2Dist
 #' @title Beta distribution of the second kind
 #' 
 #' @details The Beta distribution of the second kind with shape parameters 
@@ -18,7 +18,7 @@
 #' 
 #' @return \code{dbeta2} gives the density, \code{pbeta2} the distribution function, \code{qbeta2} the quantile function, and \code{rbeta2} generates random observations.
 #' 
-#' @note \code{Beta2} is a generic name for the functions documented. 
+#' @note \code{Beta2Dist} is a generic name for the functions documented. 
 #' 
 #' @examples 
 #' curve(dbeta2(x, 3, 10, scale=2), from=0, to=3)
@@ -27,7 +27,7 @@
 #' 
 NULL
 
-#' @rdname Beta2
+#' @rdname Beta2Dist
 #' @export 
 dbeta2 <- function(x, c, d, scale, log=FALSE, ...){
   k <- d/c/scale
@@ -37,14 +37,63 @@ dbeta2 <- function(x, c, d, scale, log=FALSE, ...){
   )
 }
 #' 
-#' @rdname Beta2 
+#' @rdname Beta2Dist 
 #' @export 
 pbeta2 <- function(q, c, d, scale, ...){
   pf(d/c/scale*q, df1=2*c, df2=2*d, ...)
 }
 #'
-#' @rdname Beta2 
+#' @rdname Beta2Dist 
 #' @export 
 rbeta2 <- function(nsims,c, d, scale){
   scale*c/d*rf(nsims, df1=2*c, df2=2*d)
 }
+
+
+#' @name Prior_mu 
+#' @rdname Prior_mu
+#' @title Prior distribution on the rate in the control group
+#' 
+#' @details The prior distribution on the rate \eqn{\mu} is the Gamma distribution 
+#' with shape parameter \eqn{a} and rate parameter \eqn{b}
+#' 
+#' @param x,q vector of quantiles 
+#' @param p vector of probabilities
+#' @param a,b non-negative shape parameter and rate parameter
+#' @param n number of observations to be simulated
+#' @param ... other arguments passed to \code{\link{GammaDist}}
+#' 
+#' @return \code{dprior_mu} gives the density, \code{pprior_mu} the distribution function, \code{qprior_mu} the quantile function, and \code{rprior_mu} samples from the distribution.
+#' 
+#' @note \code{Prior_mu} is a generic name for the functions documented. 
+#' 
+#' @examples 
+#' curve(dprior_mu(x, 2, 2), from=0, to=3)
+#' 
+NULL
+
+#' @rdname Prior_mu
+#' @export 
+dprior_mu<-function(x, a, b, ...){
+  dgamma(x, a, b, ...)
+}
+#'
+#' @rdname Prior_mu
+#' @export 
+pprior_mu<-function(q, a, b, ...){
+  pgamma(q, a, b, ...)
+}
+#'
+#' @rdname Prior_mu
+#' @export 
+qprior_mu<-function(p, a, b, ...){
+  qgamma(p, a, b, ...)
+}
+#'
+#' @rdname Prior_mu
+#' @export 
+rprior_mu<-function(n, a, b, ...){
+  rgamma(nsims, a, b, ...)
+}
+
+
