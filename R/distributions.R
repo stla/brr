@@ -74,6 +74,7 @@ rbeta2 <- function(nsims,c, d, scale){
 #' curve(dGIB(x,3,4,2,2.5), from=0, to=3)
 #' sims <- rgamma(100000, 3, 2.5/rbeta(100000,4,2))
 #' lines(density(sims, from=0), col="red")
+#' lines(density(rGIB(100000, 3, 4, 2, 2.5), from=0), col="green")
 #' 
 NULL
 #'
@@ -81,6 +82,12 @@ NULL
 #' @export
 dGIB <- function(x,a,alpha,beta,rho){
   exp(lnpoch(alpha,beta)-lngamma(a))*rho^a*x^(a-1)*exp(-rho*x)*hyperg_U(beta,a-alpha+1,rho*x)
+}
+#'
+#' @rdname GammaInverseBetaDist
+#' @export
+rGIB <- function(n,a,alpha,beta,rho){
+  rbeta(n,alpha,beta)*rgamma(n, a, rho)
 }
 
 
