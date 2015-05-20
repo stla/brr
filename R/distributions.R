@@ -163,3 +163,43 @@ qprior_VE <- function(p, b, c, d, S, T, ...){
 rprior_phi<-function(n, b, c, d, S, T){
   rbeta2(n, c, d, scale=(T+b)/S)
 }
+
+
+
+#' @name Prior_lambda 
+#' @rdname Prior_lambda
+#' @title Prior distribution on the incidence rate in the treated group
+#' 
+#' @details The prior distribution on the incidence rate \eqn{\lambda} is not to
+#' be set by the user: it is induced by the user-specified prior on \eqn{\mu} 
+#' and \eqn{phi}.
+#' 
+#' @param x vector of quantiles 
+#' @param a,b non-negative shape and rate parameter of the Gamma prior distribution on \eqn{\mu}
+#' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
+#' @param S,T sample sizes in control group and treated group
+#' @param n number of observations to be simulated
+#' @param ... other arguments passed to \code{\link{Beta2Dist}}
+#' 
+#' @return \code{dprior_lambda} gives the density, and \code{rprior_lambda} samples from the distribution.
+#' 
+#' @note \code{Prior_lambda} is a generic name for the functions documented. 
+#' 
+#' @examples 
+#' curve(dprior_lambda(x, 2, 2, 2, 2, 10, 10), from=0, to=5)
+#' 
+NULL
+
+#' @rdname Prior_lambda
+#' @importFrom gsl lnpoch lnbeta hyperg_U
+#' @export 
+dprior_lambda <- function(x, a, b, c, d, S, T){  
+  ifelse(c>1 & x<.Machine$double.eps, 0, 
+         (b*S/(b+T))^a*exp(lnpoch(a,d)-lnbeta(c,d))*x^(a-1)*hyperg_U(a+d,a-c+1,b*S/(b+T)*x))
+}
+#'
+#' @rdname Prior_lambda
+#' @export 
+rprior_lambda <- function(n,a,b,c,d,S,T){
+  return( rgamma(n,a,b) * rprior_phi(n, b, c, d, S, T) )
+}
