@@ -1,7 +1,9 @@
 #' @name Beta2Dist 
 #' @rdname Beta2Dist
 #' @title Beta distribution of the second kind
-#' 
+#' @description Density, distribution function, quantile function and random 
+#' generation for the Beta distribution of the second kind with shape parameters 
+#' \code{c} and \code{d} and scale parameter \code{scale}. 
 #' @details The Beta distribution of the second kind with shape parameters 
 #' \eqn{c>0} and \eqn{d>0} and scale parameter \eqn{k>0} is the distribution of 
 #' \eqn{k*(U/(1-U))} where \eqn{U} is a random variable following the Beta distribution 
@@ -26,7 +28,7 @@
 #' lines(density(2*u/(1-u)), col="blue", lty="dashed")
 #' 
 NULL
-
+#'
 #' @rdname Beta2Dist
 #' @export 
 dbeta2 <- function(x, c, d, scale, log=FALSE, ...){
@@ -53,7 +55,8 @@ rbeta2 <- function(nsims,c, d, scale){
 #' @name GammaInverseBetaDist 
 #' @rdname GammaInverseBetaDist
 #' @title Gamma-Inverse Beta distribution
-#' 
+#' @description Density and random  generation for the Gamma-Inverse Beta distribution 
+#' with shape parameters \code{a}, \code{c}, \code{d} and scale parameter \code{rho}. 
 #' @details This is the mixture distribution obtained by sampling a value \eqn{b} from a Beta distribution with parameters \eqn{\alpha}, \eqn{\beta} 
 #' and then sampling a Gamma distribution with shape \eqn{a} and rate \eqn{\rho/b}.
 #' 
@@ -73,7 +76,7 @@ rbeta2 <- function(nsims,c, d, scale){
 #' lines(density(sims, from=0), col="red")
 #' 
 NULL
-
+#'
 #' @rdname GammaInverseBetaDist
 #' @export
 dGIB <- function(x,a,alpha,beta,rho){
@@ -84,7 +87,8 @@ dGIB <- function(x,a,alpha,beta,rho){
 #' @name Prior_mu 
 #' @rdname Prior_mu
 #' @title Prior distribution on the rate in the control group
-#' 
+#' @description Density, distribution function, quantile function and random 
+#' generation for the prior distribution on the rate in the control group.
 #' @details The prior distribution on the rate \eqn{\mu} is the Gamma distribution 
 #' with shape parameter \eqn{a} and rate parameter \eqn{b}
 #' 
@@ -102,7 +106,7 @@ dGIB <- function(x,a,alpha,beta,rho){
 #' curve(dprior_mu(x, 2, 2), from=0, to=3)
 #' 
 NULL
-
+#'
 #' @rdname Prior_mu
 #' @export 
 dprior_mu<-function(x, a, b, ...){
@@ -131,7 +135,8 @@ rprior_mu<-function(n, a, b, ...){
 #' @name Prior_phi 
 #' @rdname Prior_phi
 #' @title Prior distribution on the relative risk and the vaccine efficacy
-#' 
+#' @description Density, distribution function, quantile function and random 
+#' generation for the prior distribution on relative risk or the vaccine efficacy.
 #' @details The prior distribution on the relative risk \eqn{\phi} is the Beta2 distribution 
 #' with shape parameters \eqn{c} and \eqn{d} and scale parameter \eqn{(T+b)/S}.
 #' 
@@ -151,7 +156,7 @@ rprior_mu<-function(n, a, b, ...){
 #' curve(dprior_phi(x, 2, 2, 2, 10, 10), from=0, to=7)
 #' 
 NULL
-
+#'
 #' @rdname Prior_phi
 #' @export 
 dprior_phi<-function(phi, b, c, d, S, T, ...){
@@ -175,7 +180,6 @@ pprior_phi<-function(q, b, c, d, S, T, ...){
 pprior_VE<-function(q, b, c, d, S, T, ...){
   1-pprior_phi(1-q, b, c, d, S, T, ...)
 }
-
 #'
 #' @rdname Prior_phi
 #' @export 
@@ -196,11 +200,11 @@ rprior_phi<-function(n, b, c, d, S, T){
 }
 
 
-
 #' @name Prior_lambda 
 #' @rdname Prior_lambda
 #' @title Prior distribution on the incidence rate in the treated group
-#' 
+#' @description Density and random  generation for the prior distribution on 
+#' the rate in the treated group.
 #' @details The prior distribution on the incidence rate \eqn{\lambda} is not to
 #' be set by the user: it is induced by the user-specified prior on \eqn{\mu} 
 #' and \eqn{\phi}.
@@ -220,7 +224,7 @@ rprior_phi<-function(n, b, c, d, S, T){
 #' curve(dprior_lambda(x, 2, 2, 2, 2, 10, 10), from=0, to=5)
 #' 
 NULL
-
+#'
 #' @rdname Prior_lambda
 #' @importFrom gsl lnpoch lnbeta hyperg_U
 #' @export 
