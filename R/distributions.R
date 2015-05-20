@@ -50,6 +50,37 @@ rbeta2 <- function(nsims,c, d, scale){
 }
 
 
+#' @name GammaInverseBetaDist 
+#' @rdname GammaInverseBetaDist
+#' @title Gamma-Inverse Beta distribution
+#' 
+#' @details This is the mixture distribution obtained by sampling a value \eqn{b} from a Beta distribution with parameters \eqn{\alpha}, \eqn{\beta} 
+#' and then sampling a Gamma distribution with shape \eqn{a} and rate \eqn{\rho/b}.
+#' 
+#' @param x vector of quantiles
+#' @param a non-negative shape parameter of the Gamma distribution
+#' @param alpha,beta non-negative shape parameters of the mixing Beta distribution
+#' @param n number of observations to be simulated
+#' 
+#' @return \code{dGIB} gives the density, and \code{rGIB} samples from the distribution.
+#' 
+#' @note \code{GammaInverseBetaDist } is a generic name for the functions documented. 
+#' 
+#' @importFrom gsl lnpoch lngamma hyperg_U
+#' @examples
+#' curve(dGIB(x,3,4,2,2.5), from=0, to=3)
+#' sims <- rgamma(100000, 3, 2.5/rbeta(100000,4,2))
+#' lines(density(sims, from=0), col="red")
+#' 
+NULL
+
+#' @rdname GammaInverseBetaDist
+#' @export
+dGIB <- function(x,a,alpha,beta,rho){
+  exp(lnpoch(alpha,beta)-lngamma(a))*rho^a*x^(a-1)*exp(-rho*x)*hyperg_U(beta,a-alpha+1,rho*x)
+}
+
+
 #' @name Prior_mu 
 #' @rdname Prior_mu
 #' @title Prior distribution on the rate in the control group
@@ -172,7 +203,7 @@ rprior_phi<-function(n, b, c, d, S, T){
 #' 
 #' @details The prior distribution on the incidence rate \eqn{\lambda} is not to
 #' be set by the user: it is induced by the user-specified prior on \eqn{\mu} 
-#' and \eqn{phi}.
+#' and \eqn{\phi}.
 #' 
 #' @param x vector of quantiles 
 #' @param a,b non-negative shape and rate parameter of the Gamma prior distribution on \eqn{\mu}
