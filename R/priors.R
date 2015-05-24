@@ -8,7 +8,7 @@
 #' @details The prior distribution on the rate \eqn{\mu} is the Gamma distribution 
 #' with shape parameter \eqn{a} and rate parameter \eqn{b}
 #' 
-#' @param x,q vector of quantiles 
+#' @param mu,q vector of quantiles 
 #' @param p vector of probabilities
 #' @param a,b non-negative shape parameter and rate parameter
 #' @param n number of observations to be simulated
@@ -25,26 +25,26 @@ NULL
 #'
 #' @rdname Prior_mu
 #' @export 
-dprior_mu<-function(x, a, b, ...){
-  dgamma(x, a, b, ...)
+dprior_mu<-function(mu, a, b, ...){
+  dgamma(mu, a, b, ...)
 }
 #'
 #' @rdname Prior_mu
 #' @export 
-pprior_mu<-function(q, a, b, ...){
+pprior_mu <- function(q, a, b, ...){
   pgamma(q, a, b, ...)
 }
 #'
 #' @rdname Prior_mu
 #' @export 
-qprior_mu<-function(p, a, b, ...){
+qprior_mu <- function(p, a, b, ...){
   qgamma(p, a, b, ...)
 }
 #'
 #' @rdname Prior_mu
 #' @export 
-rprior_mu<-function(n, a, b, ...){
-  rgamma(nsims, a, b, ...)
+rprior_mu <- function(n, a, b, ...){
+  rgamma(n, a, b, ...)
 }
 
 
@@ -56,7 +56,7 @@ rprior_mu<-function(n, a, b, ...){
 #' @details The prior distribution on the relative risk \eqn{\phi} is the Beta2 distribution 
 #' with shape parameters \eqn{c} and \eqn{d} and scale parameter \eqn{(T+b)/S}.
 #' 
-#' @param x,q vector of quantiles 
+#' @param phi,VE,q vector of quantiles 
 #' @param p vector of probabilities
 #' @param b non-negative rate parameter
 #' @param c,d non-negative shape parameters 
@@ -77,7 +77,7 @@ NULL
 #' @export 
 dprior_phi<-function(phi, b, c, d, S, T, ...){
   scale <- (T+b)/S
-  dbeta2(phi,c,d,scale, ...)
+  dbeta2(phi, c, d, scale, ...)
 }
 #' @rdname Prior_phi
 #' @export 
@@ -89,7 +89,7 @@ dprior_VE<-function(VE, b, c, d, S, T, ...){
 #' @export 
 pprior_phi<-function(q, b, c, d, S, T, ...){
   scale <- (T+b)/S
-  pbeta2(q,c,d,scale, ...)
+  pbeta2(q, c, d, scale, ...)
 }
 #' @rdname Prior_phi
 #' @export 
@@ -111,7 +111,7 @@ qprior_VE <- function(p, b, c, d, S, T, ...){
 #'
 #' @rdname Prior_phi
 #' @export 
-rprior_phi<-function(n, b, c, d, S, T){
+rprior_phi <- function(n, b, c, d, S, T){
   rbeta2(n, c, d, scale=(T+b)/S)
 }
 
@@ -119,38 +119,57 @@ rprior_phi<-function(n, b, c, d, S, T){
 #' @name Prior_lambda 
 #' @rdname Prior_lambda
 #' @title Prior distribution on the incidence rate in the treated group
-#' @description Density and random  generation for the prior distribution on 
-#' the rate in the treated group.
-#' @details The prior distribution on the incidence rate \eqn{\lambda} is not to
+#' @description Density, distribution function (see Details) and random generation for the prior distribution on 
+#' the rate in the treated group.  The prior distribution on the incidence rate \eqn{\lambda} is not to
 #' be set by the user: it is induced by the user-specified prior on \eqn{\mu} 
 #' and \eqn{\phi}.
+#' @details The pdf of the prior distribution on the incidence rate \eqn{\lambda} involves 
+#' the Kummer confluent hypergeometric function of the second kind. 
+#' The cdf involves the generalized hypergeometric function. Its current implementation 
+#' does not work when \code{a-c} is an integer.
 #' 
-#' @param x vector of quantiles 
+#' @param lambda vector of quantiles 
 #' @param a,b non-negative shape and rate parameter of the Gamma prior distribution on \eqn{\mu}
 #' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
 #' @param S,T sample sizes in control group and treated group
 #' @param n number of observations to be simulated
-#' @param ... other arguments passed to \code{\link{Beta2Dist}}
+#' @param ... other arguments passed to \code{\link{genhypergeo}}, 
+#' such as \code{series=FALSE} to use the continued fraction expansion
 #' 
-#' @return \code{dprior_lambda} gives the density, and \code{rprior_lambda} samples from the distribution.
+#' @return \code{dprior_lambda} gives the density, \code{pprior_lambda} the distribution function 
+#' (see Details), and \code{rprior_lambda} samples from the distribution.
 #' 
 #' @note \code{Prior_lambda} is a generic name for the functions documented. 
 #' 
 #' @examples 
-#' curve(dprior_lambda(x, 2, 2, 2, 2, 10, 10), from=0, to=5)
-#' 
+#' curve(dprior_lambda(x, 2, 2, 2.5, 2, 10, 10), from=0, to=5)
+#' pprior_lambda(1, 2, 2, 2.5, 2, 10, 10)
+#' ecdf(rprior_lambda(1e6, 2, 2, 2.5, 2, 10, 10))(1)
+#' integrate(function(x) dprior_lambda(x, 2, 2, 2.5, 2, 10, 10), lower=0, upper=1)
 NULL
 #'
 #' @rdname Prior_lambda
 #' @importFrom gsl lnpoch lnbeta hyperg_U
 #' @export 
-dprior_lambda <- function(x, a, b, c, d, S, T){  
-  ifelse(c>1 & x<.Machine$double.eps, 0, 
-         (b*S/(b+T))^a*exp(lnpoch(a,d)-lnbeta(c,d))*x^(a-1)*hyperg_U(a+d,a-c+1,b*S/(b+T)*x))
+dprior_lambda <- function(lambda, a, b, c, d, S, T){  
+  ifelse(c>1 & lambda<.Machine$double.eps, 0, 
+         (b*S/(b+T))^a*exp(lnpoch(a,d)-lnbeta(c,d))*lambda^(a-1)*hyperg_U(a+d,a-c+1,b*S/(b+T)*lambda))
 }
 #'
 #' @rdname Prior_lambda
 #' @export 
 rprior_lambda <- function(n,a,b,c,d,S,T){
   return( rgamma(n,a,b) * rprior_phi(n, b, c, d, S, T) )
+}
+#'
+#' @rdname Prior_lambda
+#' @importFrom gsl lngamma lnpoch lnbeta hyperg_U
+#' @importFrom hypergeo genhypergeo
+#' @export 
+pprior_lambda <- function(p, a, b, c, d, S, T, ...){ 
+  #(b*S/(b+T))^a*poch(a,d)/beta(c,d)*
+    exp(a*log(b*S/(b+T)) + lnpoch(a,d) - lnbeta(c,d))*
+    (sign(c-a)*exp(a*log(p)+lngamma(c-a)-lngamma(c+d)-log(a))*genhypergeo(U=c(a,a+d), L=c(1+a,1+a-c), b*S/(b+T)*p, ...) +
+      sign(a-c)*exp((c-a)*log(b*S/(b+T))+c*log(p)+lngamma(a-c)-lngamma(a+d)-log(c))*genhypergeo(U=c(c,c+d), L=c(1+c,1+c-a), b*S/(b+T)*p, ...)
+    )
 }
