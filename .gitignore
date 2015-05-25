@@ -3,3 +3,4 @@
 .RData
 /man
 !/man/brr-package.Rd
+/temp_docs

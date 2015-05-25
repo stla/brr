@@ -2,9 +2,10 @@
 #' @rdname Posterior_lambda
 #' @title Posterior distribution on the incidence rate in the treated group
 #' @description Density and random  generation for the prior distribution on 
-#' the rate in the treated group.
+#' the rate in the treated group. The distribution function and the quantile function 
+#' are not available.
 #' @details The pdf of the posterior distribution of the incidence rate \eqn{\lambda} involves 
-#' the Kummer confluent hypergeometric function of the second kind
+#' the Kummer confluent hypergeometric function of the second kind. 
 #' 
 #' 
 #' @param lambda vector of quantiles 
