@@ -91,3 +91,77 @@ rpost_mu <- function(n, a, b, c, d, T, x, y){
   return(rgamma(n, a.post, 1+psi)/(T+b))
 }
 
+
+
+#' @name Posterior_phi 
+#' @rdname Posterior_phi
+#' @title Posterior distribution on the relative risk and the vaccine efficacy
+#' @description Density, distribution function, quantile function and random 
+#' generation for the posterior distribution on relative risk or the vaccine efficacy.
+#' @details The prior distribution on the relative risk \eqn{\phi} is the Beta2 distribution 
+#' with shape parameters \eqn{c} and \eqn{d} and scale parameter \eqn{(T+b)/S}.
+#' 
+#' @param phi,VE,q vector of quantiles 
+#' @param p vector of probabilities
+#' @param a,b non-negative shape parameter and rate parameter of the prior Gamma distribution on the control incidence rate
+#' @param c,d non-negative shape parameters of the prior distribution on the relative risk 
+#' @param S,T sample sizes in control group and treated group
+#' @param n number of observations to be simulated
+#' @param ... other arguments passed to \code{\link{Beta2Dist}}
+#' 
+#' @return \code{dpost_phi} gives the density, \code{ppost_phi} the distribution function, \code{qpost_phi} the quantile function, and \code{rpost_phi} samples from the distribution.
+#' 
+#' @note \code{Posterior_phi} is a generic name for the functions documented. 
+#' 
+#' @examples 
+#' a <- 2; b <- 2; c <- 3; d <- 4; S <- 1; T <- 1; x <- 2; y <- 6
+#' phi <- seq(0, 6, length.out=100)
+#' phi %>% { plot(., dpost_phi(., a, b, c, d, S, T, x=x, y), type="l") }
+#' phi %>% { lines(., dprior_phi(., b, c, d, S, T),  col="red") }
+#' 
+NULL
+#'
+#' @rdname Posterior_phi
+#' @export 
+dpost_phi <- function(phi, a, b, c, d, S, T, x, y, ...){
+  c.post<-c+x ; d.post<-a+d+y
+  dprior_phi(phi, b, c.post, d.post, S, T, ...)
+}
+#'
+#' @rdname Posterior_phi
+#' @export 
+dpost_VE <- function(VE, a, b, c, d, S, T, x, y, ...){
+  dpost_phi(1-VE, a, b, c, d, S, T, x, y, ...)
+}
+#'
+#' @rdname Posterior_phi
+#' @export 
+ppost_phi <- function(q, a, b, c, d, S, T, x, y, ...){
+  c.post<-c+x ; d.post<-a+d+y
+  pprior_phi(q, b, c.post, d.post, S, T, ...)
+}
+#' @rdname Posterior_phi
+#' @export 
+ppost_VE <- function(q, a, b, c, d, S, T, x, y, ...){
+  1 - ppost_phi(1-q, a, b, c, d, S, T, x, y, ...)
+}
+#'
+#' @rdname Posterior_phi
+#' @export 
+qpost_phi <- function(p, a, b, c, d, S, T, x, y, ...){
+  c.post <- c+x ; d.post <- a+d+y
+  qprior_phi(p, b, c.post, d.post, S, T, ...)
+}
+#' @rdname Posterior_phi
+#' @export 
+qpost_VE <- function(p, a, b, c, d, S, T, x, y, ...){
+  1 - qpost_phi(1-p, a, b, c, d, S, T, x, y, ...)
+}
+#'
+#' @rdname Posterior_phi
+#' @export 
+rpost_phi <- function(n, a, b, c, d, S, T, x, y){
+  c.post <- c+x ; d.post <- a+d+y
+  rprior_phi(n, b, c.post, d.post, S, T)
+}
+
