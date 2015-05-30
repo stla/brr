@@ -89,3 +89,59 @@ dGIB <- function(x,a,alpha,beta,rho){
 rGIB <- function(n,a,alpha,beta,rho){
   rbeta(n,alpha,beta)*rgamma(n, a, rho)
 }
+
+#' @name BetaNegativeBinomialDist
+#' @rdname BetaNegativeBinomialDist
+#' @title Beta-negative binomial distribution
+#' @description Density, cumulative function, quantile function and random generation 
+#' for the  Beta-negative binomial distribution 
+#' with shape parameters \code{a}, \code{c}, \code{d}. 
+#' @details This is the mixture distribution obtained by sampling a value \eqn{b} 
+#' from a Beta distribution with parameters \eqn{c}, \eqn{d},  
+#' then sampling a value \eqn{\lambda} from a Gamma distribution with 
+#' shape \eqn{a} and rate \eqn{b/(1-b)}, and
+#' then sampling a Poisson distribution with mean \eqn{\lambda}.
+#' 
+#' @param x,q vector of non-negative integer quantities
+#' @param p vector of probabilities
+#' @param a,c,d non-negative shape parameters
+#' @param n number of observations to be sampled
+#' @param ... other arguments passed to \code{\link[SuppDists]{ghyper}}
+#' 
+#' @return \code{dbeta_nbinom} gives the density, \code{pbeta_nbinom} the cumulative function, 
+#' \code{qbeta_nbinom} the quantile function, and \code{rbeta_nbinom} samples from the distribution.
+#' 
+#' @note \code{BetaNegativeBinomialDist} is a generic name for the functions documented. 
+#' 
+#' @importFrom SuppDists dghyper pghyper qghyper rghyper
+#' @examples
+#' a <- 2 ; c <- 5 ; d <- 30
+#' nsims <- 1e6
+#' sims <- rbeta2(nsims, c, d, scale=1) %>% rgamma(nsims, a, .) %>% rpois(nsims, .)
+#' length(sims[sims<=12])/nsims
+#' pbeta_nbinom(12, a, c, d)
+NULL
+#'
+#' @rdname BetaNegativeBinomialDist
+#' @export
+dbeta_nbinom <- function(x, a, c, d, ...){
+  dghyper(x, -d, -a, c-1, ...)
+}
+#
+#' @rdname BetaNegativeBinomialDist
+#' @export
+pbeta_nbinom <- function(q, a, c, d, ...){
+  pghyper(q, -d, -a, c-1, ...)
+}
+#'
+#' @rdname BetaNegativeBinomialDist
+#' @export 
+qbeta_nbinom <- function(p, a, c, d, ...){
+  qghyper(p, -d, -a, c-1, ...)
+}
+#'
+#' @rdname BetaNegativeBinomialDist
+#' @export 
+rbeta_nbinom <- function(n, a, c, d){
+  rghyper(n, -d, -a, c-1)
+}
