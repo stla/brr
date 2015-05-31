@@ -1,0 +1,50 @@
+#' @name Prior_y 
+#' @rdname Prior_y
+#' @title Prior predictive distribution of the count in the control group
+#' @description Density, distribution function, quantile function and random 
+#' generation for the prior predictive distribution of the count in the control group.
+#' @details The prior predictive distribution of the count \eqn{y} is the Poisson-Gamma 
+#'  distribution 
+#' with shape parameter \eqn{a} and hyperrate parameter \eqn{b/T}, which is also 
+#' the negative binomial distribution with shape \eqn{a} and probability of success 
+#' \eqn{b/(b+T)}.
+#' 
+#' @param y,q vector of non-negative \strong{integer} quantiles 
+#' @param p vector of probabilities
+#' @param a,b non-negative shape parameter and rate parameter of the Gamma prior distribution on the rate \eqn{\mu}
+#' @param T sample size of the control group
+#' @param n number of observations to be simulated
+#' @param ... other arguments passed to \code{\link[stats]{NegBinomial}}
+#' 
+#' @return \code{dprior_y} gives the density, \code{pprior_y} the distribution function, \code{qprior_y} the quantile function, and \code{rprior_y} samples from the distribution.
+#' 
+#' @note \code{Prior_y} is a generic name for the functions documented. 
+#' 
+#' @examples 
+#' barplot(dprior_y(0:10, 2, 2, 1))
+#' 
+NULL
+#'
+#' @rdname Prior_y
+#' @export 
+dprior_y<-function(y, a, b, T, ...){
+  return( setNames(dnbinom(y, a, b/(b+T), ...), paste("y=",y,sep="")) )
+}
+#'
+#' @rdname Prior_y
+#' @export 
+pprior_y<-function(q, a, b, T, ...){
+  return( setNames(pnbinom(q, a, b/(b+T), ...), paste("y\u2264",q,sep="")) )
+}
+#'
+#' @rdname Prior_y
+#' @export 
+qprior_y<-function(p, a, b, T, ...){
+  return( qnbinom(p, a, b/(b+T), ...) )
+}
+#'
+#' @rdname Prior_y
+#' @export 
+rprior_y <- function(n, a, b, T){
+  return( rnbinom(n, a, b/(b+T)) )
+}

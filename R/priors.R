@@ -1,5 +1,3 @@
-
-
 #' @name Prior_mu 
 #' @rdname Prior_mu
 #' @title Prior distribution on the rate in the control group
