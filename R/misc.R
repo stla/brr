@@ -9,10 +9,11 @@
 #' Gauss hypergeometric function
 #' 
 #' @importFrom gsl hyperg_2F1
-Gauss2F1 <- function(a,b,c,x){
+Gauss2F1 <- function(a, b, c, x){
   if(x>=0 & x<1){
     hyperg_2F1(a,b,c,x)
   }else{
-    hyperg_2F1(c-a,b,c,1-1/(1-x))/(1-x)^b
+    #exp(log(hyperg_2F1(c-a,b,c,1-1/(1-x))) - b*log1p(-x))
+    hyperg_2F1(c-a,b,c,1-1/(1-x)) / (1-x)^b
   }
 }

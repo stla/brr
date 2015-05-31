@@ -145,3 +145,54 @@ qbeta_nbinom <- function(p, a, c, d, ...){
 rbeta_nbinom <- function(n, a, c, d){
   rghyper(n, -d, -a, c-1)
 }
+
+
+#' @name PGB2Dist
+#' @rdname PGB2Dist
+#' @title Poisson-Gamma-Beta2 distribution
+#' @description Density and random generation 
+#' for the  Poisson-Gamma-Beta2 distribution
+#' with shape parameters \code{a}, \code{c}, \code{d} 
+#' and hyperrate parameter \code{tau} (scale of the Beta2 distribution). 
+#' For \code{tau=1} this is the same as the \link[=BetaNegativeBinomialDist]{Beta-negative binomial distribution}.
+#' @details This is the mixture distribution obtained by sampling a value \eqn{y} 
+#' from the \link[=Beta2Dist]{Beta2 distribution} with shape parameters \eqn{c}, \eqn{d}, 
+#' and scale \eqn{\tau},   
+#' then sampling a value \eqn{\lambda} from the Gamma distribution with 
+#' shape \eqn{a} and rate \eqn{y}, and
+#' then sampling the Poisson distribution with mean \eqn{\lambda}.
+#' 
+#' @param x vector of non-negative \strong{integer} quantities
+#' @param a,c,d non-negative shape parameters
+#' @param tau non-negative hyperrate parameter 
+#' @param n number of observations to be sampled
+#' 
+#' @return \code{dPGB2} gives the density, 
+#' and \code{rPGB2} samples from the distribution.
+#' 
+#' @note \code{PGB2Dist} is a generic name for the functions documented. 
+#' 
+#' @importFrom SuppDists dghyper pghyper qghyper rghyper
+#' @examples
+#' a <- 2 ; c <- 5 ; d <- 30
+#' dPGB2(0:10, a, c, d, tau=1)==dbeta_nbinom(0:10, a, c, d)
+#' tau <- 2
+#' nsims <- 1e6
+#' sims <- rbeta2(nsims, c, d, scale=tau) %>% rgamma(nsims, a, .) %>% rpois(nsims, .)
+#' length(sims[sims<=12])/nsims
+#' sum(dPGB2(0:12, a, c, d, tau))
+NULL
+#'
+#' @rdname PGB2Dist
+#' @export
+dPGB2 <- function(x,a,c,d,tau){
+  return( exp(a*log(tau) + dbeta_nbinom(x,a,c,d,log=TRUE) + log(Gauss2F1(a+c,a+x,a+x+c+d,1-tau))) )
+}
+#
+#' @rdname PGB2Dist
+#' @export
+rPGB2 <- function(n, a, c, d, tau){
+  psi <- rbeta2(n, c, d, tau)
+  return( rnbinom(n, a, psi/(1+psi)) )
+}
+
