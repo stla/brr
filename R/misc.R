@@ -20,7 +20,7 @@ Gauss2F1 <- function(a, b, c, x){
 
 #' Inverse cdf of a discrete distribution
 #' 
-#' @param a probability mass function
+#' @param pmf a probability mass function
 #' @param p probability
 #' @param ... arguments passed to \code{pmf}
 #'

@@ -86,13 +86,13 @@ dprior_x <- function(x, a, b, c, d, T){
 #'
 #' @rdname Prior_x
 #' @export 
-pprior_x<-function(q, a, b, c, d, T){
+pprior_x <- function(q, a, b, c, d, T){
   return( setNames(pPGB2(q,a,d,c,b/(b+T)), paste("x\u2264",q,sep="")) )
 }
 #'
 #' @rdname Prior_x
 #' @export 
-qprior_x<-function(p, a, b, c, d, T){
+qprior_x <- function(p, a, b, c, d, T){
   return( qPGB2(p,a,d,c,b/(b+T)) ) 
 }
 #'
@@ -102,3 +102,57 @@ rprior_x <- function(n, a, b, c, d, T){
   return( rPGB2(n,a,d,c,b/(b+T)) )
 }
 
+#' @name Prior_x_given_y 
+#' @rdname Prior_x_given_y
+#' @title Prior predictive distribution of the count \eqn{x} in the treated group 
+#' conditionally to the count \eqn{y} in the treated group
+#' @description Density, distribution function, quantile function and random 
+#' generation for the conditional prior predictive distribution of \eqn{x} 
+#' given \eqn{y}. 
+#' @details The prior predictive distribution of the count \eqn{x} is the 
+#' \code{\link[=BetaNegativeBinomialDist]{Beta-negative binomial distribution}} 
+#' with shape parameters \eqn{a+y}, \eqn{d}, \eqn{c}.
+#' 
+#' @param x,q vector of non-negative \strong{integer} quantiles 
+#' @param y count (integer) in the control group
+#' @param p vector of probabilities
+#' @param a non-negative shape parameter of the Gamma prior distribution on the rate \eqn{\mu}
+#' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
+#' @param n number of observations to be simulated
+#' 
+#' @return \code{dprior_x_given_y} gives the density, \code{pprior_x_given_y} the distribution function, \code{qprior_x_given_y} the quantile function, and \code{rprior_x_given_y} samples from the distribution.
+#' 
+#' @note \code{Prior_x_given_y} is a generic name for the functions documented. 
+#' 
+#' @examples 
+#' barplot(dprior_x_given_y(0:10, 5, 3, 10, 20))
+#' dprior_x_given_y(5, 0:5, 3, 10, 20) # pb names
+#' a <- 3; b <- 1; c <- 10; d <- 20
+#' T <- 2
+#' dprior_x(x=5, a=a, b=b, c=c, d=d, T=T)
+#' sum(dprior_x_given_y(x=5, y=0:100, a, c, d)*dprior_y(0:100, a, b, T))
+NULL
+#'
+#' @rdname Prior_x_given_y
+#' @export 
+dprior_x_given_y <- function(x, y, a, c, d){
+  return( setNames(dbeta_nbinom(x,a+y,d,c), paste("x=",x,sep="")) ) 
+}
+#'
+#' @rdname Prior_x_given_y
+#' @export 
+pprior_x_given_y <- function(q, y, a, c, d){
+  return( setNames(pbeta_nbinom(q,a+y,d,c),  paste("x\u2264",q,sep="")) ) 
+}
+#'
+#' @rdname Prior_x_given_y
+#' @export 
+qprior_x_given_y <- function(p, y, a, c, d){
+  return( qbeta_nbinom(p,a+y,d,c) )  
+}
+#'
+#' @rdname Prior_x_given_y
+#' @export 
+rprior_x_given_y <- function(n, a, c, d){
+  return( rbeta_nbinom(n,a+y,d,c) )
+}
