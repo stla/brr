@@ -48,3 +48,57 @@ qprior_y<-function(p, a, b, T, ...){
 rprior_y <- function(n, a, b, T){
   return( rnbinom(n, a, b/(b+T)) )
 }
+
+
+#' @name Prior_x 
+#' @rdname Prior_x
+#' @title Prior predictive distribution of the count in the treated group
+#' @description Density, distribution function, quantile function and random 
+#' generation for the prior predictive distribution of the count in the treated group.
+#' @details The prior predictive distribution of the count \eqn{x} is the 
+#' \code{\link[=PGB2Dist]{Poisson-Gamma-Beta2 distribution}} 
+#' with shape parameters \eqn{a}, \eqn{d}, \eqn{c},  
+#' and hyperrate parameter \eqn{b/(b+T)}. 
+#' 
+#' @param x,q vector of non-negative \strong{integer} quantiles 
+#' @param p vector of probabilities
+#' @param a,b non-negative shape parameter and rate parameter of the Gamma prior distribution on the rate \eqn{\mu}
+#' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
+#' @param T sample size of the control group
+#' @param n number of observations to be simulated
+#' 
+#' @return \code{dprior_x} gives the density, \code{pprior_x} the distribution function, \code{qprior_x} the quantile function, and \code{rprior_x} samples from the distribution.
+#' 
+#' @note \code{Prior_x} is a generic name for the functions documented. 
+#' 
+#' @examples 
+#' barplot(dprior_x(0:10, 2, 3, 4, 5, 10))
+#' qprior_x(0.5, 2, 3, 4, 5, 10)
+#' pprior_x(5, 2, 3, 4, 5, 10)
+#' 
+NULL
+#'
+#' @rdname Prior_x
+#' @export 
+dprior_x <- function(x, a, b, c, d, T){
+    return( setNames(dPGB2(x,a,d,c,b/(b+T)), paste("x=",x,sep="")) )
+}
+#'
+#' @rdname Prior_x
+#' @export 
+pprior_x<-function(q, a, b, c, d, T){
+  return( setNames(pPGB2(q,a,d,c,b/(b+T)), paste("x\u2264",q,sep="")) )
+}
+#'
+#' @rdname Prior_x
+#' @export 
+qprior_x<-function(p, a, b, c, d, T){
+  return( qPGB2(p,a,d,c,b/(b+T)) ) 
+}
+#'
+#' @rdname Prior_x
+#' @export 
+rprior_x <- function(n, a, b, c, d, T){
+  return( rPGB2(n,a,d,c,b/(b+T)) )
+}
+

@@ -17,3 +17,24 @@ Gauss2F1 <- function(a, b, c, x){
     hyperg_2F1(c-a,b,c,1-1/(1-x)) / (1-x)^b
   }
 }
+
+#' Inverse cdf of a discrete distribution
+#' 
+#' @param a probability mass function
+#' @param p probability
+#' @param ... arguments passed to \code{pmf}
+#'
+#' @examples
+#' iquantiles(dpois, 0.5, lambda=10)
+#' qpois(0.5, 10)
+#'
+#' @export 
+iquantiles <- function(pmf, p, ...){
+  q <- 0
+  prob <- pmf(0, ...)
+  while(prob < p){
+    q <- q+1
+    prob <- prob + pmf(q, ...)
+  }
+  return(q)
+}

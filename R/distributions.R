@@ -162,12 +162,12 @@ rbeta_nbinom <- function(n, a, c, d){
 #' shape \eqn{a} and rate \eqn{y}, and
 #' then sampling the Poisson distribution with mean \eqn{\lambda}.
 #' 
-#' @param x vector of non-negative \strong{integer} quantities
+#' @param x,q vector of non-negative \strong{integer} quantiles
 #' @param a,c,d non-negative shape parameters
 #' @param tau non-negative hyperrate parameter 
 #' @param n number of observations to be sampled
 #' 
-#' @return \code{dPGB2} gives the density, 
+#' @return \code{dPGB2} gives the density, \code{pPGB2} the cumulative function, 
 #' and \code{rPGB2} samples from the distribution.
 #' 
 #' @note \code{PGB2Dist} is a generic name for the functions documented. 
@@ -187,6 +187,18 @@ NULL
 #' @export
 dPGB2 <- function(x,a,c,d,tau){
   return( exp(a*log(tau) + dbeta_nbinom(x,a,c,d,log=TRUE) + log(Gauss2F1(a+c,a+x,a+x+c+d,1-tau))) )
+}
+#'
+#' @rdname PGB2Dist
+#' @export
+pPGB2 <- function(q, a, c, d, tau){
+  return( sapply(q, function(x) sum(dPGB2(0:x, a, c, d, tau))) )
+}
+#'
+#' @rdname PGB2Dist
+#' @export
+qPGB2 <- function(p, a, c, d, tau){
+  return( iquantiles(dPGB2, p, a=a, c=c, d=d, tau=tau) )
 }
 #
 #' @rdname PGB2Dist
