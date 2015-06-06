@@ -57,7 +57,8 @@ rbeta2 <- function(nsims,c, d, scale){
 #' @title Gamma-Inverse Beta distribution
 #' @description Density and random  generation for the Gamma-Inverse Beta distribution 
 #' with shape parameters \code{a}, \code{alpha}, \code{beta} and scale parameter \code{rho}. 
-#' @details This is the mixture distribution obtained by sampling a value \eqn{b} from a Beta distribution with parameters \eqn{\alpha}, \eqn{\beta} 
+#' @details This is the mixture distribution obtained by sampling a value \eqn{b} from a Beta distribution 
+#' with shape parameters \eqn{\beta}, \eqn{\alpha} 
 #' and then sampling a Gamma distribution with shape \eqn{a} and rate \eqn{\rho/b}.
 #' 
 #' @param x vector of quantiles
@@ -72,7 +73,7 @@ rbeta2 <- function(nsims,c, d, scale){
 #' @importFrom gsl lnpoch lngamma hyperg_U
 #' @examples
 #' curve(dGIB(x,3,4,2,2.5), from=0, to=3)
-#' sims <- rgamma(100000, 3, 2.5/rbeta(100000,4,2))
+#' sims <- rgamma(100000, 3, 2.5/rbeta(100000,2,4))
 #' lines(density(sims, from=0), col="red")
 #' lines(density(rGIB(100000, 3, 4, 2, 2.5), from=0), col="green")
 #' 
@@ -81,13 +82,13 @@ NULL
 #' @rdname GammaInverseBetaDist
 #' @export
 dGIB <- function(x,a,alpha,beta,rho){
-  exp(lnpoch(alpha,beta)-lngamma(a))*rho^a*x^(a-1)*exp(-rho*x)*hyperg_U(beta,a-alpha+1,rho*x)
+  exp(lnpoch(beta,alpha)-lngamma(a))*rho^a*x^(a-1)*exp(-rho*x)*hyperg_U(alpha,a-beta+1,rho*x)
 }
 #'
 #' @rdname GammaInverseBetaDist
 #' @export
 rGIB <- function(n,a,alpha,beta,rho){
-  rbeta(n,alpha,beta)*rgamma(n, a, rho)
+  rbeta(n,beta,alpha)*rgamma(n, a, rho)
 }
 
 
@@ -113,10 +114,13 @@ rGIB <- function(n,a,alpha,beta,rho){
 #' @importFrom gsl lnpoch lngamma lnfact
 #' @examples
 #' barplot(dPGIB(0:5,3,4,2,2.5))
-#' nsims <- 1e4
+#' nsims <- 1e6
 #' sims <- rPGIB(nsims, 3,4,2,2.5)
-#' length(sims[sims<=2])/nsims
-#' sum(dPGIB(0:2,3,2,4,1/2.5)) # !!!! alpha beta inversés et rho 1/rho
+#' ecdf(sims)(0:2)
+#' dPGIB(0:2,3,4,2,2.5) %>% cumsum # !!!! code_vD : alpha beta inversés et rho 1/rho
+#'  # => j'échange alpha beta dans dGIB (conséquence dpost_lambda/mu différence avec code_vD)
+#'  # => ainsi PGIB cohérent avec papier hyperscaled poisson
+#'  # => et j'échange rho 1/rho dans dPGIB => différence avec code_vD dans dpost_x/y
 #' 
 NULL
 #'
@@ -124,8 +128,8 @@ NULL
 #' @export
 dPGIB <- function(x,a,alpha,beta,rho){
   ccpoch <- exp(lnpoch(a,x)+lnpoch(beta,x)-lnpoch(alpha+beta,x)-lnfact(x))
-  ccpoch*rho^x*
-    Gauss2F1(beta+x, a+x, alpha+beta+x, -rho)
+  ccpoch*1/rho^x*
+    Gauss2F1(beta+x, a+x, alpha+beta+x, -1/rho)
 }
 #'
 #' @rdname PoissonGammaInverseBetaDist

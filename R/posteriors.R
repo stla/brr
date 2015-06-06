@@ -31,7 +31,7 @@ dpost_lambda <- function(lambda, a, c, d, S, x, y, ...){
   a.post <- a+x+y
   c.post <- c+x
   d.post <- a+d+y
-  dGIB(lambda, a.post, c.post, d.post, S, ...)
+  dGIB(lambda, a.post, d.post, c.post, S, ...)
 }
 #'
 #' @rdname Posterior_lambda
@@ -40,7 +40,7 @@ rpost_lambda <- function(n, a, c, d, S, x, y){
   a.post <- a+x+y
   c.post <- c+x
   d.post <- a+d+y
-  rGIB(n, a.post, c.post, d.post, S)
+  rGIB(n, a.post, d.post, c.post, S)
 }
 
 
@@ -78,17 +78,17 @@ dpost_mu <- function(mu, a, b, c, d, T, x, y, ...){
   b.post <- b+T
   c.post <- c+x
   d.post <- a+d+y
-  dGIB(mu, a.post, d.post, c.post, b.post, ...)
+  dGIB(mu, a.post, c.post, d.post, b.post, ...)
 }
 #'
 #' @rdname Posterior_mu
 #' @export 
 rpost_mu <- function(n, a, b, c, d, T, x, y){
   a.post <- a+x+y
+  b.post <- b+T
   c.post <- c+x
   d.post <- a+d+y
-  psi <- rbeta2(n, c.post, d.post, 1)
-  return(rgamma(n, a.post, 1+psi)/(T+b))
+  return(rGIB(n, a.post, c.post, d.post, b.post))
 }
 
 

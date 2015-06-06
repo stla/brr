@@ -21,7 +21,7 @@
 #' @note \code{Post_x} is a generic name for the functions documented. 
 #' 
 #' @examples 
-#' barplot(dpost_x(0:10, 10, 2, 3, 4, 5, 3, 4, 10))
+#' barplot(dpost_x(0:10, 10, 2, 3, 4, 5, 3,  10))
 #' qpost_x(0.5, 2, 3, 4, 5, 10)
 #' ppost_x(5, 2, 3, 4, 5, 10)
 #' 
@@ -33,7 +33,7 @@ dpost_x <- function(x2, S2, a=0.5, c=0.5, d=0, x1, y1, S1){
   a.post <- a+x1+y1
   c.post <- c+x1
   d.post <- d+a+y1
-  return( setNames(dPGIB(x2,a.post,d.post,c.post,S2/S1), paste("x2=",x2,sep="")) )
+  return( setNames(dPGIB(x2,a.post,d.post,c.post,S1/S2), paste("x2=",x2,sep="")) )
 }
 #'
 #' @rdname Post_x
@@ -42,7 +42,7 @@ ppost_x <- function(q, S2, a=0.5, c=0.5, d=0, x1, y1, S1){
   a.post <- a+x1+y1
   c.post <- c+x1
   d.post <- d+a+y1
-  return( setNames(pPGIB(q,a.post,d.post,c.post,S2/S1), paste("x2\u2264",q,sep="")) )
+  return( setNames(pPGIB(q,a.post,d.post,c.post,S1/S2), paste("x2\u2264",q,sep="")) )
 }
 #'
 #' @rdname Post_x
@@ -51,7 +51,7 @@ qpost_x <- function(p, S2, a=0.5, c=0.5, d=0, x1, y1, S1){
   a.post <- a+x1+y1
   c.post <- c+x1
   d.post <- d+a+y1
-  return( qPGIB(p,a.post,d.post,c.post,S2/S1) ) 
+  return( qPGIB(p,a.post,d.post,c.post,S1/S2) ) 
 }
 #'
 #' @rdname Post_x
@@ -60,5 +60,5 @@ rpost_x <- function(n, S2, a=0.5, c=0.5, d=0, x1, y1, S1){
   a.post <- a+x1+y1
   c.post <- c+x1
   d.post <- d+a+y1
-  return( rPGIB(n,a.post,d.post,c.post,S2/S1) )
+  return( rPGIB(n,a.post,d.post,c.post,S1/S2) )
 }
