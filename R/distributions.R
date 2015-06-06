@@ -56,7 +56,7 @@ rbeta2 <- function(nsims,c, d, scale){
 #' @rdname GammaInverseBetaDist
 #' @title Gamma-Inverse Beta distribution
 #' @description Density and random  generation for the Gamma-Inverse Beta distribution 
-#' with shape parameters \code{a}, \code{c}, \code{d} and scale parameter \code{rho}. 
+#' with shape parameters \code{a}, \code{alpha}, \code{beta} and scale parameter \code{rho}. 
 #' @details This is the mixture distribution obtained by sampling a value \eqn{b} from a Beta distribution with parameters \eqn{\alpha}, \eqn{\beta} 
 #' and then sampling a Gamma distribution with shape \eqn{a} and rate \eqn{\rho/b}.
 #' 
@@ -67,7 +67,7 @@ rbeta2 <- function(nsims,c, d, scale){
 #' 
 #' @return \code{dGIB} gives the density, and \code{rGIB} samples from the distribution.
 #' 
-#' @note \code{GammaInverseBetaDist } is a generic name for the functions documented. 
+#' @note \code{GammaInverseBetaDist} is a generic name for the functions documented. 
 #' 
 #' @importFrom gsl lnpoch lngamma hyperg_U
 #' @examples
@@ -89,6 +89,51 @@ dGIB <- function(x,a,alpha,beta,rho){
 rGIB <- function(n,a,alpha,beta,rho){
   rbeta(n,alpha,beta)*rgamma(n, a, rho)
 }
+
+
+
+#' @name PoissonGammaInverseBetaDist 
+#' @rdname PoissonGammaInverseBetaDist
+#' @title Poisson-Gamma-Inverse Beta distribution
+#' @description Density and random  generation for the Poisson-Gamma-Inverse Beta distribution 
+#' with shape parameters \code{a}, \code{c}, \code{d} and scale parameter \code{rho}. 
+#' @details This is the mixture distribution obtained by sampling a value from a 
+#' \link[=GammaInverseBetaDist]{Gamma-Inverse Beta distribution} and then sampling from 
+#' a Poisson distribution having this value as mean.
+#' 
+#' @param x vector of \trong{integer} quantiles
+#' @param a non-negative shape parameter of the Gamma distribution
+#' @param alpha,beta non-negative shape parameters of the mixing Beta distribution
+#' @param n number of observations to be simulated
+#' 
+#' @return \code{dPGIB} gives the density, and \code{rPGIB} samples from the distribution.
+#' 
+#' @note \code{PoissonGammaInverseBetaDist} is a generic name for the functions documented. 
+#' 
+#' @importFrom gsl lnpoch lngamma lnfact
+#' @examples
+#' barplot(dPGIB(0:5,3,4,2,2.5))
+#' nsims <- 1e4
+#' sims <- rPGIB(nsims, 3,4,2,2.5)
+#' length(sims[sims<=2])/nsims
+#' sum(dPGIB(0:2,3,2,4,1/2.5)) # !!!! alpha beta inversés et rho 1/rho
+#' 
+NULL
+#'
+#' @rdname PoissonGammaInverseBetaDist
+#' @export
+dPGIB <- function(x,a,alpha,beta,rho){
+  ccpoch <- exp(lnpoch(a,x)+lnpoch(beta,x)-lnpoch(alpha+beta,x)-lnfact(x))
+  ccpoch*rho^x*
+    Gauss2F1(beta+x, a+x, alpha+beta+x, -rho)
+}
+#'
+#' @rdname PoissonGammaInverseBetaDist
+#' @export
+rPGIB <- function(n, a, alpha, beta, rho){
+  return( rpois(n, rGIB(n, a, alpha, beta, rho)) )
+}
+
 
 #' @name BetaNegativeBinomialDist
 #' @rdname BetaNegativeBinomialDist
@@ -172,7 +217,6 @@ rbeta_nbinom <- function(n, a, c, d){
 #' 
 #' @note \code{PGB2Dist} is a generic name for the functions documented. 
 #' 
-#' @importFrom SuppDists dghyper pghyper qghyper rghyper
 #' @examples
 #' a <- 2 ; c <- 5 ; d <- 30
 #' dPGB2(0:10, a, c, d, tau=1)==dbeta_nbinom(0:10, a, c, d)

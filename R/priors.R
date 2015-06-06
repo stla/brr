@@ -151,7 +151,8 @@ NULL
 #' @export 
 dprior_lambda <- function(lambda, a, b, c, d, S, T){  
   ifelse(c>1 & lambda<.Machine$double.eps, 0, 
-         (b*S/(b+T))^a*exp(lnpoch(a,d)-lnbeta(c,d))*lambda^(a-1)*hyperg_U(a+d,a-c+1,b*S/(b+T)*lambda))
+         (b*S/(b+T))^a*exp(lnpoch(a,d)-lnbeta(c,d)+(a-1)*log(lambda)+log(hyperg_U(a+d,a-c+1,b*S/(b+T)*lambda)))
+  )
 }
 #'
 #' @rdname Prior_lambda

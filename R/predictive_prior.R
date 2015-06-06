@@ -102,6 +102,7 @@ rprior_x <- function(n, a, b, c, d, T){
   return( rPGB2(n,a,d,c,b/(b+T)) )
 }
 
+
 #' @name Prior_x_given_y 
 #' @rdname Prior_x_given_y
 #' @title Prior predictive distribution of the count \eqn{x} in the treated group 
