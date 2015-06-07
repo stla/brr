@@ -121,7 +121,9 @@ rGIB <- function(n,a,alpha,beta,rho){
 #'  # => j'échange alpha beta dans dGIB (conséquence dpost_lambda/mu différence avec code_vD)
 #'  # => ainsi PGIB cohérent avec papier hyperscaled poisson
 #'  # => et j'échange rho 1/rho dans dPGIB => différence avec code_vD dans dpost_x/y
-#' 
+#' ( q <- qPGIB(0.5, 10, 2, 12, 2.1) ) 
+#' pPGIB(q, 10, 2, 12, 2.1)
+#' pPGIB(q-1, 10, 2, 12, 2.1)
 NULL
 #'
 #' @rdname PoissonGammaInverseBetaDist
@@ -130,6 +132,18 @@ dPGIB <- function(x,a,alpha,beta,rho){
   ccpoch <- exp(lnpoch(a,x)+lnpoch(beta,x)-lnpoch(alpha+beta,x)-lnfact(x))
   ccpoch*1/rho^x*
     Gauss2F1(beta+x, a+x, alpha+beta+x, -1/rho)
+}
+#'
+#' @rdname PoissonGammaInverseBetaDist
+#' @export
+pPGIB <- function(q, a, alpha, beta, rho){
+  return( sum(dPGIB(0:q, a, alpha, beta, rho)) )
+}
+#'
+#' @rdname PoissonGammaInverseBetaDist
+#' @export
+qPGIB <- function(p, a, alpha, beta, rho){
+  return( iquantiles(dPGIB, p, a=a, alpha=alpha, beta=beta, rho=rho) )
 }
 #'
 #' @rdname PoissonGammaInverseBetaDist
