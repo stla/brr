@@ -12,7 +12,7 @@
 #' @param p vector of probabilities
 #' @param a non-negative shape parameter of the Gamma prior distribution on the rate \eqn{\mu}
 #' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
-#' @param S1,S2 sample sizes of the control group in the observed experiment and the
+#' @param S1,S2 sample sizes of the treated group in the observed experiment and the
 #' predicted experiment
 #' @param n number of observations to be simulated
 #' 
@@ -61,4 +61,70 @@ rpost_x <- function(n, S2, a=0.5, c=0.5, d=0, x1, y1, S1){
   c.post <- c+x1
   d.post <- d+a+y1
   return( rPGIB(n,a.post,d.post,c.post,S1/S2) )
+}
+
+
+
+#' @name Post_y 
+#' @rdname Post_y
+#' @title Posterior predictive distribution of the count in the control group
+#' @description Density, distribution function, quantile function and random 
+#' generation for the posterior predictive distribution of the count in the control group.
+#' @details The posterior predictive distribution of the count in the treated group is a  
+#' \code{\link[=GammaInverseBetaDist]{Gamma-Inverse Beta distribution}}.
+#' 
+#' @param y2,q vector of non-negative \strong{integer} quantiles 
+#' @param x1,y1 counts (integer) in the treated group and control group of the observed experiment
+#' @param p vector of probabilities
+#' @param a,b non-negative shape parameter and rate parameter of the Gamma prior distribution on the rate \eqn{\mu}
+#' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
+#' @param T1,T2 sample sizes of the control group in the observed experiment and the
+#' predicted experiment
+#' @param n number of observations to be simulated
+#' 
+#' @return \code{dpost_y} gives the density, \code{ppost_y} the distribution function, \code{qpost_y} the quantile function, and \code{rpost_y} samples from the distribution.
+#' 
+#' @note \code{Post_y} is a generic name for the functions documented. 
+#' 
+#' @examples 
+#' barplot(dpost_y(0:10, 10, 2, 7, 3, 4, 5, 3, 10))
+#' qpost_y(0.5, 10, 2, 7, 3, 4, 5, 3, 10)
+#' ppost_y(2:3, 10, 2, 7, 3, 4, 5, 3, 10)
+#' 
+NULL
+#'
+#' @rdname Post_y
+#' @export 
+dpost_y <- function(y2, T2, a=0.5, b=0, c=0.5, d=0, x1, y1, T1){
+  a.post <- a+x1+y1
+  c.post <- c+x1
+  d.post <- d+a+y1
+  return( setNames(dPGIB(y2,a.post,c.post,d.post,(b+T1)/T2), paste("y2=",y2,sep="")) )
+}
+#'
+#' @rdname Post_y
+#' @export 
+ppost_y <- function(q, T2, a=0.5, b=0, c=0.5, d=0, x1, y1, T1){
+  a.post <- a+x1+y1
+  c.post <- c+x1
+  d.post <- d+a+y1
+  return( setNames(pPGIB(q,a.post,c.post,d.post,(b+T1)/T2), paste("y2\u2264",q,sep="")) )
+}
+#'
+#' @rdname Post_y
+#' @export 
+qpost_y <- function(p, T2, a=0.5, b=0, c=0.5, d=0, x1, y1, T1){
+  a.post <- a+x1+y1
+  c.post <- c+x1
+  d.post <- d+a+y1
+  return( qPGIB(p,a.post,c.post,d.post,(b+T1)/T2) ) 
+}
+#'
+#' @rdname Post_y
+#' @export 
+rpost_y <- function(n, T2, a=0.5, b=0, c=0.5, d=0, x1, y1, T1){
+  a.post <- a+x1+y1
+  c.post <- c+x1
+  d.post <- d+a+y1
+  return( rPGIB(n,a.post,c.post,d.post,(b+T1)/T2) )
 }

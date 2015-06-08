@@ -43,3 +43,8 @@ log(hyperg_U(a+d,a-c+1,b*S/(b+T)*lambda))
 seq(0,5,len=100) %>% {plot(., dpost_lambda(.,a=100,c=7,d=80,S=4,x=8,y=2), type="l")}
 abline(v=2)
 
+
+
+# posterior predictive x --------------------------------------------------
+
+
