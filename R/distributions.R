@@ -156,7 +156,8 @@ dPGIB <- function(x,a,alpha,beta,rho){
 #' @rdname PoissonGammaInverseBetaDist
 #' @export
 pPGIB <- function(q, a, alpha, beta, rho){
-  return( sum(dPGIB(0:q, a, alpha, beta, rho)) )
+  return( vapply(q, FUN=function(x) sum(dPGIB(0:x, a, alpha, beta, rho)), 
+                 FUN.VALUE=numeric(1)) )
 }
 #'
 #' @rdname PoissonGammaInverseBetaDist
@@ -273,7 +274,8 @@ dPGB2 <- function(x,a,c,d,tau){
 #' @rdname PGB2Dist
 #' @export
 pPGB2 <- function(q, a, c, d, tau){
-  return( sapply(q, function(x) sum(dPGB2(0:x, a, c, d, tau))) )
+  return( vapply(q, FUN=function(x)  sum(dPGB2(0:x, a, c, d, tau)), 
+                 FUN.VALUE=numeric(1)) )
 }
 #'
 #' @rdname PGB2Dist

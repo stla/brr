@@ -62,6 +62,7 @@ prior <- function(params){
       }
     }
   }
+  # warning si c, d mais pas S et T
 }
 
 #' Summary brr
