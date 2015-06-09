@@ -18,7 +18,8 @@
 #' @param n number of observations to be simulated
 #' @param ... other arguments passed to \code{\link{FDist}}
 #' 
-#' @return \code{dbeta2} gives the density, \code{pbeta2} the distribution function, \code{qbeta2} the quantile function, and \code{rbeta2} generates random observations.
+#' @return \code{dbeta2} gives the density, \code{pbeta2} the distribution function, \code{qbeta2} the quantile function, and \code{rbeta2} generates random observations, 
+#' and \code{summary_beta2} returns a summary of the distribution.
 #' 
 #' @note \code{Beta2Dist} is a generic name for the functions documented. 
 #' 
@@ -26,6 +27,7 @@
 #' curve(dbeta2(x, 3, 10, scale=2), from=0, to=3)
 #' u <- rbeta(1e5, 3, 10)
 #' lines(density(2*u/(1-u)), col="blue", lty="dashed")
+#' summary_beta2(3,2,10)
 #' 
 NULL
 #'
@@ -46,9 +48,26 @@ pbeta2 <- function(q, c, d, scale, ...){
 }
 #'
 #' @rdname Beta2Dist 
+#' @export
+qbeta2 <- function(p, c, d, scale, ...){
+  scale*c/d*qf(p, df1=2*c, df2=2*d, ...)
+}
+#'
+#' @rdname Beta2Dist 
 #' @export 
 rbeta2 <- function(nsims,c, d, scale){
   scale*c/d*rf(nsims, df1=2*c, df2=2*d)
+}
+#' @rdname Beta2Dist
+#' @export
+summary_beta2 <- function(c,d,scale){
+  list(mode=ifelse(c>1, scale*(c-1)/(d+1), 0),  
+       mean=ifelse(d>1, scale*c/(d-1), Inf),  
+       var=ifelse(d>2, scale^2*c*(c+d-1)/((d-1)^2*(d-2)), Inf),  
+       Q1=qbeta2(0.25,c,d,scale),
+       Q2=qbeta2(0.5,c,d,scale),
+       Q3=qbeta2(0.75,c,d,scale)
+  )
 }
 
 
