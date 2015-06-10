@@ -1,3 +1,31 @@
+#' Summary of a Gamma distribution
+#' 
+#' Mode, mean, variance, and quartiles for a Gamma distribution 
+#' with shape parameter \code{a} and rate parameter \code{b}.
+#'
+#' @param a,b Shape and rate parameters.
+#'
+#' @examples
+#' summary_gamma(a=2, b=4, type="pandoc", style="rmarkdown")
+#' @importFrom pander pander
+#' @export
+summary_gamma <- function(a, b, type=c("list", "pandoc"), ...){
+  out <- list(mode=ifelse(a>1, (a-1)/b, 0),  
+       mean=a/b,  
+       var=a/b^2,  
+       Q1=qgamma(0.25,a,b),
+       Q2=qgamma(0.5,a,b),
+       Q3=qgamma(0.75,a,b)
+  )
+  if(type=="pandoc"){
+    pander(data.frame(out), ...)
+    return(invisible())
+  }else{
+    return(out)
+  }
+}
+
+
 #' @name Beta2Dist 
 #' @rdname Beta2Dist
 #' @title Beta distribution of the second kind
@@ -23,6 +51,7 @@
 #' 
 #' @note \code{Beta2Dist} is a generic name for the functions documented. 
 #' 
+#' @importFrom pander pander
 #' @examples 
 #' curve(dbeta2(x, 3, 10, scale=2), from=0, to=3)
 #' u <- rbeta(1e5, 3, 10)
@@ -60,14 +89,20 @@ rbeta2 <- function(nsims,c, d, scale){
 }
 #' @rdname Beta2Dist
 #' @export
-summary_beta2 <- function(c,d,scale){
-  list(mode=ifelse(c>1, scale*(c-1)/(d+1), 0),  
+summary_beta2 <- function(c, d, scale, type=c("list", "pandoc"), ...){
+  out <- list(mode=ifelse(c>1, scale*(c-1)/(d+1), 0),  
        mean=ifelse(d>1, scale*c/(d-1), Inf),  
        var=ifelse(d>2, scale^2*c*(c+d-1)/((d-1)^2*(d-2)), Inf),  
        Q1=qbeta2(0.25,c,d,scale),
        Q2=qbeta2(0.5,c,d,scale),
        Q3=qbeta2(0.75,c,d,scale)
   )
+  if(type=="pandoc"){
+    pander(data.frame(out), ...)
+    return(invisible())
+  }else{
+    return(out)
+  }
 }
 
 

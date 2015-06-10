@@ -112,8 +112,11 @@ qprior_VE <- function(p, b, c, d, S, T, ...){
 rprior_phi <- function(n, b, c, d, S, T){
   rbeta2(n, c, d, scale=(T+b)/S)
 }
-
-
+#' @rdname Prior_phi
+#' @export 
+summary_prior_phi <- function(b, c, d, S, T, ...){
+  summary_beta2(c,d,scale=(T+b)/S, ...)
+}
 #' @name Prior_lambda 
 #' @rdname Prior_lambda
 #' @title Prior distribution on the incidence rate in the treated group

@@ -86,21 +86,24 @@ summary.brr <- function(brr){
   cat("*Prior distribution on µ*\n")
   if(all(c("a","b") %in% names(params))){
     cat(with(params, sprintf("  Gamma(a=%s,b=%s)", a, b)))
+    summary_gamma(params$a, params$b, type="pandoc", style="rmarkdown")
   }else{
-    cat("  Non-informative prior")
+    cat("  Non-informative prior\n")
   }
-  cat("\n\n")
+  cat("\n")
   cat("*Prior distribution on phi*\n")
   if(all(c("c","d","b","S","T") %in% names(params))){
     cat(with(params, sprintf("  Beta2(c=%s,d=%s,scale=%s)", c, d, (T+b)/S)))
+    with(params, summary_prior_phi(b, c, d, S, T, type="pandoc", style="rmarkdown"))
   }else{
     if(type=="non-informative prior" || type=="semi-informative prior"){
       cat("  Non-informative prior")
     }else{
       cat("  c, d, b, S and T must be supplied")
     }
+    cat("\n")
   }
-  cat("\n\n")
+  cat("\n")
   cat("*Sample sizes*\n")
   cat(sprintf("  T (control group): %s", ifelse("T" %in% names(params), params$T, "not supplied")))
   return(invisible())
