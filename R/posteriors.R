@@ -16,13 +16,14 @@
 #' @param n number of observations to be simulated
 #' @param ... other arguments passed to \code{\link{dGIB}}
 #' 
-#' @return \code{dpost_lambda} gives the density, and \code{rpost_lambda} samples from the distribution.
+#' @return \code{dpost_lambda} gives the density, and \code{rpost_lambda} samples from 
+#' the distribution, and \code{summary_post_lambda} gives a summary of the distribution.
 #' 
 #' @note \code{Posterior_lambda} is a generic name for the functions documented. 
 #' 
 #' @examples 
 #' curve(dpost_lambda(x, 2, 2, 2, 20, 1, 10), from=0, to=0.4)
-#' 
+#' summary_post_lambda( 2, 2, 2, 20, 1, 10)
 NULL
 #'
 #' @rdname Posterior_lambda
@@ -31,7 +32,7 @@ dpost_lambda <- function(lambda, a, c, d, S, x, y, ...){
   a.post <- a+x+y
   c.post <- c+x
   d.post <- a+d+y
-  dGIB(lambda, a.post, d.post, c.post, S, ...)
+  return( dGIB(lambda, a.post, d.post, c.post, S, ...) )
 }
 #'
 #' @rdname Posterior_lambda
@@ -40,9 +41,14 @@ rpost_lambda <- function(n, a, c, d, S, x, y){
   a.post <- a+x+y
   c.post <- c+x
   d.post <- a+d+y
-  rGIB(n, a.post, d.post, c.post, S)
+  return( rGIB(n, a.post, d.post, c.post, S) )
 }
-
+#'
+#' @rdname Posterior_lambda
+#' @export 
+summary_post_lambda <- function(a, c, d, S, x, y, ...){
+  return( summary_GIB(a+x+y, a+d+y, c+x, S, ...) )
+}
 
 #' @name Posterior_mu 
 #' @rdname Posterior_mu
@@ -61,13 +67,15 @@ rpost_lambda <- function(n, a, c, d, S, x, y){
 #' @param n number of observations to be simulated
 #' @param ... other arguments passed to \code{\link{dGIB}}
 #' 
-#' @return \code{dpost_mu} gives the density, and \code{rpost_mu} samples from the distribution.
+#' @return \code{dpost_mu} gives the density, \code{rpost_mu} samples from the 
+#' distribution, and \code{summary_post_mu} gives a summary of the distribution.
 #' 
 #' @note \code{Posterior_mu} is a generic name for the functions documented. 
 #' 
 #' @examples 
 #' curve(dpost_mu(x, 2, 2, 2, 2, 10, 3, 8), from=0, to=2)
 #' lines(density(rpost_mu(1e6, 2, 2, 2, 2, 10, 3, 8)), col="red", lty="dashed")
+#' summary_post_mu(2, 2, 2, 2, 10, 3, 8, type="pandoc")
 #' 
 NULL
 #'
@@ -90,7 +98,12 @@ rpost_mu <- function(n, a, b, c, d, T, x, y){
   d.post <- a+d+y
   return(rGIB(n, a.post, c.post, d.post, b.post))
 }
-
+#'
+#' @rdname Posterior_mu
+#' @export 
+summary_post_mu <- function(a, b, c, d, T, x, y, ...){
+  summary_GIB(a+x+y, c+x, a+d+y, T+b, ...)
+}
 
 
 #' @name Posterior_phi 

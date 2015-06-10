@@ -9,7 +9,7 @@
 #' summary_gamma(a=2, b=4, type="pandoc", style="rmarkdown")
 #' @importFrom pander pander
 #' @export
-summary_gamma <- function(a, b, type=c("list", "pandoc"), ...){
+summary_gamma <- function(a, b, type="list", ...){
   out <- list(mode=ifelse(a>1, (a-1)/b, 0),  
        mean=a/b,  
        var=a/b^2,  
@@ -89,7 +89,7 @@ rbeta2 <- function(nsims,c, d, scale){
 }
 #' @rdname Beta2Dist
 #' @export
-summary_beta2 <- function(c, d, scale, type=c("list", "pandoc"), ...){
+summary_beta2 <- function(c, d, scale, type="list", ...){
   out <- list(mode=ifelse(c>1, scale*(c-1)/(d+1), 0),  
        mean=ifelse(d>1, scale*c/(d-1), Inf),  
        var=ifelse(d>2, scale^2*c*(c+d-1)/((d-1)^2*(d-2)), Inf),  
@@ -125,11 +125,14 @@ summary_beta2 <- function(c, d, scale, type=c("list", "pandoc"), ...){
 #' @note \code{GammaInverseBetaDist} is a generic name for the functions documented. 
 #' 
 #' @importFrom gsl lnpoch lngamma hyperg_U
+#' @importFrom pander pander
 #' @examples
 #' curve(dGIB(x,3,4,2,2.5), from=0, to=3)
 #' sims <- rgamma(100000, 3, 2.5/rbeta(100000,2,4))
 #' lines(density(sims, from=0), col="red")
 #' lines(density(rGIB(100000, 3, 4, 2, 2.5), from=0), col="green")
+#' mean(sims); var(sims)
+#' summary_GIB(3,4,2,2.5,type="pandoc")
 #' 
 NULL
 #'
@@ -144,7 +147,21 @@ dGIB <- function(x,a,alpha,beta,rho){
 rGIB <- function(n,a,alpha,beta,rho){
   rbeta(n,beta,alpha)*rgamma(n, a, rho)
 }
-
+#'
+#' @rdname GammaInverseBetaDist
+#' @export
+summary_GIB <- function(a, alpha, beta, rho, type="list", ...){
+  out <- list(mean=a*beta/(alpha+beta)/rho,
+       var=a*(1+a)*beta*(beta+1)/(alpha+beta)/(alpha+beta+1)/rho^2 - (a*beta/(alpha+beta)/rho)^2
+       )
+  if(type=="pandoc"){
+    pander(data.frame(out), ...)
+    return(invisible())
+  }else{
+    return(out)
+  }
+}
+  
 
 
 #' @name PoissonGammaInverseBetaDist 

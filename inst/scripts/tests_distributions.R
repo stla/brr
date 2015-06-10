@@ -18,8 +18,27 @@ seq(0,5,len=100) %>% {plot(., dpost_mu(.,a=140,b=70,c,d,T,x,y), type="l")}
 abline(v=2)
 seq(0,5,len=100) %>% {lines(., dpost_mu(.,a=140,b=70,c,d,T,x,y=2), col="red")}
 
+# mean 
+a <- 5; b <- 10; c <- 5; d <- 4
+x <- 10; y <- 10
+S <- 1; T <- 1
+sims <- rpost_mu(1e6, a, b, c, d, T, x, y)
+mean(sims)
+a.post <- a+x+y
+c.post <- c+x
+d.post <- a+d+y
+a.post*d.post/(c.post+d.post)/(T+b)
 
+sims <- rGIB(1e6,a,c,d,b)
+mean(sims)
+a*d/(c+d)/b
+mean(sims^2)
+a*(1+a)*d*(d+1)/(c+d)/(c+d+1)/b^2
 # posterior lambda --------------------------------------------------------
+
+a <- 0.5; b <- 0; c <- 0.5; d <- 0
+x <- 10; y <- 10
+S <- 1; T <- 1
 
 # centered around 10
 seq(0,20,len=100) %>% {plot(., dpost_lambda(.,a,c,d,S,x,y), type="l")}
