@@ -121,7 +121,11 @@ rprior_x <- function(n, a, b, c, d, T){
 #' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
 #' @param n number of observations to be simulated
 #' 
-#' @return \code{dprior_x_given_y} gives the density, \code{pprior_x_given_y} the distribution function, \code{qprior_x_given_y} the quantile function, and \code{rprior_x_given_y} samples from the distribution.
+#' @return \code{dprior_x_given_y} gives the density, 
+#' \code{pprior_x_given_y} the distribution function, 
+#' \code{qprior_x_given_y} the quantile function, 
+#' \code{rprior_x_given_y} samples from the distribution, and
+#' \code{summary_prior_x_given_y} gives a summary of the distribution.
 #' 
 #' @note \code{Prior_x_given_y} is a generic name for the functions documented. 
 #' 
@@ -156,4 +160,10 @@ qprior_x_given_y <- function(p, y, a, c, d){
 #' @export 
 rprior_x_given_y <- function(n, a, c, d){
   return( rbeta_nbinom(n,a+y,d,c) )
+}
+#'
+#' @rdname Prior_x_given_y
+#' @export 
+summary_prior_x_given_y <- function(a, c, d, ...){
+  return( summary_beta_nbinom(a+y,d,c,...) )
 }

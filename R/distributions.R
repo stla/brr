@@ -120,7 +120,8 @@ summary_beta2 <- function(c, d, scale, type="list", ...){
 #' @param alpha,beta non-negative shape parameters of the mixing Beta distribution
 #' @param n number of observations to be simulated
 #' 
-#' @return \code{dGIB} gives the density, and \code{rGIB} samples from the distribution.
+#' @return \code{dGIB} gives the density, \code{rGIB} samples from the distribution, 
+#' and \code{summary_GIB} returns a summary of the distribution.
 #' 
 #' @note \code{GammaInverseBetaDist} is a generic name for the functions documented. 
 #' 
@@ -243,12 +244,16 @@ rPGIB <- function(n, a, alpha, beta, rho){
 #' @param n number of observations to be sampled
 #' @param ... other arguments passed to \code{\link[SuppDists]{ghyper}}
 #' 
-#' @return \code{dbeta_nbinom} gives the density, \code{pbeta_nbinom} the cumulative function, 
-#' \code{qbeta_nbinom} the quantile function, and \code{rbeta_nbinom} samples from the distribution.
+#' @return \code{dbeta_nbinom} gives the density, 
+#' \code{pbeta_nbinom} the cumulative function, 
+#' \code{qbeta_nbinom} the quantile function, 
+#' \code{rbeta_nbinom} samples from the distribution, 
+#' \code{sbeta_nbinom} and \code{summary_beta_nbinom} give some summaries of the distribution.
 #' 
 #' @note \code{BetaNegativeBinomialDist} is a generic name for the functions documented. 
 #' 
-#' @importFrom SuppDists dghyper pghyper qghyper rghyper
+#' @importFrom SuppDists dghyper pghyper qghyper rghyper sghyper
+#' @importFrom pander pander
 #' @examples
 #' a <- 2 ; c <- 5 ; d <- 30
 #' nsims <- 1e6
@@ -280,7 +285,33 @@ qbeta_nbinom <- function(p, a, c, d, ...){
 rbeta_nbinom <- function(n, a, c, d){
   rghyper(n, -d, -a, c-1)
 }
-
+#'
+#' @rdname BetaNegativeBinomialDist
+#' @export 
+sbeta_nbinom <- function(a, c, d){
+  sghyper(-d, -a, c-1)
+}
+#'
+#' @rdname BetaNegativeBinomialDist
+#' @export 
+summary_beta_nbinom <- function(a, c, d, type="list", ...){
+  out <- c(with(sghyper(-d, -a, c-1), 
+              list(mean=Mean,
+                   mode=Mode,
+                   sd=SD)),
+              list(
+                   Q1=qbeta_nbinom(.25, a, c, d),
+                   Q2=qbeta_nbinom(.5, a, c, d),
+                   Q3=qbeta_nbinom(.75, a, c, d)
+                   )
+           )
+  if(type=="pandoc"){
+    pander(data.frame(out), ...)
+    return(invisible())
+  }else{
+    return(out)
+  }
+}
 
 #' @name PGB2Dist
 #' @rdname PGB2Dist
