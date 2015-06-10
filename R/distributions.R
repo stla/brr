@@ -174,7 +174,7 @@ summary_GIB <- function(a, alpha, beta, rho, type="list", ...){
 #' \link[=GammaInverseBetaDist]{Gamma-Inverse Beta distribution} and then sampling from 
 #' a Poisson distribution having this value as mean.
 #' 
-#' @param x vector of \trong{integer} quantiles
+#' @param x vector of \strong{integer} quantiles
 #' @param a non-negative shape parameter of the Gamma distribution
 #' @param alpha,beta non-negative shape parameters of the mixing Beta distribution
 #' @param n number of observations to be simulated

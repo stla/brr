@@ -141,19 +141,31 @@ NULL
 #' @rdname Prior_x_given_y
 #' @export 
 dprior_x_given_y <- function(x, y, a, c, d){
-  return( setNames(dbeta_nbinom(x,a+y,d,c), paste("x=",x,sep="")) ) 
+  if(length(y)==1){
+    return( setNames(dbeta_nbinom(x,a+y,d,c), paste("x=",x,sep="")) )
+  }else{
+    return( t(vapply(setNames(y, paste("y=",y,sep="")), function(y) dprior_x_given_y(x, y, a, c, d), numeric(length(x)))) )
+  }
 }
 #'
 #' @rdname Prior_x_given_y
 #' @export 
 pprior_x_given_y <- function(q, y, a, c, d){
-  return( setNames(pbeta_nbinom(q,a+y,d,c),  paste("x\u2264",q,sep="")) ) 
+  if(length(y)==1){
+    return( setNames(pbeta_nbinom(q,a+y,d,c),  paste("x\u2264",q,sep="")) ) 
+  }else{
+    return( t(vapply(setNames(y, paste("y=",y,sep="")), function(y) pprior_x_given_y(q, y, a, c, d), numeric(length(q)))) )
+  }
 }
 #'
 #' @rdname Prior_x_given_y
 #' @export 
 qprior_x_given_y <- function(p, y, a, c, d){
-  return( qbeta_nbinom(p,a+y,d,c) )  
+  if(length(y)==1){
+    return( qbeta_nbinom(p,a+y,d,c) )
+  }else{
+    return( t(vapply(setNames(y, paste("y=",y,sep="")), function(y) qprior_x_given_y(p, y, a, c, d), numeric(length(p)))) )
+  }
 }
 #'
 #' @rdname Prior_x_given_y
