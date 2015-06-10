@@ -109,14 +109,17 @@ rpost_mu <- function(n, a, b, c, d, T, x, y){
 #' @param n number of observations to be simulated
 #' @param ... other arguments passed to \code{\link{Beta2Dist}}
 #' 
-#' @return \code{dpost_phi} gives the density, \code{ppost_phi} the distribution function, \code{qpost_phi} the quantile function, and \code{rpost_phi} samples from the distribution.
+#' @return \code{dpost_phi} gives the density, \code{ppost_phi} the distribution function, \code{qpost_phi} the quantile function, 
+#' \code{rpost_phi} samples from the distribution, and \code{summary_post_phi} 
+#' gives a summary of the distribution.
 #' 
 #' @note \code{Posterior_phi} is a generic name for the functions documented. 
 #' 
 #' @examples 
 #' a <- 2; b <- 2; c <- 3; d <- 4; S <- 1; T <- 1; x <- 2; y <- 6
+#' summary_post_phi(a, b, c, d, S, T, x, y, type="pandoc")
 #' phi <- seq(0, 6, length.out=100)
-#' phi %>% { plot(., dpost_phi(., a, b, c, d, S, T, x=x, y), type="l") }
+#' phi %>% { plot(., dpost_phi(., a, b, c, d, S, T, x, y), type="l") }
 #' phi %>% { lines(., dprior_phi(., b, c, d, S, T),  col="red") }
 #' 
 NULL
@@ -164,4 +167,10 @@ rpost_phi <- function(n, a, b, c, d, S, T, x, y){
   c.post <- c+x ; d.post <- a+d+y
   rprior_phi(n, b, c.post, d.post, S, T)
 }
-
+#'
+#' @rdname Posterior_phi
+#' @export 
+summary_post_phi <- function(a, b, c, d, S, T, x, y, ...){
+  c.post <- c+x ; d.post <- a+d+y
+  summary_prior_phi(b, c.post, d.post, S, T, ...)
+}

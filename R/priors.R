@@ -62,12 +62,15 @@ rprior_mu <- function(n, a, b, ...){
 #' @param n number of observations to be simulated
 #' @param ... other arguments passed to \code{\link{Beta2Dist}}
 #' 
-#' @return \code{dprior_phi} gives the density, \code{pprior_phi} the distribution function, \code{qprior_phi} the quantile function, and \code{rprior_phi} samples from the distribution.
+#' @return \code{dprior_phi} gives the density, \code{pprior_phi} the distribution 
+#' function, \code{qprior_phi} the quantile function, \code{rprior_phi} samples from 
+#' the distribution, and \code{summary_prior_phi} gives a summary of the distribution.
 #' 
 #' @note \code{Prior_phi} is a generic name for the functions documented. 
 #' 
 #' @examples 
 #' curve(dprior_phi(x, 2, 2, 2, 10, 10), from=0, to=7)
+#' summary_prior_phi(2, 2, 2, 10, 10, type="pandoc")
 #' 
 NULL
 #'
@@ -117,6 +120,8 @@ rprior_phi <- function(n, b, c, d, S, T){
 summary_prior_phi <- function(b, c, d, S, T, ...){
   summary_beta2(c,d,scale=(T+b)/S, ...)
 }
+
+
 #' @name Prior_lambda 
 #' @rdname Prior_lambda
 #' @title Prior distribution on the incidence rate in the treated group
