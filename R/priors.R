@@ -44,7 +44,12 @@ qprior_mu <- function(p, a, b, ...){
 rprior_mu <- function(n, a, b, ...){
   rgamma(n, a, b, ...)
 }
-
+#'
+#' @rdname Prior_mu
+#' @export 
+summary_prior_mu <- function(a, b, ...){
+  summary_gamma(a, b, ...)
+}
 
 #' @name Prior_phi 
 #' @rdname Prior_phi
@@ -115,6 +120,7 @@ qprior_VE <- function(p, b, c, d, S, T, ...){
 rprior_phi <- function(n, b, c, d, S, T){
   rbeta2(n, c, d, scale=(T+b)/S)
 }
+#'
 #' @rdname Prior_phi
 #' @export 
 summary_prior_phi <- function(b, c, d, S, T, ...){
@@ -134,7 +140,7 @@ summary_prior_phi <- function(b, c, d, S, T, ...){
 #' The cdf involves the generalized hypergeometric function. Its current implementation 
 #' does not work when \code{a-c} is an integer.
 #' 
-#' @param lambda vector of quantiles 
+#' @param lambda,q vector of quantiles 
 #' @param a,b non-negative shape and rate parameter of the Gamma prior distribution on \eqn{\mu}
 #' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
 #' @param S,T sample sizes in control group and treated group
@@ -158,9 +164,10 @@ NULL
 #' @importFrom gsl lnpoch lnbeta hyperg_U
 #' @export 
 dprior_lambda <- function(lambda, a, b, c, d, S, T){  
-  ifelse(c>1 & lambda<.Machine$double.eps, 0, 
-         (b*S/(b+T))^a*exp(lnpoch(a,d)-lnbeta(c,d)+(a-1)*log(lambda)+log(hyperg_U(a+d,a-c+1,b*S/(b+T)*lambda)))
-  )
+#   ifelse(c>1 & lambda<.Machine$double.eps, 0, 
+#          (b*S/(b+T))^a*exp(lnpoch(a,d)-lnbeta(c,d)+(a-1)*log(lambda)+log(hyperg_U(a+d,a-c+1,b*S/(b+T)*lambda)))
+#   )
+  return( dGB2(lambda, a=a, c=d, d=c, tau=b*S/(T+b)) )
 }
 #'
 #' @rdname Prior_lambda
@@ -173,10 +180,16 @@ rprior_lambda <- function(n,a,b,c,d,S,T){
 #' @importFrom gsl lngamma lnpoch lnbeta hyperg_U
 #' @importFrom hypergeo genhypergeo
 #' @export 
-pprior_lambda <- function(p, a, b, c, d, S, T, ...){ 
-  #(b*S/(b+T))^a*poch(a,d)/beta(c,d)*
-    exp(a*log(b*S/(b+T)) + lnpoch(a,d) - lnbeta(c,d))*
-    (sign(c-a)*exp(a*log(p)+lngamma(c-a)-lngamma(c+d)-log(a))*genhypergeo(U=c(a,a+d), L=c(1+a,1+a-c), b*S/(b+T)*p, ...) +
-      sign(a-c)*exp((c-a)*log(b*S/(b+T))+c*log(p)+lngamma(a-c)-lngamma(a+d)-log(c))*genhypergeo(U=c(c,c+d), L=c(1+c,1+c-a), b*S/(b+T)*p, ...)
-    )
+pprior_lambda <- function(q, a, b, c, d, S, T, ...){ 
+#     exp(a*log(b*S/(b+T)) + lnpoch(a,d) - lnbeta(c,d))*
+#     (sign(c-a)*exp(a*log(p)+lngamma(c-a)-lngamma(c+d)-log(a))*genhypergeo(U=c(a,a+d), L=c(1+a,1+a-c), b*S/(b+T)*p, ...) +
+#       sign(a-c)*exp((c-a)*log(b*S/(b+T))+c*log(p)+lngamma(a-c)-lngamma(a+d)-log(c))*genhypergeo(U=c(c,c+d), L=c(1+c,1+c-a), b*S/(b+T)*p, ...)
+#     )
+  return( pGB2(q, a=a, c=d, d=c, tau=b*S/(T+b)) )
+}
+#'
+#' @rdname Prior_lambda
+#' @export 
+summary_prior_lambda <- function(a, b, c, d, S, T, ...){
+  summary_GB2(a=a, c=d, d=c, tau=b*S/(T+b), ...)
 }

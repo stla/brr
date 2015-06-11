@@ -184,6 +184,7 @@ summary_GIB <- function(a, alpha, beta, rho, type="list", ...){
 #' @note \code{PoissonGammaInverseBetaDist} is a generic name for the functions documented. 
 #' 
 #' @importFrom gsl lnpoch lngamma lnfact
+#' @importFrom pander pander
 #' @examples
 #' barplot(dPGIB(0:5,3,4,2,2.5))
 #' nsims <- 1e6
@@ -312,6 +313,108 @@ summary_beta_nbinom <- function(a, c, d, type="list", ...){
     return(out)
   }
 }
+
+
+#' @name GB2Dist
+#' @rdname GB2Dist
+#' @title Gamma-Beta2 distribution
+#' @description Density and random generation 
+#' for the  Gamma-Beta2 distribution
+#' with shape parameters \code{a}, \code{c}, \code{d} 
+#' and hyperrate parameter \code{tau} (scale of the Beta2 distribution). 
+#' For \code{tau=1} this is the same as the \link[=BetaNegativeBinomialDist]{Beta-negative binomial distribution}.
+#' @details This is the mixture distribution obtained by sampling a value \eqn{y} 
+#' from the \link[=Beta2Dist]{Beta2 distribution} with shape parameters \eqn{c}, \eqn{d}, 
+#' and scale \eqn{\tau} and 
+#' then sampling a value  from the Gamma distribution with 
+#' shape \eqn{a} and rate \eqn{y}.
+#' The pdf  involves 
+#' the Kummer confluent hypergeometric function of the second kind. 
+#' The cdf involves the generalized hypergeometric function. Its current implementation 
+#' does not work when \code{a-d} is an integer.
+#' 
+#' @param x,q vector of non-negative quantiles
+#' @param a,c,d non-negative shape parameters
+#' @param tau non-negative rate parameter 
+#' @param n number of observations to be sampled
+#' 
+#' @return \code{dGB2} gives the density, \code{pGB2} the cumulative function, 
+#' and \code{rGB2} samples from the distribution.
+#' 
+#' @note \code{GB2Dist} is a generic name for the functions documented. 
+#' 
+#' @importFrom gsl lnpoch lnbeta hyperg_U
+#' @importFrom pander pander
+#' 
+#' @examples
+#' a <- 2 ; c <- 4 ; d <- 3
+#' dGB2(0:10, a, c, d, tau=1)==dGIB(0:10, a, c, d, rho=1)
+#' tau <- 20/12
+#' nsims <- 1e6
+#' sims <- rGB2(nsims, a, c, d, tau)
+#' length(sims[sims<=1])/nsims
+#' integrate(function(x) dGB2(x, a, c, d, tau), lower=0, upper=1)
+#' pGB2(1, a, c, d-1e-5, tau)
+#' mean(sims); moment_GB2(1,a,c,d,tau)
+#' mean(sims^2); moment_GB2(2,a,c,d,tau)
+NULL
+#'
+#' @rdname GB2Dist
+#' @export
+dGB2 <- function(x,a,c,d,tau){
+  return(
+    ifelse(d>1 & x<.Machine$double.eps, 0, 
+           tau^a*exp(lnpoch(a,c)-lnbeta(d,c)+(a-1)*log(x)+log(hyperg_U(a+c,a-d+1,tau*x)))
+    )
+  )
+}
+#'
+#' @rdname GB2Dist
+#' @export
+pGB2 <- function(q, a, c, d, tau, ...){
+  return(  exp(a*log(tau) + lnpoch(a,c) - lnbeta(d,c))*
+             (sign(d-a)*exp(a*log(q)+lngamma(d-a)-lngamma(c+d)-log(a))*
+                genhypergeo(U=c(a,a+c), L=c(1+a,1+a-d), tau*q, ...) +
+                sign(a-d)*exp((d-a)*log(tau)+d*log(q)+lngamma(a-d)-lngamma(a+c)-log(d))*
+                genhypergeo(U=c(d,c+d), L=c(1+d,1+d-a), tau*q, ...)
+             )
+  )
+}
+#'
+#' @rdname GB2Dist
+#' @export
+qGB2 <- function(p, a, c, d, tau){
+  return( iquantiles(dGB2, p, a=a, c=c, d=d, tau=tau) )
+}
+#
+#' @rdname GB2Dist
+#' @export
+rGB2 <- function(n, a, c, d, tau){
+  return( rgamma(n, a, rbeta2(n, c, d, tau)) )
+}
+#'
+#' @rdname GB2Dist
+#' @export
+moment_GB2 <- function(k,a,c,d,tau){
+  return(
+    exp(-k*log(tau)+lnpoch(a,k)+lnpoch(d,k)-lnpoch(c-k,k))
+  )
+}
+#'
+#' @rdname GammaInverseBetaDist
+#' @export
+summary_GB2 <- function(a, c, d, tau, type="list", ...){
+  out <- list(mean=moment_GB2(1, a, c, d, tau),
+              sd=sqrt(moment_GB2(2, a, c, d, tau) - (moment_GB2(1, a, c, d, tau))^2)
+                )
+  if(type=="pandoc"){
+    pander(data.frame(out), ...)
+    return(invisible())
+  }else{
+    return(out)
+  }
+}
+
 
 #' @name PGB2Dist
 #' @rdname PGB2Dist
