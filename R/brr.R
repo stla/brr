@@ -76,6 +76,8 @@ prior <- function(params){
 #' summary(model)
 #' model <- brr(a=2, b=4, c=3, d=5, S=10, T=10)
 #' summary(model)
+#' model <- model(x=5, y=10)
+#' summary(model)
 #' @export
 summary.brr <- function(brr){
   params <- brr()
@@ -105,6 +107,22 @@ summary.brr <- function(brr){
   }
   cat("\n")
   cat("*Sample sizes*\n")
+  cat(sprintf("  S (treated group): %s", ifelse("S" %in% names(params), params$S, "not supplied")))
+  cat("\n")
   cat(sprintf("  T (control group): %s", ifelse("T" %in% names(params), params$T, "not supplied")))
+  cat("\n\n")
+  cat("*Observed counts*\n")
+  cat(sprintf("  x (treated group): %s", ifelse("x" %in% names(params), params$x, "not supplied")))
+  cat("\n")
+  cat(sprintf("  y (control group): %s", ifelse("y" %in% names(params), params$y, "not supplied")))
+  cat("\n\n")
+  cat("*Posterior distribution on phi*\n")
+  if(all(c("a","b","c","d","S","T","x","y") %in% names(params))){
+    cat(with(params, sprintf("  Beta2(%s,%s,scale=%s)", c+x, d+a+y, (T+b)/S)))
+    with(params, summary_post_phi(a, b, c, d, S, T, x, y, type="pandoc", style="rmarkdown"))
+  }else{
+      cat("  a, b, c, d, S, T, x and y must be supplied")
+  }
+  cat("\n")
   return(invisible())
 }
