@@ -42,6 +42,15 @@ brr <- function(...){
 #' @export
 plot.brr <- function(brr){ # marche car plot a déjà méthode S3 ; test.brr marche pas : il faudrait définir test() avec UseMethod
   params <- brr()
+  for(i in seq_along(params)) assign(names(params)[i], params[[i]])
+  # prior mu 
+  bounds <- qprior_mu(c(1e-4, 1-1e-4), a=a, b=b)
+  mu <- seq(bounds[1], bounds[2], length.out=100)
+  mu %>% {plot(., dprior_mu(., a=a, b=b), 
+            type="l", axes=FALSE, 
+            xlab=expression(mu), ylab=NA)}
+  axis(1)
+  readline(prompt="Press [enter] to continue")
   return(params$a+params$b)
   # faire output ggplots qui s'affichent ou liste de ggplot
 }

@@ -322,7 +322,6 @@ summary_beta_nbinom <- function(a, c, d, type="list", ...){
 #' for the  Gamma-Beta2 distribution
 #' with shape parameters \code{a}, \code{c}, \code{d} 
 #' and hyperrate parameter \code{tau} (scale of the Beta2 distribution). 
-#' For \code{tau=1} this is the same as the \link[=BetaNegativeBinomialDist]{Beta-negative binomial distribution}.
 #' @details This is the mixture distribution obtained by sampling a value \eqn{y} 
 #' from the \link[=Beta2Dist]{Beta2 distribution} with shape parameters \eqn{c}, \eqn{d}, 
 #' and scale \eqn{\tau} and 
@@ -331,7 +330,7 @@ summary_beta_nbinom <- function(a, c, d, type="list", ...){
 #' The pdf  involves 
 #' the Kummer confluent hypergeometric function of the second kind. 
 #' The cdf involves the generalized hypergeometric function. Its current implementation 
-#' does not work when \code{a-d} is an integer.
+#' does not work when \code{a-d} is an integer, and fails for many other cases.
 #' 
 #' @param x,q vector of non-negative quantiles
 #' @param a,c,d non-negative shape parameters
@@ -348,7 +347,6 @@ summary_beta_nbinom <- function(a, c, d, type="list", ...){
 #' 
 #' @examples
 #' a <- 2 ; c <- 4 ; d <- 3
-#' dGB2(0:10, a, c, d, tau=1)==dGIB(0:10, a, c, d, rho=1)
 #' tau <- 20/12
 #' nsims <- 1e6
 #' sims <- rGB2(nsims, a, c, d, tau)
