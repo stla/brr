@@ -1,7 +1,16 @@
 #' Set up
 #'
+#' @examples
+#' model <- Brr(a=2, b=3)
+#' model()
+#' # add parameters
+#' model <- model(c=4, d=5)
+#' model() 
+#' # replace parameters
+#' model <- model(a=10, b=11)
+#' model()
 #'@export
-brr <- function(...){
+Brr <- function(...){
   parameters <- sapply(list(...), identity, simplify=FALSE) #names(list(...))
   params <- c("a","b","c","d","S","T","x","y")
   if((!is.null(names(parameters))) && ! all(names(parameters) %in% params)){
@@ -19,15 +28,15 @@ brr <- function(...){
 #       P <- list(...)
 #       return(function(...){
 #         if(length(list(...))==0){
-#           return(c(parameters, do.call(brr,P)()))
+#           return(c(parameters, do.call(Brr,P)()))
 #         }else{
-#           return(c(parameters, brr(...)()))
+#           return(c(parameters, Brr(...)()))
 #         }
 #       })
-    #return(do.call(brr, c(list(...), parameters))) # pb error message : "Erreur dans function()" au lieu de "Erreur dans brr"
-    parameters <- c(list(...), parameters)
+    #return(do.call(Brr, c(list(...), parameters))) # pb error message : "Erreur dans function()" au lieu de "Erreur dans Brr"
+    parameters <- c(list(...), parameters[!names(parameters) %in% names(list(...))])
     return( eval(parse(
-      text=sprintf("brr(%s)", paste(sprintf("%s=%s", names(parameters), sapply(parameters, function(x) as.character(x))), collapse=",")))) )
+      text=sprintf("Brr(%s)", paste(sprintf("%s=%s", names(parameters), sapply(parameters, function(x) as.character(x))), collapse=",")))) )
     }
   }
   class(out) <- "brr"
@@ -37,21 +46,60 @@ brr <- function(...){
 #' plot brr
 #' 
 #' @examples
-#' model <- brr(a=2, b=3)
+#' model <- Brr(a=2, b=3)
 #' plot(model)
+#' model <- model(c=4, d=6, S=10, T=10)
 #' @export
 plot.brr <- function(brr){ # marche car plot a déjà méthode S3 ; test.brr marche pas : il faudrait définir test() avec UseMethod
   params <- brr()
+  type <- prior(params)
   for(i in seq_along(params)) assign(names(params)[i], params[[i]])
   # prior mu 
-  bounds <- qprior_mu(c(1e-4, 1-1e-4), a=a, b=b)
-  mu <- seq(bounds[1], bounds[2], length.out=100)
-  mu %>% {plot(., dprior_mu(., a=a, b=b), 
-            type="l", axes=FALSE, 
-            xlab=expression(mu), ylab=NA)}
-  axis(1)
-  readline(prompt="Press [enter] to continue")
-  return(params$a+params$b)
+  if(type != "non-informative"){
+    bounds <- qprior_mu(c(1e-4, 1-1e-4), a=a, b=b)
+    mu <- seq(bounds[1], bounds[2], length.out=100)
+    mu %>% {
+      plot(., dprior_mu(., a=a, b=b), 
+           type="l", axes=FALSE, 
+           xlab=expression(mu), ylab=NA, 
+           main=expression(paste("Prior distribution of ", mu)) )
+    }
+    axis(1)
+    readline(prompt="Press [enter] to continue")
+  }
+  # prior phi
+  if(type == "informative"){
+    bounds <- qprior_phi(c(1e-4, 1-1e-4), b=b, c=c, d=d, S=S, T=T)
+    phi <- seq(bounds[1], bounds[2], length.out=100)
+    phi %>% {
+      plot(., dprior_phi(., b=b, c=c, d=d, S=S, T=T), 
+           type="l", axes=FALSE, 
+           xlab=expression(phi), ylab=NA, 
+           main=expression(paste("Prior distribution of ", phi)) )
+    }
+    axis(1)
+    readline(prompt="Press [enter] to continue")
+  }
+  # posteriors
+  if(!all(c("x","y","S","T") %in% names(params))) return(invisible())
+  missings <- NULL
+  if(!"a" %in% names(params)){
+    a <- 0.5
+    missings <- c(missings, "a")
+  }
+  if(!"b" %in% names(params)){
+    b <- 0
+    missings <- c(missings, "b")
+  }
+  if(!"c" %in% names(params)){
+    c <- 0.5
+    missings <- c(missings, "c")
+  }
+  if(!"a" %in% names(params)){
+    d <- 0
+    missings <- c(missings, "d")
+  }
+  return(missings)
   # faire output ggplots qui s'affichent ou liste de ggplot
 }
 
@@ -61,13 +109,13 @@ plot.brr <- function(brr){ # marche car plot a déjà méthode S3 ; test.brr mar
 prior <- function(params){
   #params <- brr()
   if(all(c("a","b","c","d","S","T") %in% names(params))){
-    return("informative prior")
+    return("informative")
   }else{
     if(!all(c("a","b") %in% names(params))){
-      return("non-informative prior")
+      return("non-informative")
     }else{
       if(all(c("a","b") %in% names(params))){
-        return("semi-informative prior")
+        return("semi-informative")
       }
     }
   }
@@ -77,13 +125,13 @@ prior <- function(params){
 #' Summary brr
 #' 
 #' @examples
-#' model <- brr()
+#' model <- Brr()
 #' summary(model)
-#' model <- brr(x=3, y=4)
+#' model <- Brr(x=3, y=4)
 #' summary(model)
-#' model <- brr(a=2, b=4, T=10)
+#' model <- Brr(a=2, b=4, T=10)
 #' summary(model)
-#' model <- brr(a=2, b=4, c=3, d=5, S=10, T=10)
+#' model <- model(a=2, b=4, c=3, d=5, S=10, T=10)
 #' summary(model)
 #' model <- model(x=5, y=10)
 #' summary(model)
@@ -107,7 +155,7 @@ summary.brr <- function(brr){
     cat(with(params, sprintf("  Beta2(c=%s,d=%s,scale=%s)", c, d, (T+b)/S)))
     with(params, summary_prior_phi(b, c, d, S, T, type="pandoc", style="rmarkdown"))
   }else{
-    if(type=="non-informative prior" || type=="semi-informative prior"){
+    if(type=="non-informative" || type=="semi-informative"){
       cat("  Non-informative prior")
     }else{
       cat("  c, d, b, S and T must be supplied")
