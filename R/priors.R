@@ -23,7 +23,7 @@ NULL
 #'
 #' @rdname Prior_mu
 #' @export 
-dprior_mu<-function(mu, a, b, ...){
+dprior_mu <- function(mu, a, b, ...){
   dgamma(mu, a, b, ...)
 }
 #'
@@ -193,3 +193,32 @@ pprior_lambda <- function(q, a, b, c, d, S, T, ...){
 summary_prior_lambda <- function(a, b, c, d, S, T, ...){
   summary_GB2(a=a, c=d, d=c, tau=b*S/(T+b), ...)
 }
+
+#' @name Prior
+#' @rdname Prior
+#' @title Prior distributions
+#' @description Generic functions for prior distributions
+#' 
+#' @param model
+#' @param parameter
+#' @param ...
+#' 
+#' @examples
+#' model <- Brr(a=2, b=4)
+#' dprior(model, "mu", 1)
+#' # the same:
+#' dprior_mu(mu=1, a=2, b=4)
+NULL
+#' 
+#' @rdname Prior
+#' @export
+dprior <- function(model, parameter, ...){
+  if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
+  fun <- eval(parse(text=sprintf("dprior_%s", parameter)))
+  args <- formalArgs(fun) %>% subset(!. %in% "...") %>% .[-1]
+  params <- model()
+  if(!all(args %in% names(params))) stop(sprintf("Missing parameters. You must supply %s.", 
+                                          paste(args, collapse=", ")))
+  return( do.call(fun, c(list(...), params[names(params) %in% args])) )
+}
+

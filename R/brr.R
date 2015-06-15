@@ -49,58 +49,69 @@ Brr <- function(...){
 #' model <- Brr(a=2, b=3)
 #' plot(model)
 #' model <- model(c=4, d=6, S=10, T=10)
+#' plot(model)
+#' plot(model, prior(phi))
 #' @export
-plot.brr <- function(brr){ # marche car plot a déjà méthode S3 ; test.brr marche pas : il faudrait définir test() avec UseMethod
+plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S3 ; test.brr marche pas : il faudrait définir test() avec UseMethod
   params <- brr()
   type <- prior(params)
   for(i in seq_along(params)) assign(names(params)[i], params[[i]])
-  # prior mu 
-  if(type != "non-informative"){
-    bounds <- qprior_mu(c(1e-4, 1-1e-4), a=a, b=b)
-    mu <- seq(bounds[1], bounds[2], length.out=100)
-    mu %>% {
-      plot(., dprior_mu(., a=a, b=b), 
-           type="l", axes=FALSE, 
-           xlab=expression(mu), ylab=NA, 
-           main=expression(paste("Prior distribution of ", mu)) )
+  # specific plot 
+  if(substitute(what)!="summary"){
+    f <- eval(parse(text=paste(as.character(substitute(what)), collapse="_")))
+    return(f)
+  }
+  
+  # summary 
+  if(substitute(what)=="summary"){
+    # prior mu 
+    if(type != "non-informative"){
+      bounds <- qprior_mu(c(1e-4, 1-1e-4), a=a, b=b)
+      mu <- seq(bounds[1], bounds[2], length.out=100)
+      mu %>% {
+        plot(., dprior_mu(., a=a, b=b), 
+             type="l", axes=FALSE, 
+             xlab=expression(mu), ylab=NA, 
+             main=expression(paste("Prior distribution of ", mu)) )
+      }
+      axis(1)
+      readline(prompt="Press [enter] to continue")
     }
-    axis(1)
-    readline(prompt="Press [enter] to continue")
-  }
-  # prior phi
-  if(type == "informative"){
-    bounds <- qprior_phi(c(1e-4, 1-1e-4), b=b, c=c, d=d, S=S, T=T)
-    phi <- seq(bounds[1], bounds[2], length.out=100)
-    phi %>% {
-      plot(., dprior_phi(., b=b, c=c, d=d, S=S, T=T), 
-           type="l", axes=FALSE, 
-           xlab=expression(phi), ylab=NA, 
-           main=expression(paste("Prior distribution of ", phi)) )
+    # prior phi
+    if(type == "informative"){
+      bounds <- qprior_phi(c(1e-4, 1-1e-4), b=b, c=c, d=d, S=S, T=T)
+      phi <- seq(bounds[1], bounds[2], length.out=100)
+      phi %>% {
+        plot(., dprior_phi(., b=b, c=c, d=d, S=S, T=T), 
+             type="l", axes=FALSE, 
+             xlab=expression(phi), ylab=NA, 
+             main=expression(paste("Prior distribution of ", phi)) )
+      }
+      axis(1)
+      readline(prompt="Press [enter] to continue")
     }
-    axis(1)
-    readline(prompt="Press [enter] to continue")
+    # posteriors
+    if(!all(c("x","y","S","T") %in% names(params))) return(invisible())
+    missings <- NULL
+    if(!"a" %in% names(params)){
+      a <- 0.5
+      missings <- c(missings, "a")
+    }
+    if(!"b" %in% names(params)){
+      b <- 0
+      missings <- c(missings, "b")
+    }
+    if(!"c" %in% names(params)){
+      c <- 0.5
+      missings <- c(missings, "c")
+    }
+    if(!"a" %in% names(params)){
+      d <- 0
+      missings <- c(missings, "d")
+    }
+    return(missings)
+    # faire output ggplots qui s'affichent ou liste de ggplot
   }
-  # posteriors
-  if(!all(c("x","y","S","T") %in% names(params))) return(invisible())
-  missings <- NULL
-  if(!"a" %in% names(params)){
-    a <- 0.5
-    missings <- c(missings, "a")
-  }
-  if(!"b" %in% names(params)){
-    b <- 0
-    missings <- c(missings, "b")
-  }
-  if(!"c" %in% names(params)){
-    c <- 0.5
-    missings <- c(missings, "c")
-  }
-  if(!"a" %in% names(params)){
-    d <- 0
-    missings <- c(missings, "d")
-  }
-  return(missings)
-  # faire output ggplots qui s'affichent ou liste de ggplot
 }
 
 #' Type of the prior
