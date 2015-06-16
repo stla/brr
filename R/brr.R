@@ -194,3 +194,32 @@ summary.brr <- function(brr){
   cat("\n")
   return(invisible())
 }
+
+
+#' @name Prior
+#' @rdname Prior
+#' @title Prior distributions
+#' @description Generic functions for prior distributions
+#' 
+#' @param model an object of class \code{\link[=Brr]{brr}}
+#' @param parameter a character string among \code{mu}, \code{phi}, \code{lambda}, \code{x}, \code{y}
+#' @param ... the first argument of the function called 
+#' 
+#' @examples
+#' model <- Brr(a=2, b=4)
+#' dprior(model, "mu", 1)
+#' # the same:
+#' dprior_mu(mu=1, a=2, b=4)
+NULL
+#' 
+#' @rdname Prior
+#' @export
+dprior <- function(model, parameter, ...){
+  if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
+  fun <- eval(parse(text=sprintf("dprior_%s", parameter)))
+  args <- formalArgs(fun) %>% subset(!. %in% "...") %>% .[-1]
+  params <- model()
+  if(!all(args %in% names(params))) stop(sprintf("Missing parameters. You must supply %s.", 
+                                                 paste(args, collapse=", ")))
+  return( do.call(fun, c(list(...), params[names(params) %in% args])) )
+}

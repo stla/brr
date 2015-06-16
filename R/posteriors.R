@@ -17,13 +17,13 @@
 #' @param ... other arguments passed to \code{\link{dGIB}}
 #' 
 #' @return \code{dpost_lambda} gives the density, and \code{rpost_lambda} samples from 
-#' the distribution, and \code{summary_post_lambda} gives a summary of the distribution.
+#' the distribution, and \code{spost_lambda} gives a summary of the distribution.
 #' 
 #' @note \code{Posterior_lambda} is a generic name for the functions documented. 
 #' 
 #' @examples 
 #' curve(dpost_lambda(x, 2, 2, 2, 20, 1, 10), from=0, to=0.4)
-#' summary_post_lambda( 2, 2, 2, 20, 1, 10)
+#' spost_lambda( 2, 2, 2, 20, 1, 10)
 NULL
 #'
 #' @rdname Posterior_lambda
@@ -46,7 +46,7 @@ rpost_lambda <- function(n, a, c, d, S, x, y){
 #'
 #' @rdname Posterior_lambda
 #' @export 
-summary_post_lambda <- function(a, c, d, S, x, y, ...){
+spost_lambda <- function(a, c, d, S, x, y, ...){
   return( summary_GIB(a+x+y, a+d+y, c+x, S, ...) )
 }
 
@@ -68,14 +68,14 @@ summary_post_lambda <- function(a, c, d, S, x, y, ...){
 #' @param ... other arguments passed to \code{\link{dGIB}}
 #' 
 #' @return \code{dpost_mu} gives the density, \code{rpost_mu} samples from the 
-#' distribution, and \code{summary_post_mu} gives a summary of the distribution.
+#' distribution, and \code{spost_mu} gives a summary of the distribution.
 #' 
 #' @note \code{Posterior_mu} is a generic name for the functions documented. 
 #' 
 #' @examples 
 #' curve(dpost_mu(x, 2, 2, 2, 2, 10, 3, 8), from=0, to=2)
 #' lines(density(rpost_mu(1e6, 2, 2, 2, 2, 10, 3, 8)), col="red", lty="dashed")
-#' summary_post_mu(2, 2, 2, 2, 10, 3, 8, type="pandoc")
+#' spost_mu(2, 2, 2, 2, 10, 3, 8, type="pandoc")
 #' 
 NULL
 #'
@@ -101,7 +101,7 @@ rpost_mu <- function(n, a, b, c, d, T, x, y){
 #'
 #' @rdname Posterior_mu
 #' @export 
-summary_post_mu <- function(a, b, c, d, T, x, y, ...){
+spost_mu <- function(a, b, c, d, T, x, y, ...){
   summary_GIB(a+x+y, c+x, a+d+y, T+b, ...)
 }
 
@@ -123,14 +123,14 @@ summary_post_mu <- function(a, b, c, d, T, x, y, ...){
 #' @param ... other arguments passed to \code{\link{Beta2Dist}}
 #' 
 #' @return \code{dpost_phi} gives the density, \code{ppost_phi} the distribution function, \code{qpost_phi} the quantile function, 
-#' \code{rpost_phi} samples from the distribution, and \code{summary_post_phi} 
+#' \code{rpost_phi} samples from the distribution, and \code{spost_phi} 
 #' gives a summary of the distribution.
 #' 
 #' @note \code{Posterior_phi} is a generic name for the functions documented. 
 #' 
 #' @examples 
 #' a <- 2; b <- 2; c <- 3; d <- 4; S <- 1; T <- 1; x <- 2; y <- 6
-#' summary_post_phi(a, b, c, d, S, T, x, y, type="pandoc")
+#' spost_phi(a, b, c, d, S, T, x, y, type="pandoc")
 #' phi <- seq(0, 6, length.out=100)
 #' phi %>% { plot(., dpost_phi(., a, b, c, d, S, T, x, y), type="l") }
 #' phi %>% { lines(., dprior_phi(., b, c, d, S, T),  col="red") }
@@ -183,7 +183,7 @@ rpost_phi <- function(n, a, b, c, d, S, T, x, y){
 #'
 #' @rdname Posterior_phi
 #' @export 
-summary_post_phi <- function(a, b, c, d, S, T, x, y, ...){
+spost_phi <- function(a, b, c, d, S, T, x, y, ...){
   c.post <- c+x ; d.post <- a+d+y
-  summary_prior_phi(b, c.post, d.post, S, T, ...)
+  sprior_phi(b, c.post, d.post, S, T, ...)
 }

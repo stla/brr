@@ -47,7 +47,7 @@ rprior_mu <- function(n, a, b, ...){
 #'
 #' @rdname Prior_mu
 #' @export 
-summary_prior_mu <- function(a, b, ...){
+sprior_mu <- function(a, b, ...){
   summary_gamma(a, b, ...)
 }
 
@@ -69,13 +69,13 @@ summary_prior_mu <- function(a, b, ...){
 #' 
 #' @return \code{dprior_phi} gives the density, \code{pprior_phi} the distribution 
 #' function, \code{qprior_phi} the quantile function, \code{rprior_phi} samples from 
-#' the distribution, and \code{summary_prior_phi} gives a summary of the distribution.
+#' the distribution, and \code{sprior_phi} gives a summary of the distribution.
 #' 
 #' @note \code{Prior_phi} is a generic name for the functions documented. 
 #' 
 #' @examples 
 #' curve(dprior_phi(x, 2, 2, 2, 10, 10), from=0, to=7)
-#' summary_prior_phi(2, 2, 2, 10, 10, type="pandoc")
+#' sprior_phi(2, 2, 2, 10, 10, type="pandoc")
 #' 
 NULL
 #'
@@ -123,7 +123,7 @@ rprior_phi <- function(n, b, c, d, S, T){
 #'
 #' @rdname Prior_phi
 #' @export 
-summary_prior_phi <- function(b, c, d, S, T, ...){
+sprior_phi <- function(b, c, d, S, T, ...){
   summary_beta2(c,d,scale=(T+b)/S, ...)
 }
 
@@ -149,7 +149,8 @@ summary_prior_phi <- function(b, c, d, S, T, ...){
 #' such as \code{series=FALSE} to use the continued fraction expansion
 #' 
 #' @return \code{dprior_lambda} gives the density, \code{pprior_lambda} the distribution function 
-#' (see Details), and \code{rprior_lambda} samples from the distribution.
+#' (see Details), \code{rprior_lambda} samples from the distribution, and 
+#' \code{rprior_lambda} gives a summary of the distribution.
 #' 
 #' @note \code{Prior_lambda} is a generic name for the functions documented. 
 #' 
@@ -190,35 +191,7 @@ pprior_lambda <- function(q, a, b, c, d, S, T, ...){
 #'
 #' @rdname Prior_lambda
 #' @export 
-summary_prior_lambda <- function(a, b, c, d, S, T, ...){
+sprior_lambda <- function(a, b, c, d, S, T, ...){
   summary_GB2(a=a, c=d, d=c, tau=b*S/(T+b), ...)
-}
-
-#' @name Prior
-#' @rdname Prior
-#' @title Prior distributions
-#' @description Generic functions for prior distributions
-#' 
-#' @param model
-#' @param parameter
-#' @param ...
-#' 
-#' @examples
-#' model <- Brr(a=2, b=4)
-#' dprior(model, "mu", 1)
-#' # the same:
-#' dprior_mu(mu=1, a=2, b=4)
-NULL
-#' 
-#' @rdname Prior
-#' @export
-dprior <- function(model, parameter, ...){
-  if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
-  fun <- eval(parse(text=sprintf("dprior_%s", parameter)))
-  args <- formalArgs(fun) %>% subset(!. %in% "...") %>% .[-1]
-  params <- model()
-  if(!all(args %in% names(params))) stop(sprintf("Missing parameters. You must supply %s.", 
-                                          paste(args, collapse=", ")))
-  return( do.call(fun, c(list(...), params[names(params) %in% args])) )
 }
 
