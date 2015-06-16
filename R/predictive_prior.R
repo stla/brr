@@ -131,7 +131,7 @@ rprior_x <- function(n, a, b, c, d, T){
 #' 
 #' @examples 
 #' barplot(dprior_x_given_y(0:10, 5, 3, 10, 20))
-#' dprior_x_given_y(5, 0:5, 3, 10, 20) # pb names
+#' dprior_x_given_y(5, 0:5, 3, 10, 20) 
 #' a <- 3; b <- 1; c <- 10; d <- 20
 #' T <- 2
 #' dprior_x(x=5, a=a, b=b, c=c, d=d, T=T)
