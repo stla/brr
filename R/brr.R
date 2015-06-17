@@ -36,7 +36,7 @@ Brr <- function(...){
     #return(do.call(Brr, c(list(...), parameters))) # pb error message : "Erreur dans function()" au lieu de "Erreur dans Brr"
     parameters <- c(list(...), parameters[!names(parameters) %in% names(list(...))])
     return( eval(parse(
-      text=sprintf("Brr(%s)", paste(sprintf("%s=%s", names(parameters), sapply(parameters, function(x) as.character(x))), collapse=",")))) )
+      text=sprintf("Brr(%s)", paste(sprintf("%s=%s", names(parameters), sapply(parameters, function(x) if(is.null(x)) "NULL" else as.character(x))), collapse=",")))) )
     }
   }
   class(out) <- "brr"
@@ -119,6 +119,8 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
 #' 
 prior <- function(params){
   #params <- brr()
+  # remove NULL components
+  params <- as.list(unlist(params))
   if(all(c("a","b","c","d","S","T") %in% names(params))){
     return("informative")
   }else{
@@ -150,6 +152,8 @@ prior <- function(params){
 summary.brr <- function(brr){
   params <- brr()
   type <- prior(params)
+  # remove NULL components
+  params <- as.list(unlist(params))
   cat("----------\n")
   cat(type)
   cat("\n\n")
@@ -198,6 +202,7 @@ summary.brr <- function(brr){
 #' Generic function
 #' 
 brr_generic <- function(fun, model, parameter, ...){
+  # virer les NULL mais mettre les valeurs pour posterior => mettre ça en attribut de prior()
   if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
   fun <- sprintf("%s_%s", fun, parameter)
   if(! fun %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun))
