@@ -52,7 +52,7 @@ icdf <- function(pmf, p, ...){
 #' dd_moment(dpois, k=2, lambda=5)
 #' @export
 dd_moment <- function(pmf, k=1, accuracy=.Machine$double.eps, ...){
- m0 <- 0*pmf(0, ...)
+ m0 <- 0
  x <- 1
  px <- pmf(x, ...)
  m1 <- m0+x^k*px
