@@ -195,11 +195,24 @@ summary.brr <- function(brr){
   return(invisible())
 }
 
+#' Generic function
+#' 
+brr_generic <- function(fun, model, parameter, ...){
+  if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
+  fun <- sprintf("%s_%s", fun, parameter)
+  if(! fun %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun))
+  fun <- eval(parse(text=fun))
+  args <- formalArgs(fun) %>% subset(!. %in% "...") %>% .[-1]
+  params <- model()
+  if(!all(args %in% names(params))) stop(sprintf("Missing parameters. You must supply %s.", 
+                                                 paste(args, collapse=", ")))
+  return( do.call(fun, c(list(...), params[names(params) %in% args])) )
+}
 
-#' @name Prior
-#' @rdname Prior
-#' @title Prior distributions
-#' @description Generic functions for prior distributions
+#' @name PriorAndPosterior
+#' @rdname PriorAndPosterior
+#' @title Prior and posterior distributions
+#' @description Generic functions for prior and posterior distributions
 #' 
 #' @param model an object of class \code{\link[=Brr]{brr}}
 #' @param parameter a character string among \code{mu}, \code{phi}, \code{lambda}, \code{x}, \code{y}
@@ -207,19 +220,64 @@ summary.brr <- function(brr){
 #' 
 #' @examples
 #' model <- Brr(a=2, b=4)
-#' dprior(model, "mu", 1)
+#' dprior(model, "mu", 1:3)
 #' # the same:
-#' dprior_mu(mu=1, a=2, b=4)
-NULL
+#' dprior_mu(mu=1:3, a=2, b=4)
+#' \dontrun{
+#' dprior(model, "lambda", 1:3)}
+#' model <- model(c=4, d=5, S=10, T=10)
+#' dprior(model, "lambda", 1:3)
+#' model <- model(x=5, y=10)
+#' ppost(model, "phi", 1)
+NULL 
 #' 
-#' @rdname Prior
+#' @rdname PriorAndPosterior
 #' @export
 dprior <- function(model, parameter, ...){
-  if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
-  fun <- eval(parse(text=sprintf("dprior_%s", parameter)))
-  args <- formalArgs(fun) %>% subset(!. %in% "...") %>% .[-1]
-  params <- model()
-  if(!all(args %in% names(params))) stop(sprintf("Missing parameters. You must supply %s.", 
-                                                 paste(args, collapse=", ")))
-  return( do.call(fun, c(list(...), params[names(params) %in% args])) )
+  return( brr_generic("dprior", model, parameter, ...) )
+}
+#' @rdname PriorAndPosterior
+#' @export
+pprior <- function(model, parameter, ...){
+  return( brr_generic("pprior", model, parameter, ...) )
+}
+#' @rdname PriorAndPosterior
+#' @export
+qprior <- function(model, parameter, ...){
+  return( brr_generic("qprior", model, parameter, ...) )
+}
+#' @rdname PriorAndPosterior
+#' @export
+rprior <- function(model, parameter, ...){
+  return( brr_generic("rprior", model, parameter, ...) )
+}
+#' @rdname PriorAndPosterior
+#' @export
+sprior <- function(model, parameter, ...){
+  return( brr_generic("sprior", model, parameter, ...) )
+}
+#' @rdname PriorAndPosterior
+#' @export
+dpost <- function(model, parameter, ...){
+  return( brr_generic("dpost", model, parameter, ...) )
+}
+#' @rdname PriorAndPosterior
+#' @export
+ppost <- function(model, parameter, ...){
+  return( brr_generic("ppost", model, parameter, ...) )
+}
+#' @rdname PriorAndPosterior
+#' @export
+qpost <- function(model, parameter, ...){
+  return( brr_generic("qpost", model, parameter, ...) )
+}
+#' @rdname PriorAndPosterior
+#' @export
+rpost <- function(model, parameter, ...){
+  return( brr_generic("rpost", model, parameter, ...) )
+}
+#' @rdname PriorAndPosterior
+#' @export
+spost <- function(model, parameter, ...){
+  return( brr_generic("spost", model, parameter, ...) )
 }
