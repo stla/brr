@@ -187,16 +187,10 @@ summary_GIB <- function(a, alpha, beta, rho, type="list", ...){
 #' @importFrom pander pander
 #' @examples
 #' barplot(dPGIB(0:5,3,4,2,2.5))
-#' nsims <- 1e6
-#' sims <- rPGIB(nsims, 3,4,2,2.5)
-#' ecdf(sims)(0:2)
-#' dPGIB(0:2,3,4,2,2.5) %>% cumsum # !!!! code_vD : alpha beta inversés et rho 1/rho
+#'  # !!!! code_vD : alpha beta inversés et rho 1/rho
 #'  # => j'échange alpha beta dans dGIB (conséquence dpost_lambda/mu différence avec code_vD)
 #'  # => ainsi PGIB cohérent avec papier hyperscaled poisson
 #'  # => et j'échange rho 1/rho dans dPGIB => différence avec code_vD dans dpost_x/y
-#' ( q <- qPGIB(0.5, 10, 2, 12, 2.1) ) 
-#' pPGIB(q, 10, 2, 12, 2.1)
-#' pPGIB(q-1, 10, 2, 12, 2.1)
 NULL
 #'
 #' @rdname PoissonGammaInverseBetaDist
@@ -399,7 +393,7 @@ moment_GB2 <- function(k,a,c,d,tau){
   )
 }
 #'
-#' @rdname GammaInverseBetaDist
+#' @rdname GB2Dist
 #' @export
 summary_GB2 <- function(a, c, d, tau, type="list", ...){
   out <- list(mean=moment_GB2(1, a, c, d, tau),
@@ -441,7 +435,7 @@ summary_GB2 <- function(a, c, d, tau, type="list", ...){
 #' 
 #' @examples
 #' a <- 2 ; c <- 5 ; d <- 30
-#' dPGB2(0:10, a, c, d, tau=1)==dbeta_nbinom(0:10, a, c, d)
+#' all(dPGB2(0:10, a, c, d, tau=1)==dbeta_nbinom(0:10, a, c, d))
 #' tau <- 2
 #' nsims <- 1e6
 #' sims <- rbeta2(nsims, c, d, scale=tau) %>% rgamma(nsims, a, .) %>% rpois(nsims, .)
