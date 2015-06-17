@@ -12,7 +12,7 @@
 #'@export
 Brr <- function(...){
   parameters <- sapply(list(...), identity, simplify=FALSE) #names(list(...))
-  params <- c("a","b","c","d","S","T","x","y")
+  params <- c("a","b","c","d","S","T","x","y","Snew","Tnew")
   if((!is.null(names(parameters))) && ! all(names(parameters) %in% params)){
     not <- names(parameters)[which(! names(parameters) %in% params)]
     if(length(not)==1){

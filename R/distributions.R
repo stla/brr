@@ -12,7 +12,7 @@
 summary_gamma <- function(a, b, type="list", ...){
   out <- list(mode=ifelse(a>1, (a-1)/b, 0),  
        mean=a/b,  
-       var=a/b^2,  
+       sd=sqrt(a)/b,  
        Q1=qgamma(0.25,a,b),
        Q2=qgamma(0.5,a,b),
        Q3=qgamma(0.75,a,b)
@@ -92,7 +92,7 @@ rbeta2 <- function(nsims,c, d, scale){
 summary_beta2 <- function(c, d, scale, type="list", ...){
   out <- list(mode=ifelse(c>1, scale*(c-1)/(d+1), 0),  
        mean=ifelse(d>1, scale*c/(d-1), Inf),  
-       var=ifelse(d>2, scale^2*c*(c+d-1)/((d-1)^2*(d-2)), Inf),  
+       sd=ifelse(d>2, sqrt(scale^2*c*(c+d-1)/((d-1)^2*(d-2))), Inf),  
        Q1=qbeta2(0.25,c,d,scale),
        Q2=qbeta2(0.5,c,d,scale),
        Q3=qbeta2(0.75,c,d,scale)
@@ -153,7 +153,7 @@ rGIB <- function(n,a,alpha,beta,rho){
 #' @export
 summary_GIB <- function(a, alpha, beta, rho, type="list", ...){
   out <- list(mean=a*beta/(alpha+beta)/rho,
-       var=a*(1+a)*beta*(beta+1)/(alpha+beta)/(alpha+beta+1)/rho^2 - (a*beta/(alpha+beta)/rho)^2
+       sd = sqrt(a*(1+a)*beta*(beta+1)/(alpha+beta)/(alpha+beta+1)/rho^2 - (a*beta/(alpha+beta)/rho)^2)
        )
   if(type=="pandoc"){
     pander(data.frame(out), ...)
@@ -396,8 +396,8 @@ moment_GB2 <- function(k,a,c,d,tau){
 #' @rdname GB2Dist
 #' @export
 summary_GB2 <- function(a, c, d, tau, type="list", ...){
-  out <- list(mean=moment_GB2(1, a, c, d, tau),
-              sd=sqrt(moment_GB2(2, a, c, d, tau) - (moment_GB2(1, a, c, d, tau))^2)
+  out <- list(mean=ifelse(c>1, moment_GB2(1, a, c, d, tau), Inf),
+              sd=ifelse(c>2, sqrt(moment_GB2(2, a, c, d, tau) - (moment_GB2(1, a, c, d, tau))^2))
                 )
   if(type=="pandoc"){
     pander(data.frame(out), ...)

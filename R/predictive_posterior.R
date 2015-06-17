@@ -7,12 +7,12 @@
 #' @details The posterior predictive distribution of the count in the treated group is a  
 #' \code{\link[=GammaInverseBetaDist]{Gamma-Inverse Beta distribution}}.
 #' 
-#' @param x2,q vector of non-negative \strong{integer} quantiles 
-#' @param x1,y1 counts (integer) in the treated group and control group of the observed experiment
+#' @param xnew,q vector of non-negative \strong{integer} quantiles 
+#' @param x,y counts (integer) in the treated group and control group of the observed experiment
 #' @param p vector of probabilities
 #' @param a non-negative shape parameter of the Gamma prior distribution on the rate \eqn{\mu}
 #' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
-#' @param S1,S2 sample sizes of the treated group in the observed experiment and the
+#' @param S,Snew sample sizes of the treated group in the observed experiment and the
 #' predicted experiment
 #' @param n number of observations to be simulated
 #' 
@@ -29,38 +29,38 @@ NULL
 #'
 #' @rdname Post_x
 #' @export 
-dpost_x <- function(x2, S2, a=0.5, c=0.5, d=0, x1, y1, S1){
-  a.post <- a+x1+y1
-  c.post <- c+x1
-  d.post <- d+a+y1
-  return( setNames(dPGIB(x2,a.post,d.post,c.post,S1/S2), paste("x2=",x2,sep="")) )
+dpost_x <- function(xnew, Snew, a=0.5, c=0.5, d=0, x, y, S){
+  a.post <- a+x+y
+  c.post <- c+x
+  d.post <- d+a+y
+  return( setNames(dPGIB(xnew,a.post,d.post,c.post,S/Snew), paste("xnew=",xnew,sep="")) )
 }
 #'
 #' @rdname Post_x
 #' @export 
-ppost_x <- function(q, S2, a=0.5, c=0.5, d=0, x1, y1, S1){
-  a.post <- a+x1+y1
-  c.post <- c+x1
-  d.post <- d+a+y1
-  return( setNames(pPGIB(q,a.post,d.post,c.post,S1/S2), paste("x2\u2264",q,sep="")) )
+ppost_x <- function(q, Snew, a=0.5, c=0.5, d=0, x, y, S){
+  a.post <- a+x+y
+  c.post <- c+x
+  d.post <- d+a+y
+  return( setNames(pPGIB(q,a.post,d.post,c.post,S/Snew), paste("xnew\u2264",q,sep="")) )
 }
 #'
 #' @rdname Post_x
 #' @export 
-qpost_x <- function(p, S2, a=0.5, c=0.5, d=0, x1, y1, S1){
-  a.post <- a+x1+y1
-  c.post <- c+x1
-  d.post <- d+a+y1
-  return( qPGIB(p,a.post,d.post,c.post,S1/S2) ) 
+qpost_x <- function(p, Snew, a=0.5, c=0.5, d=0, x, y, S){
+  a.post <- a+x+y
+  c.post <- c+x
+  d.post <- d+a+y
+  return( qPGIB(p,a.post,d.post,c.post,S/Snew) ) 
 }
 #'
 #' @rdname Post_x
 #' @export 
-rpost_x <- function(n, S2, a=0.5, c=0.5, d=0, x1, y1, S1){
-  a.post <- a+x1+y1
-  c.post <- c+x1
-  d.post <- d+a+y1
-  return( rPGIB(n,a.post,d.post,c.post,S1/S2) )
+rpost_x <- function(n, Snew, a=0.5, c=0.5, d=0, x, y, S){
+  a.post <- a+x+y
+  c.post <- c+x
+  d.post <- d+a+y
+  return( rPGIB(n,a.post,d.post,c.post,S/Snew) )
 }
 
 
@@ -73,12 +73,12 @@ rpost_x <- function(n, S2, a=0.5, c=0.5, d=0, x1, y1, S1){
 #' @details The posterior predictive distribution of the count in the treated group is a  
 #' \code{\link[=GammaInverseBetaDist]{Gamma-Inverse Beta distribution}}.
 #' 
-#' @param y2,q vector of non-negative \strong{integer} quantiles 
-#' @param x1,y1 counts (integer) in the treated group and control group of the observed experiment
+#' @param ynew,q vector of non-negative \strong{integer} quantiles 
+#' @param x,y counts (integer) in the treated group and control group of the observed experiment
 #' @param p vector of probabilities
 #' @param a,b non-negative shape parameter and rate parameter of the Gamma prior distribution on the rate \eqn{\mu}
 #' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
-#' @param T1,T2 sample sizes of the control group in the observed experiment and the
+#' @param T,Tnew sample sizes of the control group in the observed experiment and the
 #' predicted experiment
 #' @param n number of observations to be simulated
 #' 
@@ -95,36 +95,36 @@ NULL
 #'
 #' @rdname Post_y
 #' @export 
-dpost_y <- function(y2, T2, a=0.5, b=0, c=0.5, d=0, x1, y1, T1){
-  a.post <- a+x1+y1
-  c.post <- c+x1
-  d.post <- d+a+y1
-  return( setNames(dPGIB(y2,a.post,c.post,d.post,(b+T1)/T2), paste("y2=",y2,sep="")) )
+dpost_y <- function(ynew, Tnew, a=0.5, b=0, c=0.5, d=0, x, y, T){
+  a.post <- a+x+y
+  c.post <- c+x
+  d.post <- d+a+y
+  return( setNames(dPGIB(ynew,a.post,c.post,d.post,(b+T)/Tnew), paste("ynew=",ynew,sep="")) )
 }
 #'
 #' @rdname Post_y
 #' @export 
-ppost_y <- function(q, T2, a=0.5, b=0, c=0.5, d=0, x1, y1, T1){
-  a.post <- a+x1+y1
-  c.post <- c+x1
-  d.post <- d+a+y1
-  return( setNames(pPGIB(q,a.post,c.post,d.post,(b+T1)/T2), paste("y2\u2264",q,sep="")) )
+ppost_y <- function(q, Tnew, a=0.5, b=0, c=0.5, d=0, x, y, T){
+  a.post <- a+x+y
+  c.post <- c+x
+  d.post <- d+a+y
+  return( setNames(pPGIB(q,a.post,c.post,d.post,(b+T)/Tnew), paste("ynew\u2264",q,sep="")) )
 }
 #'
 #' @rdname Post_y
 #' @export 
-qpost_y <- function(p, T2, a=0.5, b=0, c=0.5, d=0, x1, y1, T1){
-  a.post <- a+x1+y1
-  c.post <- c+x1
-  d.post <- d+a+y1
-  return( qPGIB(p,a.post,c.post,d.post,(b+T1)/T2) ) 
+qpost_y <- function(p, Tnew, a=0.5, b=0, c=0.5, d=0, x, y, T){
+  a.post <- a+x+y
+  c.post <- c+x
+  d.post <- d+a+y
+  return( qPGIB(p,a.post,c.post,d.post,(b+T)/Tnew) ) 
 }
 #'
 #' @rdname Post_y
 #' @export 
-rpost_y <- function(n, T2, a=0.5, b=0, c=0.5, d=0, x1, y1, T1){
-  a.post <- a+x1+y1
-  c.post <- c+x1
-  d.post <- d+a+y1
-  return( rPGIB(n,a.post,c.post,d.post,(b+T1)/T2) )
+rpost_y <- function(n, Tnew, a=0.5, b=0, c=0.5, d=0, x, y, T){
+  a.post <- a+x+y
+  c.post <- c+x
+  d.post <- d+a+y
+  return( rPGIB(n,a.post,c.post,d.post,(b+T)/Tnew) )
 }

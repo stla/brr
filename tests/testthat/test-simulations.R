@@ -18,3 +18,11 @@ test_that("Check PGIB using simulations",{
   expect_equal(p1, p2, tolerance=1e-3, scale=1)
 })
 
+test_that("Check GIB using siumations",{
+  set.seed(666)
+  a <- 50; b <- 1; c <- 5; d <- 4
+  sims <- rGIB(1e6,a,c,d,b)
+  summ <- summary_GIB(a=a, alpha=c, beta=d, rho=b)
+  expect_equal(mean(sims), summ$mean, tolerance=1e-3)
+  expect_equal(sd(sims), summ$sd, tolerance=1e-3)
+})

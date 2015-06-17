@@ -6,6 +6,7 @@ test_that("Test Brr function", {
     identical(model(), list(a=2,b=4)), 
     is_true()
   )
+  expect_error(model(hello=10))
   model <- model(a=3)
   expect_that(
     identical(model(), list(a=3,b=4)), 
@@ -53,8 +54,11 @@ test_that("Test dpost function", {
     all(dpost(model, "phi", 1:3) == dpost_phi(phi=1:3, a=2, b=4, c=3, d=4, x=5, y=6, S=10, T=8)), 
     is_true()
   )  
-#   expect_that(
-#     all(dpost(model, "x", 1:3) == dprior_x(x2=1:3, a=2, b=4, c=3, d=10, T=10)), 
-#     is_true()
-#   )
+  # x 
+  expect_error(dpost(model, "x", 1:3), "Missing parameters. You must supply Snew, a, c, d, x, y, S.")
+  model <- model(Snew=12)
+  expect_that(
+    all(dpost(model, "x", 1:3) == dpost_x(xnew=1:3, a=2, c=3, d=4, S=10, x=5, y=6, Snew=12)), 
+    is_true()
+  )
 })

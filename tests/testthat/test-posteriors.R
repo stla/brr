@@ -7,3 +7,12 @@ test_that("Check stochastic monotonicity of mu", {
   expect_true(p1$message=="OK" && p2$message=="OK")
   expect_less_than(p1$value, p2$value)
 })
+
+test_that("Check stochastic monotonicity of predictive x", {
+  a <- 3;  c <- 4; d <- 5; S <- 10; x <- 1; y <- 0
+  Snew <- 11
+  q <- 1:3
+  p1 <- ppost_x(q, Snew, a, c, d, x, y, S)
+  p2 <- ppost_x(q, Snew-.1, a, c, d, x, y, S)
+  expect_true(all(p1<p2))
+})
