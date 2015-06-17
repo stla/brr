@@ -25,11 +25,11 @@ Gauss2F1 <- function(a, b, c, x){
 #' @param ... arguments passed to \code{pmf}
 #'
 #' @examples
-#' iquantiles(dpois, 0.5, lambda=10)
+#' icdf(dpois, 0.5, lambda=10)
 #' qpois(0.5, 10)
 #'
 #' @export 
-iquantiles <- function(pmf, p, ...){
+icdf <- function(pmf, p, ...){
   q <- 0
   prob <- pmf(0, ...)
   while(prob < p){
@@ -37,4 +37,30 @@ iquantiles <- function(pmf, p, ...){
     prob <- prob + pmf(q, ...)
   }
   return(q)
+}
+
+#' Moment of a discrete distribution
+#' 
+#' @param pmf a probability mass function
+#' @param k order
+#' @param accuracy accuracy
+#' @param ... arguments passed to \code{pmf}
+#' 
+#' @examples
+#' dd_moment(dpois, lambda=5)
+#' dd_moment(dpois, lambda=5.5795791557050280)
+#' dd_moment(dpois, k=2, lambda=5)
+#' @export
+dd_moment <- function(pmf, k=1, accuracy=.Machine$double.eps, ...){
+ m0 <- 0*pmf(0, ...)
+ x <- 1
+ px <- pmf(x, ...)
+ m1 <- m0+x^k*px
+ while(px==0 || (m1-m0)>accuracy){
+   x <- x + 1
+   px <- pmf(x, ...)
+   m0 <- m1
+   m1 <- m0+x^k*px
+ }
+ return(m1)
 }

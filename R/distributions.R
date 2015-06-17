@@ -211,7 +211,7 @@ pPGIB <- function(q, a, alpha, beta, rho){
 #' @rdname PoissonGammaInverseBetaDist
 #' @export
 qPGIB <- function(p, a, alpha, beta, rho){
-  return( iquantiles(dPGIB, p, a=a, alpha=alpha, beta=beta, rho=rho) )
+  return( icdf(dPGIB, p, a=a, alpha=alpha, beta=beta, rho=rho) )
 }
 #'
 #' @rdname PoissonGammaInverseBetaDist
@@ -376,7 +376,7 @@ pGB2 <- function(q, a, c, d, tau, ...){
 #' @rdname GB2Dist
 #' @export
 qGB2 <- function(p, a, c, d, tau){
-  return( iquantiles(dGB2, p, a=a, c=c, d=d, tau=tau) )
+  return( icdf(dGB2, p, a=a, c=c, d=d, tau=tau) )
 }
 #
 #' @rdname GB2Dist
@@ -459,7 +459,7 @@ pPGB2 <- function(q, a, c, d, tau){
 #' @rdname PGB2Dist
 #' @export
 qPGB2 <- function(p, a, c, d, tau){
-  return( iquantiles(dPGB2, p, a=a, c=c, d=d, tau=tau) )
+  return( icdf(dPGB2, p, a=a, c=c, d=d, tau=tau) )
 }
 #
 #' @rdname PGB2Dist
