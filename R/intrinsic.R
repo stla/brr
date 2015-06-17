@@ -1,0 +1,119 @@
+rho <- function(phi, phi0, S, T){
+  coef <- S/T
+  gamma <- phi*coef
+  gamma0 <- phi0*coef
+  G <- ifelse(gamma0<1 && gamma<.Machine$double.eps, log1p(gamma0), gamma * log(gamma/gamma0) + log((gamma0+1)/(gamma+1))*(gamma+1))
+  H <- ifelse(gamma0<2.220446e-16, gamma,  gamma+1 - exp(gamma0/(gamma0+1)*log(gamma/gamma0))*(gamma0+1))
+return( pmin(G,H) )
+}
+
+intrinsic_discrepancy <- function(phi, phi0, mu, S, T){
+  return( mu * T * rho(phi, phi0, S, T) )
+}
+
+
+#' Posterior intrinsic cost
+#'
+#' @examples
+#'  a<-0.5; b<-0; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20
+#' intrinsic_phi0(0.5, x, y, S, T, a, b, c, d)
+#'
+#'@export
+intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, subd=10000, tol=1e-6){
+  post.c <- x+c
+  post.d <- y+a+d
+  post.a <- x+y+a
+  lambda <- (T+b)/S
+  K <- post.a*post.d/(post.c+post.d)*T/(T+b)
+  integrande <- function(u){
+    phi <- lambda * u/(1-u)
+    rho(phi, phi0, S, T)*dbeta(u, post.c, post.d+1)
+  }
+  i <- -3
+  old.value <- 0
+  value <- Inf
+  while(abs(value-old.value)>tol){
+    old.value <- value
+    i <- i-1
+    M <- qbeta(1-10^i,post.c, post.d+1)
+    value <- integrate(integrande, 0, M, subdivisions=subd)$value
+  }
+  return( K*value )
+}
+
+#' Unilateral intrinsic cost
+#'
+#' @description  alternative="less" for  H1: phi0 < phi.star; 
+#' alternative="gretaer" for  H1: phi0 > phi.star 
+#' 
+#'  @export 
+intrinsic_H0 <- function(phi.star, alternative, x, y, S, T, a=0.5, b=0, c=0.5, d=0, subd=10000, tol=1e-6){
+  post.c <- x+c
+  post.d <- y+a+d
+  post.a <- x+y+a
+  lambda <- (T+b)/S
+  K <- post.a*post.d/(post.c+post.d)*T/(T+b)
+  integrande <- function(u){
+    phi <- lambda * u/(1-u)
+    rho(phi, phi.star, S, T)*dbeta(u, post.c, post.d+1)
+  }
+  psi.star <- phi.star/lambda
+  u.star <- psi.star/(1+psi.star)
+  bounds <- switch(alternative, less=c(0,u.star), greater=c(u.star, 1))
+  value <- integrate(integrande, bounds[1], bounds[2], subdivisions=subd, rel.tol=tol)$value
+  K*value
+}
+
+
+#' Intrinsic estimate
+#' 
+#' @examples
+#' a<-0.5; b<-0; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20
+#' intrinsic_estimate(x, y, S, T, a, b, c, d)
+#' 
+#' @export
+intrinsic_estimate <- function(x, y, S, T, a, b, c, d, subd=10000, tol = 1e-08){
+  post.cost <- function(u0){
+    phi0 <- u0/(1-u0)
+    intrinsic_phi0(phi0, x, y, S, T, a, b, c, d, subd)
+  }
+  optimize <- optimize(post.cost, c(0, 1), tol=tol)
+  u0.min <- optimize$minimum
+  estimator <- u0.min/(1-u0.min)
+  loss <- optimize$objective
+  out <- list(estimator, loss)
+  names(out) <- c("estimator", "loss")
+  out
+}
+
+#' Intrinsic interval
+#' 
+#' @examples
+#' a<-0.5; b<-0; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20
+#' intrinsic_estimate(x, y, S, T, a, b, c, d)
+#' bounds <- intrinsic_bounds(x, y, S, T, a, b, c, d, conf=0.95); bounds
+#' ppost_phi(bounds[2], a, b, c, d, S, T,  x, y)- ppost_phi(bounds[1], a, b, c, d, S, T, x, y)
+#' @export
+intrinsic_bounds <- function(x, y, S, T, a, b, c, d, conf, parameter="phi", subd=10000, tol = 1e-08){
+  post.cost <- function(phi0){
+    intrinsic_phi0(phi0, x, y, S, T, a, b, c, d, subd)
+  }
+  post.icdf <- function(p){
+    qpost_phi(p, a=a, b=b, c=c, d=d, S=S, T=T, x=x, y=y)
+  }
+  conf <- min(conf, 1 - conf)
+  f <- function(p, post.icdf, conf){
+    u.phi <- post.icdf(1 - conf + p) 
+    l.phi <- post.icdf(p)
+    (post.cost(u.phi)-post.cost(l.phi))^2
+  }
+  minimize <- optimize(f, c(0, conf), post.icdf = post.icdf, 
+                       conf = conf, tol=tol)$minimum
+  out <- switch(parameter, 
+                phi=c(post.icdf(minimize), post.icdf(1 - conf + minimize)),
+                VE = sort(1-c(post.icdf(minimize), post.icdf(1 - conf + minimize))))
+  out
+}
+
+
+
