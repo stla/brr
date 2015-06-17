@@ -2,10 +2,20 @@ rho <- function(phi, phi0, S, T){
   coef <- S/T
   gamma <- phi*coef
   gamma0 <- phi0*coef
-  G <- ifelse(gamma0<1 && gamma<.Machine$double.eps, log1p(gamma0), gamma * log(gamma/gamma0) + log((gamma0+1)/(gamma+1))*(gamma+1))
-  H <- ifelse(gamma0<2.220446e-16, gamma,  gamma+1 - exp(gamma0/(gamma0+1)*log(gamma/gamma0))*(gamma0+1))
+  G <- ifelse(gamma0<=1 & gamma<.Machine$double.eps, log1p(gamma0), gamma * log(gamma/gamma0) + log((gamma0+1)/(gamma+1))*(gamma+1))
+  H <- if(gamma0<.Machine$double.eps) gamma else gamma+1 - exp(gamma0/(gamma0+1)*log(gamma/gamma0))*(gamma0+1)
 return( pmin(G,H) )
 }
+
+# rho <- function(phi, phi0, S, T){
+#   coef <- S/T
+#   gamma <- phi*coef
+#   gamma0 <- phi0*coef
+#   G <- gamma * log(gamma/gamma0) + log((gamma0+1)/(gamma+1))*(gamma+1)
+#   H <- gamma+1 - exp(gamma0/(gamma0+1)*log(gamma/gamma0))*(gamma0+1)
+#   result <- pmin(G,H)
+#   result
+# }
 
 intrinsic_discrepancy <- function(phi, phi0, mu, S, T){
   return( mu * T * rho(phi, phi0, S, T) )
@@ -79,10 +89,10 @@ intrinsic_estimate <- function(x, y, S, T, a, b, c, d, subd=10000, tol = 1e-08){
   }
   optimize <- optimize(post.cost, c(0, 1), tol=tol)
   u0.min <- optimize$minimum
-  estimator <- u0.min/(1-u0.min)
+  estimate <- u0.min/(1-u0.min)
   loss <- optimize$objective
-  out <- list(estimator, loss)
-  names(out) <- c("estimator", "loss")
+  out <- list(estimate, loss)
+  names(out) <- c("estimate", "loss")
   out
 }
 
