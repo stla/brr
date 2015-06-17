@@ -27,7 +27,10 @@ test_that("Compare prior predictive of x to summation of x_given_y", {
   p1 <- dprior_x(x=5, a=a, b=b, c=c, d=d, T=T)
   p2 <- sum(dprior_x_given_y(x=5, y=0:100, a, c, d)*dprior_y(0:100, a, b, T))
   expect_that(
-    abs(p1-p2$value) < .Machine$double.eps, 
+    abs(p1-p2) < .Machine$double.eps^.75, 
     is_true()
   )
+  # the same :
+  expect_equivalent(p1, p2)
+  
 })
