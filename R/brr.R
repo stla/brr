@@ -157,7 +157,7 @@ summary.brr <- function(brr){
   cat("----------\n")
   cat(type)
   cat("\n\n")
-  cat("*Prior distribution on µ*\n")
+  cat("*Prior distribution on \u03BC*\n")
   if(all(c("a","b") %in% names(params))){
     cat(with(params, sprintf("  Gamma(a=%s,b=%s)", a, b)))
     summary_gamma(params$a, params$b, type="pandoc", style="rmarkdown")
@@ -165,7 +165,7 @@ summary.brr <- function(brr){
     cat("  Non-informative prior\n")
   }
   cat("\n")
-  cat("*Prior distribution on phi*\n")
+  cat("*Prior distribution on \u03d5*\n")
   if(all(c("c","d","b","S","T") %in% names(params))){
     cat(with(params, sprintf("  Beta2(c=%s,d=%s,scale=%s)", c, d, (T+b)/S)))
     with(params, summary_prior_phi(b, c, d, S, T, type="pandoc", style="rmarkdown"))
@@ -188,7 +188,7 @@ summary.brr <- function(brr){
   cat("\n")
   cat(sprintf("  y (control group): %s", ifelse("y" %in% names(params), params$y, "not supplied")))
   cat("\n\n")
-  cat("*Posterior distribution on phi*\n")
+  cat("*Posterior distribution on \u03d5*\n")
   if(all(c("a","b","c","d","S","T","x","y") %in% names(params))){
     cat(with(params, sprintf("  Beta2(%s,%s,scale=%s)", c+x, d+a+y, (T+b)/S)))
     with(params, summary_post_phi(a, b, c, d, S, T, x, y, type="pandoc", style="rmarkdown"))
@@ -216,10 +216,11 @@ brr_generic <- function(fun, model, parameter, ...){
   if(posterior){
     type <- prior(params)
     if(type=="semi-informative" || type=="non-informative"){
-      params$a <- 0.5; params$b <- 0
+      if(is.null(params$c)) params$c <- 0.5
+      if(is.null(params$d)) params$d <- 0
     }
     if(type=="non-informative"){
-      params$c <- 0.5; params$d <- 0
+      params$a <- 0.5; params$b <- 0
     }
     if(!all(args %in% names(params))) stop(sprintf("Missing parameters. You must supply %s (or at least %s, if you want to use the non-informative prior).", 
                                                    paste(args, collapse=", "),

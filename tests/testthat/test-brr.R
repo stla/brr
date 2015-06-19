@@ -44,6 +44,7 @@ test_that("Test dpost function", {
   )
   model <- model(c=3, d=4, x=5, y=6, T=8)
   expect_that(
+    # car brr:::prior(model())==semi-info car il manque S 
     all(dpost(model, "mu", 1:3) == dpost_mu(mu=1:3, a=2, b=4, c=3, d=4, x=5, y=6, T=8)), 
     is_true()
   )  
