@@ -1,5 +1,9 @@
 context("Brr")
 
+test_that("Test prior function", {
+  expect_equal(prior(list(a=2,b=3)), "semi-informative")
+})
+
 test_that("Test Brr function", {
   model <- Brr(a=2, b=4)
   expect_that(

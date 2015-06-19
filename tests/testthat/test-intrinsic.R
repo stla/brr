@@ -2,7 +2,8 @@ context("Intrinsic loss")
 
 test_that("Figure 10", {
   loss <- intrinsic_phi0(phi0=0.5, x=6, y=15, S=1, T=1, a = 0.5, b = 0, c = 0.5, d = 0)
-  expect_less_than(loss, log(10)/2)
+  expect_less_than(loss, log(1.713))
+  expect_less_than(log(1.7129), loss)
   phi0 <- c(0.12, 0.1202, .994, .995)
   loss <- sapply(phi0, function(phi0) intrinsic_phi0(phi0=phi0, x=6, y=15, S=1, T=1, a = 0.5, b = 0, c = 0.5, d = 0)) 
   expect_true(loss[3] < log(10) & loss[4] > log(10))

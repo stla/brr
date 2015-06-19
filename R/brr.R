@@ -201,16 +201,30 @@ summary.brr <- function(brr){
 
 #' Generic function
 #' 
+#' @importFrom stringr str_detect
 brr_generic <- function(fun, model, parameter, ...){
   # virer les NULL mais mettre les valeurs pour posterior => mettre ça en attribut de prior()
   if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
   fun <- sprintf("%s_%s", fun, parameter)
   if(! fun %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun))
+  posterior <- stringr::str_detect(fun, "post")
   fun <- eval(parse(text=fun))
   args <- formalArgs(fun) %>% subset(!. %in% "...") %>% .[-1]
   params <- model()
-  if(!all(args %in% names(params))) stop(sprintf("Missing parameters. You must supply %s.", 
+  if(!posterior && !all(args %in% names(params))) stop(sprintf("Missing parameters. You must supply %s.", 
                                                  paste(args, collapse=", ")))
+  if(posterior){
+    type <- prior(params)
+    if(type=="semi-informative" || type=="non-informative"){
+      params$a <- 0.5; params$b <- 0
+    }
+    if(type=="non-informative"){
+      params$c <- 0.5; params$d <- 0
+    }
+    if(!all(args %in% names(params))) stop(sprintf("Missing parameters. You must supply %s (or at least %s, if you want to use the non-informative prior).", 
+                                                   paste(args, collapse=", "),
+                                                   paste(args[!args %in% c("a","b","c","d")], collapse=", ")))
+  }
   return( do.call(fun, c(list(...), params[names(params) %in% args])) )
 }
 
@@ -233,6 +247,10 @@ brr_generic <- function(fun, model, parameter, ...){
 #' model <- model(c=4, d=5, S=10, T=10)
 #' dprior(model, "lambda", 1:3)
 #' model <- model(x=5, y=10)
+#' ppost(model, "phi", 1)
+#' model <- Brr()
+#' ppost(model, "phi", 1)
+#' model <- model(x=5, y=10, S=3, T=10)
 #' ppost(model, "phi", 1)
 NULL 
 #' 
