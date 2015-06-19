@@ -150,6 +150,7 @@ prior <- function(params){
 #' summary(model)
 #' @export
 summary.brr <- function(brr){
+  #greek lambda <- "\u03BB"
   params <- brr()
   type <- prior(params)
   # remove NULL components

@@ -219,7 +219,20 @@ qPGIB <- function(p, a, alpha, beta, rho){
 rPGIB <- function(n, a, alpha, beta, rho){
   return( rpois(n, rGIB(n, a, alpha, beta, rho)) )
 }
-
+#'
+#' @rdname PoissonGammaInverseBetaDist
+#' @export
+summary_PGIB <- function(a, alpha, beta, rho, type="list", ...){
+  out <- list(mean=a*beta/(alpha+beta)/rho,
+              sd = sqrt( a*beta/rho*( 1/(alpha+beta) + (alpha*(a+beta+1)+beta*(beta+1))/(alpha+beta)^2/(alpha+beta+1)/rho ))
+  )
+  if(type=="pandoc"){
+    pander(data.frame(out), ...)
+    return(invisible())
+  }else{
+    return(out)
+  }
+}
 
 #' @name BetaNegativeBinomialDist
 #' @rdname BetaNegativeBinomialDist
