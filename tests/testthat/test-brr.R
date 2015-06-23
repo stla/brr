@@ -5,6 +5,7 @@ test_that("Test prior function", {
 })
 
 test_that("Test sprior function", {
+  expect_is(sprior(Brr(a=2,b=3), "mu"), "list")
   expect_identical(sprior(Brr(a=2,b=3), "mu"), sprior_mu(a=2,b=3))
 })
 
