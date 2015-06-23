@@ -184,7 +184,7 @@ prior <- function(params){
 #' model <- model(x=5, y=10)
 #' summary(model)
 #' @export
-summary.brr <- function(brr, table.style="grid"){
+summary.brr <- function(brr, phi0=1, hypothesis="greater", table.style="grid"){
   #greek lambda <- "\u03BB"
   params <- brr()
   type <- prior(params)
@@ -193,20 +193,22 @@ summary.brr <- function(brr, table.style="grid"){
   cat("----------\n")
   cat(type)
   cat("\n\n")
-  cat("*Prior distribution on \u03BC*\n")
-  if(all(c("a","b") %in% names(params))){
+  cat(sprintf("*Prior distribution on %s*\n", greek_utf8("mu")))
+  if(type=="informative"){
     cat(with(params, sprintf("  Gamma(a=%s,b=%s)", a, b)))
     summary_gamma(params$a, params$b, type="pandoc", style=table.style)
   }else{
+    params$a <- 0.5; params$b <- 0
     cat("  Non-informative prior\n")
   }
   cat("\n")
-  cat("*Prior distribution on \u03d5*\n")
+  cat(sprintf("*Prior distribution on %s*\n", greek_utf8("phi")))
   if(all(c("c","d","b","S","T") %in% names(params))){
     cat(with(params, sprintf("  Beta2(c=%s,d=%s,scale=%s)", c, d, (T+b)/S)))
     with(params, sprior_phi(b, c, d, S, T, type="pandoc", style=table.style))
   }else{
     if(type=="non-informative" || type=="semi-informative"){
+      params$c <- 0.5; params$d <- 0
       cat("  Non-informative prior")
     }else{
       cat("  c, d, b, S and T must be supplied")
@@ -224,10 +226,17 @@ summary.brr <- function(brr, table.style="grid"){
   cat("\n")
   cat(sprintf("  y (control group): %s", ifelse("y" %in% names(params), params$y, "not supplied")))
   cat("\n\n")
-  cat("*Posterior distribution on \u03d5*\n")
+  cat(sprintf("*Posterior distribution on %s*\n", greek_utf8("phi")))
   if(all(c("a","b","c","d","S","T","x","y") %in% names(params))){
     cat(with(params, sprintf("  Beta2(%s,%s,scale=%s)", c+x, d+a+y, (T+b)/S)))
     with(params, spost_phi(a, b, c, d, S, T, x, y, type="pandoc", style=table.style))
+    cat("\n")
+    cat(sprintf("Pr(hypothesis 'relative risk is %s than %s') = %s",
+                hypothesis, phi0, 
+                with(params, ppost_phi(phi0, a, b, c, d, S, T, x, y, 
+                          lower.tail=hypothesis=="greater"))
+        )
+    )
   }else{
       cat("  a, b, c, d, S, T, x and y must be supplied")
   }
