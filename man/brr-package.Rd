@@ -6,7 +6,10 @@
 Bayesian inference on the ratio of two Poisson rates
 }
 \description{
-Implementation of the Bayesian inference for the two independent Poisson samples model, using the semi-conjugate family of prior distributions.
+Implementation of the Bayesian inference for the two independent Poisson samples model, using the semi-conjugate family of prior distributions. 
+
+To learn more, start with the vignettes:
+\code{browseVignettes(package = "brr")}
 }
 \details{
 \tabular{ll}{
@@ -17,9 +20,11 @@ Date: \tab 2015-05-10\cr
 License: \tab GPL-2\cr
 }
 }
+
 \author{
 Stéphane Laurent
 }
+
 \references{
 S. Laurent, C. Legrand (2011): 
 A Bayesian framework for the ratio of two Poisson rates in the context of vaccine efficacy trials.
