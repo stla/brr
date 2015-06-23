@@ -3,10 +3,13 @@ context("Simulations")
 test_that("Check PGB2 using simulations",{
   set.seed(666)
   a <- 2 ; c <- 5 ; d <- 30; tau <- 6
-  sims <- rPGB2(1e6, a, c, d, tau)
+  sims <- rPGB2(2e6, a, c, d, tau)
   p1 <- ecdf(sims)(1:3)
   p2 <- pPGB2(1:3, a, c, d, tau)
   expect_equal(p1, p2, tolerance=1e-3)
+  s <- summary_PGB2(a, c, d, tau)
+  expect_equal(mean(sims), s$mean, tolerance=1e-3)
+  expect_equal(sd(sims), s$sd, tolerance=1e-3)
 })
 
 test_that("Check PGIB using simulations",{
@@ -16,6 +19,9 @@ test_that("Check PGIB using simulations",{
   p1 <- ecdf(sims)(1:3)
   p2 <- pPGIB(1:3, a,  alpha, beta, rho)
   expect_equal(p1, p2, tolerance=1e-3, scale=1)
+  s <- summary_PGIB(a, alpha, beta, rho)
+  expect_equal(mean(sims), s$mean, tolerance=1e-3)
+  expect_equal(sd(sims), s$sd, tolerance=1e-2)
 })
 
 test_that("Check GIB using siumations",{

@@ -10,3 +10,9 @@ test_that("Check moment GB2", {
               is_true())
 })
 
+test_that("Check moments GIB and PGIB", {
+  a <- 3; alpha <- 4; beta <- 5; rho <- 10
+  expect_equal(summary_GIB(a,alpha,beta,rho)$mean, summary_PGIB(a,alpha,beta,rho)$mean)
+  expect_equal(summary_GIB(a,alpha,beta,rho)$mean+summary_GIB(a,alpha,beta,rho)$sd^2, summary_PGIB(a,alpha,beta,rho)$sd^2)
+})
+

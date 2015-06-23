@@ -25,6 +25,33 @@ summary_gamma <- function(a, b, type="list", ...){
   }
 }
 
+#' Summary of a Negative Binomial distribution
+#' 
+#' Mode, mean, variance, and quartiles for a Negative Binomial distribution 
+#' with shape parameter \code{a} and probability parameter \code{p}.
+#'
+#' @param a,b Shape and rate parameters.
+#'
+#' @examples
+#' summary_nbinom(a=2, p=0.4, type="pandoc", style="rmarkdown")
+#' @importFrom pander pander
+#' @export
+summary_nbinom <- function(a, p, type="list", ...){
+  out <- list(mode=ifelse(a>1, floor((1-p)*(a-1)/p), 0),  
+              mean=a*(1-p)/p,  
+              sd=sqrt(a*(1-p))/p,  
+              Q1=qnbinom(0.25, a, p),
+              Q2=qnbinom(0.5, a, p),
+              Q3=qnbinom(0.75, a, p)
+  )
+  if(type=="pandoc"){
+    pander(data.frame(out), ...)
+    return(invisible())
+  }else{
+    return(out)
+  }
+}
+
 
 #' @name Beta2Dist 
 #' @rdname Beta2Dist
@@ -179,14 +206,16 @@ summary_GIB <- function(a, alpha, beta, rho, type="list", ...){
 #' @param alpha,beta non-negative shape parameters of the mixing Beta distribution
 #' @param n number of observations to be simulated
 #' 
-#' @return \code{dPGIB} gives the density, and \code{rPGIB} samples from the distribution.
+#' @return \code{dPGIB} gives the density, \code{rPGIB} samples from the distribution, 
+#' and \code{summary_PGIB} gives a summary of the distribution.
 #' 
 #' @note \code{PoissonGammaInverseBetaDist} is a generic name for the functions documented. 
 #' 
 #' @importFrom gsl lnpoch lngamma lnfact
 #' @importFrom pander pander
 #' @examples
-#' barplot(dPGIB(0:5,3,4,2,2.5))
+#' barplot(dPGIB(0:5, a=13, alpha=4, beta=2, rho=2.5))
+#' summary_PGIB(13, 4, 2, 2.5)
 #'  # !!!! code_vD : alpha beta inversés et rho 1/rho
 #'  # => j'échange alpha beta dans dGIB (conséquence dpost_lambda/mu différence avec code_vD)
 #'  # => ainsi PGIB cohérent avec papier hyperscaled poisson
@@ -224,7 +253,10 @@ rPGIB <- function(n, a, alpha, beta, rho){
 #' @export
 summary_PGIB <- function(a, alpha, beta, rho, type="list", ...){
   out <- list(mean=a*beta/(alpha+beta)/rho,
-              sd = sqrt( a*beta/rho*( 1/(alpha+beta) + (alpha*(a+beta+1)+beta*(beta+1))/(alpha+beta)^2/(alpha+beta+1)/rho ))
+              sd = sqrt( a*beta/rho*( 1/(alpha+beta) + (alpha*(a+beta+1)+beta*(beta+1))/(alpha+beta)^2/(alpha+beta+1)/rho )),
+              Q1 = qPGIB(0.25, a, alpha, beta, rho),
+              Q2 = qPGIB(0.5, a, alpha, beta, rho),
+              Q3 = qPGIB(0.75, a, alpha, beta, rho)
   )
   if(type=="pandoc"){
     pander(data.frame(out), ...)
@@ -345,7 +377,8 @@ summary_beta_nbinom <- function(a, c, d, type="list", ...){
 #' @param n number of observations to be sampled
 #' 
 #' @return \code{dGB2} gives the density, \code{pGB2} the cumulative function, 
-#' and \code{rGB2} samples from the distribution.
+#' \code{rGB2} samples from the distribution, and \code{summary_GB2} gives a summary 
+#' of the distribution.
 #' 
 #' @note \code{GB2Dist} is a generic name for the functions documented. 
 #' 
@@ -442,7 +475,8 @@ summary_GB2 <- function(a, c, d, tau, type="list", ...){
 #' @param n number of observations to be sampled
 #' 
 #' @return \code{dPGB2} gives the density, \code{pPGB2} the cumulative function, 
-#' and \code{rPGB2} samples from the distribution.
+#' \code{rPGB2} samples from the distribution, and \code{summary_PGB2} gives 
+#' a summary of the distribution. 
 #' 
 #' @note \code{PGB2Dist} is a generic name for the functions documented. 
 #' 
@@ -480,5 +514,23 @@ qPGB2 <- function(p, a, c, d, tau){
 rPGB2 <- function(n, a, c, d, tau){
   psi <- rbeta2(n, c, d, tau)
   return( rnbinom(n, a, psi/(1+psi)) )
+}
+#'
+#' @rdname PGB2Dist
+#' @export
+summary_PGB2 <- function(a, c, d, tau, type="list", ...){
+  m1 <- moment_GB2(1, a, c, d, tau)
+  out <- list(mean = ifelse(c>1, m1, Inf),
+              sd = ifelse(c>2, sqrt(m1 + moment_GB2(2, a, c, d, tau) - m1^2)),
+              Q1 = qPGB2(0.25, a, c, d, tau),
+              Q2 = qPGB2(0.5, a, c, d, tau),
+              Q3 = qPGB2(0.75, a, c, d, tau)
+  )
+  if(type=="pandoc"){
+    pander(data.frame(out), ...)
+    return(invisible())
+  }else{
+    return(out)
+  }
 }
 

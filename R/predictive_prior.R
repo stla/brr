@@ -16,7 +16,9 @@
 #' @param n number of observations to be simulated
 #' @param ... other arguments passed to \code{\link[stats]{NegBinomial}}
 #' 
-#' @return \code{dprior_y} gives the density, \code{pprior_y} the distribution function, \code{qprior_y} the quantile function, and \code{rprior_y} samples from the distribution.
+#' @return \code{dprior_y} gives the density, \code{pprior_y} the distribution function, 
+#' \code{qprior_y} the quantile function, \code{rprior_y} samples from the distribution, 
+#' and \code{sprior_y} gives a summary of the distribution.
 #' 
 #' @note \code{Prior_y} is a generic name for the functions documented. 
 #' 
@@ -48,6 +50,12 @@ qprior_y<-function(p, a, b, T, ...){
 rprior_y <- function(n, a, b, T){
   return( rnbinom(n, a, b/(b+T)) )
 }
+#'
+#' @rdname Prior_y
+#' @export 
+sprior_y <- function(a, b, T){
+  return( summary_nbinom(a, b/(b+T)) )
+}
 
 
 #' @name Prior_x 
@@ -67,7 +75,9 @@ rprior_y <- function(n, a, b, T){
 #' @param T sample size of the control group
 #' @param n number of observations to be simulated
 #' 
-#' @return \code{dprior_x} gives the density, \code{pprior_x} the distribution function, \code{qprior_x} the quantile function, and \code{rprior_x} samples from the distribution.
+#' @return \code{dprior_x} gives the density, \code{pprior_x} the distribution function, 
+#' \code{qprior_x} the quantile function, \code{rprior_x} samples from the distribution, 
+#' and \code{sprior_x} gives a summary of the distribution.
 #' 
 #' @note \code{Prior_x} is a generic name for the functions documented. 
 #' 
@@ -101,6 +111,12 @@ qprior_x <- function(p, a, b, c, d, T){
 rprior_x <- function(n, a, b, c, d, T){
   return( rPGB2(n,a,d,c,b/(b+T)) )
 }
+#'
+#' @rdname Prior_x
+#' @export 
+sprior_x <- function(a, b, c, d, T){
+  return( sPGB2(a,d,c,b/(b+T)) )
+}
 
 
 #' @name Prior_x_given_y 
@@ -125,7 +141,7 @@ rprior_x <- function(n, a, b, c, d, T){
 #' \code{pprior_x_given_y} the distribution function, 
 #' \code{qprior_x_given_y} the quantile function, 
 #' \code{rprior_x_given_y} samples from the distribution, and
-#' \code{summary_prior_x_given_y} gives a summary of the distribution.
+#' \code{sprior_x_given_y} gives a summary of the distribution.
 #' 
 #' @note \code{Prior_x_given_y} is a generic name for the functions documented. 
 #' 
@@ -176,6 +192,6 @@ rprior_x_given_y <- function(n, a, c, d){
 #'
 #' @rdname Prior_x_given_y
 #' @export 
-summary_prior_x_given_y <- function(a, c, d, ...){
+sprior_x_given_y <- function(a, c, d, ...){
   return( summary_beta_nbinom(a+y,d,c,...) )
 }

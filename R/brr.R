@@ -149,7 +149,7 @@ prior <- function(params){
 #' model <- model(x=5, y=10)
 #' summary(model)
 #' @export
-summary.brr <- function(brr){
+summary.brr <- function(brr, table.style="grid"){
   #greek lambda <- "\u03BB"
   params <- brr()
   type <- prior(params)
@@ -161,7 +161,7 @@ summary.brr <- function(brr){
   cat("*Prior distribution on \u03BC*\n")
   if(all(c("a","b") %in% names(params))){
     cat(with(params, sprintf("  Gamma(a=%s,b=%s)", a, b)))
-    summary_gamma(params$a, params$b, type="pandoc", style="rmarkdown")
+    summary_gamma(params$a, params$b, type="pandoc", style=table.style)
   }else{
     cat("  Non-informative prior\n")
   }
@@ -169,7 +169,7 @@ summary.brr <- function(brr){
   cat("*Prior distribution on \u03d5*\n")
   if(all(c("c","d","b","S","T") %in% names(params))){
     cat(with(params, sprintf("  Beta2(c=%s,d=%s,scale=%s)", c, d, (T+b)/S)))
-    with(params, summary_prior_phi(b, c, d, S, T, type="pandoc", style="rmarkdown"))
+    with(params, sprior_phi(b, c, d, S, T, type="pandoc", style=table.style))
   }else{
     if(type=="non-informative" || type=="semi-informative"){
       cat("  Non-informative prior")
@@ -192,7 +192,7 @@ summary.brr <- function(brr){
   cat("*Posterior distribution on \u03d5*\n")
   if(all(c("a","b","c","d","S","T","x","y") %in% names(params))){
     cat(with(params, sprintf("  Beta2(%s,%s,scale=%s)", c+x, d+a+y, (T+b)/S)))
-    with(params, summary_post_phi(a, b, c, d, S, T, x, y, type="pandoc", style="rmarkdown"))
+    with(params, spost_phi(a, b, c, d, S, T, x, y, type="pandoc", style=table.style))
   }else{
       cat("  a, b, c, d, S, T, x and y must be supplied")
   }
