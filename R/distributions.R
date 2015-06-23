@@ -30,7 +30,9 @@ summary_gamma <- function(a, b, type="list", ...){
 #' Mode, mean, variance, and quartiles for a Negative Binomial distribution 
 #' with shape parameter \code{a} and probability parameter \code{p}.
 #'
-#' @param a,b Shape and rate parameters.
+#' @param a,p parameters of the negative binomial distribution
+#' @param type \code{"list"} (default) or \code{"pandoc"}
+#' @param ... arguments passed to \code{\link[=pander]{pander.data.frame}}
 #'
 #' @examples
 #' summary_nbinom(a=2, p=0.4, type="pandoc", style="rmarkdown")

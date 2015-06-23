@@ -50,7 +50,7 @@ Brr <- function(...){
 #' plot(model)
 #' model <- model(c=4, d=6, S=10, T=10)
 #' plot(model)
-#' plot(model, prior(phi))
+#' plot(model, dprior(phi))
 #' @export
 plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S3 ; test.brr marche pas : il faudrait définir test() avec UseMethod
   params <- brr()
@@ -251,7 +251,8 @@ brr_generic <- function(fun, model, parameter, ...){
 #' model <- model(x=5, y=10)
 #' ppost(model, "phi", 1)
 #' model <- Brr()
-#' ppost(model, "phi", 1)
+#' \dontrun{
+#' ppost(model, "phi", 1)}
 #' model <- model(x=5, y=10, S=3, T=10)
 #' ppost(model, "phi", 1)
 NULL 

@@ -4,4 +4,5 @@
 /man
 !/man/brr-package.Rd
 /temp_docs
+/temp_vignettes
 /vignettes
