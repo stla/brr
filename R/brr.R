@@ -241,11 +241,12 @@ summary.brr <- function(brr, table.style="grid"){
 brr_generic <- function(fun, model, parameter, ...){
   # virer les NULL mais mettre les valeurs pour posterior => mettre ça en attribut de prior()
   if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
-  fun <- sprintf("%s_%s", fun, parameter)
-  if(! fun %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun))
+  fun_ <- sprintf("%s_%s", fun, parameter)
+  if(! fun_ %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun))
   posterior <- stringr::str_detect(fun, "post")
-  fun <- eval(parse(text=fun))
-  args <- formalArgs(fun) %>% subset(!. %in% "...") %>% .[-1]
+  args <- formalArgs(fun_) %>% subset(!. %in% "...")
+  if(!fun %in% c("sprior", "spost")) args <- args[-1] 
+  fun <- eval(parse(text=fun_))
   params <- model()
   if(!posterior && !all(args %in% names(params))) stop(sprintf("Missing parameters. You must supply %s.", 
                                                  paste(args, collapse=", ")))
