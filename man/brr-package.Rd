@@ -14,14 +14,25 @@ Package: \tab brr\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2015-05-10\cr
-License: \tab What license is it under?\cr
+License: \tab GPL-2\cr
 }
 }
 \author{
 Stéphane Laurent
 }
 \references{
-Laurent, Legrand (2011): A Bayesian framework for the ratio of two Poisson rates in the context of vaccine efficacy trials
+S. Laurent, C. Legrand (2011): 
+A Bayesian framework for the ratio of two Poisson rates in the context of vaccine efficacy trials.
+ESAIM, Probability \& Statistics (2011). Published online by Cambridge University Press
+(doi:10.1051/ps/2010018)
+
+S. Laurent (2012):  
+Some Poisson mixtures  distributions with a hyperscale parameter. 
+Brazilian Journal of Probability and Statistics 26 (2012), 265--278.
+
+S. Laurent (2012):
+Intrinsic Bayesian inference on a Poisson rate and on the ratio of two Poisson rates. 
+Journal of Statistical Planning and Inference 142 (2012), 2656--2671.
 }
 \keyword{ package }
 \keyword{ models }
