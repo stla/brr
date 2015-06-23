@@ -48,18 +48,53 @@ Brr <- function(...){
 #' @examples
 #' model <- Brr(a=2, b=3)
 #' plot(model)
+#' plot(model, dprior(mu))
+#' plot(model, pprior(mu))
 #' model <- model(c=4, d=6, S=10, T=10)
 #' plot(model)
 #' plot(model, dprior(phi))
+#' plot(model, dprior(x))
+#' 
+#' @importFrom stringr str_sub
 #' @export
 plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S3 ; test.brr marche pas : il faudrait définir test() avec UseMethod
   params <- brr()
   type <- prior(params)
   for(i in seq_along(params)) assign(names(params)[i], params[[i]])
   # specific plot 
-  if(substitute(what)!="summary"){
-    f <- eval(parse(text=paste(as.character(substitute(what)), collapse="_")))
-    return(f)
+  if(substitute(what)[1] != "summary"){
+    what <- as.character(substitute(what)) # e.g. dprior(phi) => "dprior" "phi"
+    f <- what[1]; param <- what[2]
+    fun <- eval(parse(text=paste(what, collapse="_")))
+    if(f %in% c("dprior", "pprior", "dpost", "ppost")){
+      qfun <- paste0("q", stringr::str_sub(f, 2))
+      bounds <- eval(parse(text=qfun))(brr, param, c(1e-4, 1-1e-4))
+      if(!param %in% c("x","y")){
+        seq(bounds[1], bounds[2], length.out=100) %>% {
+          plot(., eval(parse(text=f))(brr, param, .), 
+               type="l", 
+               axes=FALSE,
+               ylab=ifelse(f %in% c("dprior","dpost"), NA, sprintf("P(%s \u2264 . )", greek_utf8(param))),
+               xlab=ifelse(f %in% c("dprior","dpost"), parse(text=param), NA)
+          )
+          if(f %in% c("dprior","dpost")) axis(1) else { axis(1); axis(2) }
+        }
+        return(invisible())
+      } else {
+        barplot(eval(parse(text=f))(brr, param, bounds[1]:bounds[2]))
+        return(invisible())
+      }
+    } else if(f %in% c("qprior", "qpost")){
+      seq(0, 1, length.out=100) %>% {
+        plot(., eval(parse(text=f))(brr, param, .), 
+             type="l", 
+             axes=FALSE, ylab="p", xlab="q")
+        axis(1); axis(2)
+      }
+        return(invisible())
+    } else{
+      stop("Unvalid 'what' argument.")
+    }
   }
   
   # summary 

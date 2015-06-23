@@ -6,6 +6,12 @@
 #' @export
 '%>%' <- magrittr::`%>%`
 
+#' Unicode encoding of Greek letters
+#' 
+greek_utf8 <- function(letter){
+  return(switch(letter, mu="\u03BC", phi="\u03d5", lambda="\u03BB"))
+}
+
 #' Gauss hypergeometric function
 #' 
 #' @importFrom gsl hyperg_2F1
