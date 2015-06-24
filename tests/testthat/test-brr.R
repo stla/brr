@@ -86,3 +86,13 @@ test_that("Test dpost function", {
     is_true()
   )
 })
+
+test_that("Test plot.brr",{
+  model <- Brr(a=2, b=4, c=3, d=10, S=11, T=10, x=2, y=3)
+  expect_equal(plot(model, dpost(lambda)), invisible())
+  expect_equal(plot(model, dprior(lambda)), invisible())
+  expect_error(plot(model, ppost(lambda)), "ppost_lambda does not exist in brr package")
+  expect_error(plot(model, pprior(lambda)))
+  model <- model(c=2.9)
+  expect_equal(plot(model, pprior(lambda)), invisible())
+})

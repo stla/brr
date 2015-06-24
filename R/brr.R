@@ -65,10 +65,15 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
   if(substitute(what)[1] != "summary"){
     what <- as.character(substitute(what)) # e.g. dprior(phi) => "dprior" "phi"
     f <- what[1]; param <- what[2]
-    fun <- eval(parse(text=paste(what, collapse="_")))
+    fun <- paste(what, collapse="_")
+    if(! fun %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun))
     if(f %in% c("dprior", "pprior", "dpost", "ppost")){
       qfun <- paste0("q", stringr::str_sub(f, 2))
-      bounds <- eval(parse(text=qfun))(brr, param, c(1e-4, 1-1e-4))
+      bounds <- try(eval(parse(text=qfun))(brr, param, c(1e-4, 1-1e-4)), silent=TRUE)
+      if(class(bounds)=="try-error"){
+        summ <- eval(parse(text=paste0("s", stringr::str_sub(f, 2))))(brr, param)
+        bounds <- c(max(0, summ$mean-3*summ$sd), summ$mean+3*summ$sd)
+      }
       if(!param %in% c("x","y")){
         seq(bounds[1], bounds[2], length.out=100) %>% {
           plot(., eval(parse(text=f))(brr, param, .), 
@@ -260,7 +265,7 @@ brr_generic <- function(fun, model, parameter, ...){
   # virer les NULL mais mettre les valeurs pour posterior => mettre ça en attribut de prior()
   if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
   fun_ <- sprintf("%s_%s", fun, parameter)
-  if(! fun_ %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun))
+  if(! fun_ %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun_))
   posterior <- stringr::str_detect(fun, "post")
   args <- formalArgs(fun_) %>% subset(!. %in% "...")
   if(!fun %in% c("sprior", "spost")) args <- args[-1] 

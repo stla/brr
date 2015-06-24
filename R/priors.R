@@ -186,6 +186,7 @@ pprior_lambda <- function(q, a, b, c, d, S, T, ...){
 #     (sign(c-a)*exp(a*log(p)+lngamma(c-a)-lngamma(c+d)-log(a))*genhypergeo(U=c(a,a+d), L=c(1+a,1+a-c), b*S/(b+T)*p, ...) +
 #       sign(a-c)*exp((c-a)*log(b*S/(b+T))+c*log(p)+lngamma(a-c)-lngamma(a+d)-log(c))*genhypergeo(U=c(c,c+d), L=c(1+c,1+c-a), b*S/(b+T)*p, ...)
 #     )
+  if(a-c == floor(a-c)) stop("pprior_lambda() does not work when a-c is an integer.")
   return( pGB2(q, a=a, c=d, d=c, tau=b*S/(T+b)) )
 }
 #'

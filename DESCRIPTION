@@ -6,7 +6,7 @@ Date: 2015-05-10
 Author: Stéphane Laurent
 Maintainer: <laurent_step@yahoo.fr>
 Description: Implementation of the Bayesian inference for the two independent Poisson samples model, using the semi-conjugate family of prior distributions.
-Depends: R (>= 2.15.3)
+Depends: R (>= 3.0.0)
 License: GPL-2
 Imports: gsl,
     SuppDists,
