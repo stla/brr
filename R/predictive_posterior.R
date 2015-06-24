@@ -16,7 +16,9 @@
 #' predicted experiment
 #' @param n number of observations to be simulated
 #' 
-#' @return \code{dpost_x} gives the density, \code{ppost_x} the distribution function, \code{qpost_x} the quantile function, and \code{rpost_x} samples from the distribution.
+#' @return \code{dpost_x} gives the density, \code{ppost_x} the distribution function, 
+#' \code{qpost_x} the quantile function, \code{rpost_x} samples from the distribution, 
+#' and \code{spost_x} gives a summary of the distribution.
 #' 
 #' @note \code{Post_x} is a generic name for the functions documented. 
 #' 
@@ -62,6 +64,15 @@ rpost_x <- function(n, Snew, a=0.5, c=0.5, d=0, x, y, S){
   d.post <- d+a+y
   return( rPGIB(n,a.post,d.post,c.post,S/Snew) )
 }
+#'
+#' @rdname Post_x
+#' @export 
+spost_x <- function(Snew, a=0.5, c=0.5, d=0, x, y, S, ...){
+  a.post <- a+x+y
+  c.post <- c+x
+  d.post <- d+a+y
+  return( summary_PGIB(a.post, d.post, c.post, S/Snew, ...) )
+}
 
 
 
@@ -82,7 +93,9 @@ rpost_x <- function(n, Snew, a=0.5, c=0.5, d=0, x, y, S){
 #' predicted experiment
 #' @param n number of observations to be simulated
 #' 
-#' @return \code{dpost_y} gives the density, \code{ppost_y} the distribution function, \code{qpost_y} the quantile function, and \code{rpost_y} samples from the distribution.
+#' @return \code{dpost_y} gives the density, \code{ppost_y} the distribution function, 
+#' \code{qpost_y} the quantile function, \code{rpost_y} samples from the distribution, 
+#' and \code{spost_y} gives a summary of the distribution.
 #' 
 #' @note \code{Post_y} is a generic name for the functions documented. 
 #' 
@@ -127,4 +140,13 @@ rpost_y <- function(n, Tnew, a=0.5, b=0, c=0.5, d=0, x, y, T){
   c.post <- c+x
   d.post <- d+a+y
   return( rPGIB(n,a.post,c.post,d.post,(b+T)/Tnew) )
+}
+#'
+#' @rdname Post_y
+#' @export 
+spost_y <- function(Tnew, a=0.5, b=0, c=0.5, d=0, x, y, T, ...){
+  a.post <- a+x+y
+  c.post <- c+x
+  d.post <- d+a+y
+  return( summary_PGIB(a.post,c.post,d.post,(b+T)/Tnew, ...) )
 }
