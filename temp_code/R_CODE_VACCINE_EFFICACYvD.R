@@ -149,7 +149,7 @@ beta2.summary <- function(c,d,scale){
 
 
 ## summary of prior
-## à virer => inclure ça dans la fonction summary(brrprior) uniquement
+## ? virer => inclure ?a dans la fonction summary(brrprior) uniquement
 summary.prior.phi <- function(b, c, d, S, T){
 	beta2.summary(c,d,scale=(T+b)/S)
 }
@@ -593,7 +593,7 @@ qprior.x.mid.y <- function(p, y, a, b, c, d){
 return(out)
 }
 
-## à virer => inclure ça dans la fonction summary(brrprior) uniquement
+## ? virer => inclure ?a dans la fonction summary(brrprior) uniquement
 summary.prior.x.mid.y <- function(y, a, c, d){
 	summary.beta.nbinom(a+y,d,c)
 }
@@ -838,7 +838,7 @@ Credibility.Interval <- function(x, y, S, T, a, b, c, d, conf, interval="equi.st
 			equi=post.icdf(c((1-conf)/2, (1+conf)/2)),
 			equi.star=c(sign(x)*post.icdf((1-conf)/2),post.icdf((1+conf)/2)),
 			hpd=hpd2(x, y, S, T, a, b, c, d, conf), 
-			intrinsic=bounds.intrinsic(x, y, S, T, a, b, c, d, conf)  # mettre l'intrinsèque à part
+			intrinsic=bounds.intrinsic(x, y, S, T, a, b, c, d, conf)  # mettre l'intrins?que ? part
 		)
 		if(is.null(bounds)) stop("invalid interval name")
 return(bounds)
@@ -936,7 +936,7 @@ list(phi0=seq.phi0, power=round(Reject, digits))
 
 
 
-############################################################################## # ne pas mettre ça
+############################################################################## # ne pas mettre ?a
 ############## SIGNIFICANCE LEVEL  ###########################################
 significance.curve <- function(K, seq.mu0, phi.star, interval, S, T, a=0.5, b=0, c=0.5, d=0, prec=1e-5, digits=4){
 	mu0.max <- max(seq.mu0)
@@ -1173,7 +1173,7 @@ region.BPGIB11 <- function(conf, r, a, c, d, tau){
 while(S<0.99){
 	y.next <- y+r
 	for(i in (y+1):y.next){
-		temp <- out[dim(out)[1],] # dernière ligne de out[]
+		temp <- out[dim(out)[1],] # derni?re ligne de out[]
 		next.line <- temp*(d+i-1)/i*(a+i-2+c(1:(x+1)))/(c+d+i-2+c(1:(x+1)))*tau/(tau+1)
 		out <- rbind(out,next.line)
 		S <- S+sum(next.line)
