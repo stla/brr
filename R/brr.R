@@ -153,21 +153,30 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
 #' 
 #' 
 prior <- function(params){
-  #params <- brr()
-  # remove NULL components
+#   # remove NULL components
+#   params <- as.list(unlist(params))
+#   if(all(c("a","b","c","d","S","T") %in% names(params))){
+#     return("informative")
+#   }else{
+#     if(!all(c("a","b") %in% names(params))){
+#       return("non-informative")
+#     }else{
+#       if(all(c("a","b") %in% names(params))){
+#         return("semi-informative")
+#       }
+#     }
+#   }
   params <- as.list(unlist(params))
-  if(all(c("a","b","c","d","S","T") %in% names(params))){
+  for(i in seq_along(params)) assign(names(params)[i], params[[i]])
+  if((all(c("a","b","c","d") %in% names(params))) && all(c(a,b,c,d)>0)){
     return("informative")
-  }else{
-    if(!all(c("a","b") %in% names(params))){
-      return("non-informative")
-    }else{
-      if(all(c("a","b") %in% names(params))){
-        return("semi-informative")
-      }
-    }
   }
-  # warning si c, d mais pas S et T
+  info_mu <- all(c("a","b") %in% names(params)) && all(c(a,b)>0)
+  noninfo_mu <- (is.null(params$a) && is.null(params$b)) || (all(c("a","b") %in% names(params)) && a==0.5 && b==0)
+  noninfo_phi <- (is.null(params$c) && is.null(params$d)) || (all(c("c","d") %in% names(params)) && c==0.5 && d==0)
+  if(noninfo_mu && noninfo_phi) return("non-informative")
+  if(noninfo_phi && info_mu) return("semi-informative")
+  stop("Invalid combination of parameters a,b,c,d.")
 }
 
 #' Summary brr

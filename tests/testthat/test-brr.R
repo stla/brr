@@ -2,6 +2,20 @@ context("Brr")
 
 test_that("Test prior function", {
   expect_equal(prior(list(a=2,b=3)), "semi-informative")
+  expect_equal(prior(list(a=2,b=3,c=0.5,d=0)), "semi-informative")
+  expect_equal(prior(list(a=2,b=3,c=NULL,d=NULL)), "semi-informative")
+  expect_equal(prior(list()), "non-informative")
+  expect_equal(prior(list(c=NULL)), "non-informative")  
+  expect_equal(prior(list(a=2,b=3,c=1,d=2)), "informative")
+  expect_error(prior(list(a=2)), "Invalid combination of parameters a,b,c,d.")
+  expect_error(prior(list(a=2, b=0)), "Invalid combination of parameters a,b,c,d.")
+  expect_error(prior(list(a=2, b=1, c=2)), "Invalid combination of parameters a,b,c,d.")
+  expect_error(prior(list(a=2, b=1, c=0)), "Invalid combination of parameters a,b,c,d.")
+  expect_error(prior(list(a=2, b=1, c=0.5)), "Invalid combination of parameters a,b,c,d.")
+  expect_error(prior(list(a=2, b=1, c=0, d=4)), "Invalid combination of parameters a,b,c,d.")
+  expect_error(prior(list(a=NULL, b=0)), "Invalid combination of parameters a,b,c,d.")
+  expect_error(prior(list(c=2, d=3)), "Invalid combination of parameters a,b,c,d.")
+  expect_error(prior(list(c=0.5, d=NULL)), "Invalid combination of parameters a,b,c,d.")
 })
 
 test_that("Test sprior function", {
