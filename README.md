@@ -4,7 +4,7 @@ Bayesian inference on the ratio of two Poisson rates.
 
 ### Install ###
 
-The `brr` package is still under development. You can install it from `github` using the `devtools` package. 
+The `brr` package is still under development. You can install it from `github` using the `devtools` package:
 
 ```r
 devtools::install_github('brr', 'stla')
@@ -30,7 +30,7 @@ Get a credibility interval about `phi`:
 confint(model)
 ```
 
-Get the probability that `phi>1`:
+Get the posterior probability that `phi>1`:
 
 ```r
 ppost(model, "phi", 1, lower.tail=FALSE)
@@ -39,6 +39,6 @@ ppost(model, "phi", 1, lower.tail=FALSE)
 Update the `brr` object to include new sample sizes and get a summary of the posterior predictive distribution of `x`:
 
 ```r
-model <- model(Snew=10000, Tnew=1000)
+model <- model(Snew=10000, Tnew=10000)
 spost(model, "x", type="pandoc")
 ```
