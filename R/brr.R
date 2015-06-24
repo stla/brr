@@ -289,6 +289,7 @@ brr_generic <- function(fun, model, parameter, ...){
   return( do.call(fun, c(list(...), params[names(params) %in% args])) )
 }
 
+
 #' @name PriorAndPosterior
 #' @rdname PriorAndPosterior
 #' @title Prior and posterior distributions
@@ -369,8 +370,35 @@ spost <- function(model, parameter, ...){
 
 #' Credibility Intervals
 #' 
+#' Wrapper to \code{\link{credibility_intervals}}
 #' 
+#' @param model a \code{link[Brr]{brr}} object
+#' @param conf confidence level
+#' @param intervals a character vector, the intervals to be returned
+#' @param ... other aguments passed to \code{\link{credibility_intervals}} (currently nothing)
+#' 
+#' @return A list of confidence intervals
+#' 
+#' @examples 
+#' model <- Brr(x=10, y=10, S=100, T=100)
+#' confint(model)
 #' @export
-confint.brr <- function(model, ...){
-  0
+confint.brr <- function(model, conf=0.95, intervals="all", ...){
+  params <- model()
+  type <- prior(params)
+  if(type=="semi-informative" || type=="non-informative"){
+    params$a <- 0.5; params$b <- 0
+    if(type=="non-informative"){
+      params$c <- 0.5; params$d <- 0
+    }
+  }
+  args <- formalArgs("credibility_intervals") %>% subset(!. %in% "...")
+  if(intervals=="all") intervals <- c("equi", "equi.star", "hpd", "intrinsic")
+  confints <- do.call(credibility_intervals, c(list(...), params[names(params) %in% args], list(conf=conf, intervals=intervals)))
+  for(i in seq_along(confints)){
+    cat(intervals[i], ": ")
+    pander(confints[[i]])
+    cat("\n")
+  }
+  return(invisible(confints))
 }
