@@ -6,16 +6,14 @@
 #' @export
 '%>%' <- magrittr::`%>%`
 
-#' Unicode encoding of Greek letters
-#' 
-greek_utf8 <- function(letter){
+
+greek_utf8 <- function(letter){ #' Unicode encoding of Greek letters
   return(switch(letter, mu="\u03BC", phi="\u03d5", lambda="\u03BB"))
 }
 
-#' Gauss hypergeometric function
-#' 
+
 #' @importFrom gsl hyperg_2F1
-Gauss2F1 <- function(a, b, c, x){
+Gauss2F1 <- function(a, b, c, x){ #' Gauss hypergeometric function
   if(x>=0 & x<1){
     hyperg_2F1(a,b,c,x)
   }else{
@@ -24,17 +22,17 @@ Gauss2F1 <- function(a, b, c, x){
   }
 }
 
-#' Inverse cdf of a discrete distribution
-#' 
-#' @param pmf a probability mass function
-#' @param p probability
-#' @param ... arguments passed to \code{pmf}
-#'
-#' @examples
-#' icdf(dpois, 0.5, lambda=10)
-#' qpois(0.5, 10)
-#'
-#' @export 
+# Inverse cdf of a discrete distribution
+# 
+# @param pmf a probability mass function
+# @param p probability
+# @param ... arguments passed to \code{pmf}
+# 
+# @examples
+# icdf(dpois, 0.5, lambda=10)
+# qpois(0.5, 10)
+# 
+# @export 
 icdf <- function(pmf, p, ...){
   q <- 0
   prob <- pmf(0, ...)
@@ -45,18 +43,18 @@ icdf <- function(pmf, p, ...){
   return(q)
 }
 
-#' Moment of a discrete distribution
-#' 
-#' @param pmf a probability mass function
-#' @param k order
-#' @param accuracy accuracy
-#' @param ... arguments passed to \code{pmf}
-#' 
-#' @examples
-#' dd_moment(dpois, lambda=5)
-#' dd_moment(dpois, lambda=5.5795791557050280)
-#' dd_moment(dpois, k=2, lambda=5)
-#' @export
+# Moment of a discrete distribution
+# 
+# @param pmf a probability mass function
+# @param k order
+# @param accuracy accuracy
+# @param ... arguments passed to \code{pmf}
+# 
+# @examples
+# dd_moment(dpois, lambda=5)
+# dd_moment(dpois, lambda=5.5795791557050280)
+# dd_moment(dpois, k=2, lambda=5)
+# @export
 dd_moment <- function(pmf, k=1, accuracy=.Machine$double.eps, ...){
  m0 <- 0
  x <- 1

@@ -1,8 +1,6 @@
 .Rproj.user
 .Rhistory
 .RData
-/man
-!/man/brr-package.Rd
 /tests/testthat/*.pdf
 /temp_docs
 /temp_vignettes
