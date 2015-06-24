@@ -352,3 +352,11 @@ rpost <- function(model, parameter, ...){
 spost <- function(model, parameter, ...){
   return( brr_generic("spost", model, parameter, ...) )
 }
+
+#' Credibility Intervals
+#' 
+#' 
+#' @export
+confint.brr <- function(model, ...){
+  0
+}
