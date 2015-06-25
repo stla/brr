@@ -24,7 +24,7 @@ Plot the posterior distribution of the rate ratio `phi`:
 plot(model, dpost(phi))
 ```
 
-Get a credibility interval about `phi`:
+Get credibility intervals about `phi`:
 
 ```r
 confint(model)
@@ -42,3 +42,11 @@ Update the `brr` object to include new sample sizes and get a summary of the pos
 model <- model(Snew=10000, Tnew=10000)
 spost(model, "x", type="pandoc")
 ```
+
+### References ###
+
+S. Laurent, C. Legrand: *A Bayesian framework for the ratio of two Poisson rates in the context of vaccine efficacy trials.* ESAIM, Probability \& Statistics 16 (2012), 375--398.
+
+S. Laurent: *Some Poisson mixtures  distributions with a hyperscale parameter.* Brazilian Journal of Probability and Statistics 26 (2012), 265--278.
+
+S. Laurent: *Intrinsic Bayesian inference on a Poisson rate and on the ratio of two Poisson rates.* Journal of Statistical Planning and Inference 142 (2012), 2656--2671.
