@@ -96,7 +96,19 @@ intrinsic_estimate <- function(x, y, S, T, a, b, c, d, subd=10000, tol = 1e-08){
   out
 }
 
-#' Intrinsic interval
+#' Intrinsic credible interval
+#' 
+#' Intrinsic credible interval about the relative risk or the vaccine efficacy
+#' 
+#' @param a,b,c,d Prior parameters
+#' @param S,T sample sizes
+#' @param x,y Observed counts
+#' @param conf credibility level
+#' @param parameter relative risk \code{"phi"} or vaccine efficacy \code{"VE"}
+#' @param subd number of subdividisions passed to the \code{\link{integrate}} function 
+#' through the \code{\link{intrinsic_phi0}} function
+#' 
+#' @return a vector with two numbers, the bounds of the intrinsic credible interval
 #' 
 #' @examples
 #' a<-0.5; b<-0; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20
@@ -104,9 +116,9 @@ intrinsic_estimate <- function(x, y, S, T, a, b, c, d, subd=10000, tol = 1e-08){
 #' bounds <- intrinsic_bounds(x, y, S, T, a, b, c, d, conf=0.95); bounds
 #' ppost_phi(bounds[2], a, b, c, d, S, T,  x, y)- ppost_phi(bounds[1], a, b, c, d, S, T, x, y)
 #' @export
-intrinsic_bounds <- function(x, y, S, T, a, b, c, d, conf, parameter="phi", subd=10000, tol = 1e-08){
+intrinsic_bounds <- function(x, y, S, T, a, b, c, d, conf=.95, parameter="phi", subd=1000, tol = 1e-08){
   post.cost <- function(phi0){
-    intrinsic_phi0(phi0, x, y, S, T, a, b, c, d, subd)
+    intrinsic_phi0(phi0, x, y, S, T, a, b, c, d, subd=subd)
   }
   post.icdf <- function(p){
     qpost_phi(p, a=a, b=b, c=c, d=d, S=S, T=T, x=x, y=y)
