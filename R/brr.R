@@ -418,14 +418,14 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
 #' @rdname inference_brr
 #' @title Credibility intervals and estimates
 #' @description Get credibility intervals and estimates from a \code{brr} object
-#' @details \code{confint.brr} is a wrapper to \code{\link{credibility_intervals}}
+#' @details \code{confint.brr} is a wrapper to \code{\link{brr_intervals}}
 #' 
 #' @param model a \code{\link[Brr]{brr}} object
 #' @param conf confidence level
 #' @param intervals a character vector, the intervals to be returned
 #' @param style the style of the table to print 
 #' (passed to  \code{\link[=pander]{pandoc.table.return}})
-#' @param ... other aguments passed to \code{\link{credibility_intervals}} (currently nothing)
+#' @param ... other aguments passed to \code{\link{brr_intervals}} (currently nothing)
 #' 
 #' @return \code{confint.brr} returns a list of confidence intervals
 #' 
@@ -445,9 +445,9 @@ confint.brr <- function(model, conf=0.95, intervals="all", ...){
       params$c <- 0.5; params$d <- 0
     }
   }
-  args <- formalArgs("credibility_intervals") %>% subset(!. %in% "...")
+  args <- formalArgs("brr_intervals") %>% subset(!. %in% "...")
   if(intervals=="all") intervals <- c("equi", "equi.star", "hpd", "intrinsic")
-  confints <- do.call(credibility_intervals, c(list(...), params[names(params) %in% args], list(conf=conf, intervals=intervals)))
+  confints <- do.call(brr_intervals, c(list(...), params[names(params) %in% args], list(conf=conf, intervals=intervals)))
   class(confints) <- "confint.brr"
   attr(confints, "level") <- conf
   return(confints)

@@ -17,7 +17,7 @@
 
 \item{intervals}{a character vector, the intervals to be returned}
 
-\item{...}{other aguments passed to \code{\link{credibility_intervals}} (currently nothing)}
+\item{...}{other aguments passed to \code{\link{brr_intervals}} (currently nothing)}
 
 \item{style}{the style of the table to print
 (passed to  \code{\link[=pander]{pandoc.table.return}})}
@@ -31,7 +31,7 @@ Get credibility intervals and estimates from a \code{brr} object
 
 }
 \details{
-\code{confint.brr} is a wrapper to \code{\link{credibility_intervals}}
+\code{confint.brr} is a wrapper to \code{\link{brr_intervals}}
 }
 \examples{
 model <- Brr(x=10, y=10, S=100, T=100)

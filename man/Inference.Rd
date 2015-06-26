@@ -2,29 +2,38 @@
 % Please edit documentation in R/inference.R
 \name{Inference}
 \alias{Inference}
-\alias{credibility_intervals}
+\alias{brr_estimates}
+\alias{brr_intervals}
 \title{Inference summaries}
 \usage{
-credibility_intervals(x, y, S, T, a, b, c, d, conf = 0.95,
-  intervals = "equi.star")
+brr_intervals(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0, conf = 0.95,
+  intervals = "equi.star", ...)
+
+brr_estimates(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
+  parameter = "phi", ...)
 }
 \arguments{
 \item{conf}{confidence level}
 
 \item{intervals}{a character vector, the intervals to be returned}
+
+\item{...}{arguments passed to \link{IntrinsicInference}}
 }
 \value{
 A list of confidence intervals
 }
 \description{
 Credibility intervals, estimates
+
+
 }
 \note{
 \code{Inference} is a generic name for the functions documented.
 }
 \examples{
-credibility_intervals(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0)
-credibility_intervals(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0, intervals=c("left","equi"))
+brr_intervals(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0)
+brr_intervals(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0, intervals=c("left","equi"))
+brr_estimates(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0)
 }
 \seealso{
 \code{\link{confint.brr}}
