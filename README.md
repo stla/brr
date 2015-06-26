@@ -43,6 +43,14 @@ model <- model(Snew=10000, Tnew=10000)
 spost(model, "x", type="pandoc")
 ```
 
+### To learn more ###
+
+Look at the vignettes:
+
+```r
+browseVignettes(package = "brr")
+```
+
 ### References ###
 
 S. Laurent, C. Legrand: *A Bayesian framework for the ratio of two Poisson rates in the context of vaccine efficacy trials.* ESAIM, Probability \& Statistics 16 (2012), 375--398.
