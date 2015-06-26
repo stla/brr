@@ -23,7 +23,7 @@ future sample sizes \code{Snew}, \code{Tnew}, to be set as in a list (see exampl
 \code{"lower"} to return \eqn{Pr(\phi<\phi_0)}}
 
 \item{table.style}{the style of the table to print
-(passed to  \code{\link[=pander]{pander.data.frame}})}
+(passed to  \code{\link[=pander]{pandoc.table.return}})}
 }
 \value{
 \code{Brr} returns an object of class \code{brr}, \code{summary.brr}

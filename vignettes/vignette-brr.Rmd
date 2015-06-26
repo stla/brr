@@ -1,0 +1,99 @@
+---
+title: "brr: an R package for Bayesian inference on the ratio of two Poisson rates"
+author: "Stéphane Laurent"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+The `brr` package performs Bayesian inference on the rate ratio $\phi=\frac{\lambda}{\mu}$ of the *two Poisson samples model*  given by two independent observations 
+$$\begin{cases}
+x \sim {\cal P}(\lambda S) \\ 
+y \sim{\cal P}(\mu T)
+\end{cases}$$ 
+where $\lambda$ and $\mu$ are 
+the unknown incidence rates and $S$ and $T$ are the known observation-opportunity
+sizes, or, for short, the sample sizes. $S$ and $T$ are also called the times at risk when they represent some durations.
+
+This model can also be used in the case of two independent series of observations 
+$(x_i)_{i=1}^m$ and $(y_i)_{i=1}^n$ assuming 
+$$\begin{cases}
+x_i \sim_{\text{i.i.d.}} {\cal P}(\lambda S_i) \\ 
+y_i \sim_{\text{i.i.d.}} {\cal P}(\mu T_i)
+\end{cases}$$ 
+by setting $S=\sum S_i$ and $T= \sum T_i$, and by using the sufficient statistics 
+$x=\sum x_i$ and $y=\sum y_i$ as the observations.
+
+The `brr` package implements the *semi-conjugate family of prior distributions*. 
+ Precisely, for positive numbers $a,b,c,d$ to be set by the user, the following independent prior distributions are assigned on $\mu$ and $\phi:=\lambda/\mu$:
+$$
+\mu \sim {\cal G}(a,b) \quad \text{and } \quad \phi \sim  \frac{T+b}{S} \times {\cal B}'(c,d),
+$$
+Then the joint posterior on $(\mu,\phi)$ is given by  
+$$
+(\mu \mid \phi,x,y) \sim {\cal G}(a+x+y, b + \phi S+T) 
+\quad \text{and } \quad (\phi\mid x,y) \sim \frac{T+b}{S} \times {\cal B}'(c+x,a+d+y). 
+$$
+
+In particular :
+
+- when $a=c=0.5$ and $b=d=0$, the prior is the reference prior, also called the *non-informative prior*;
+
+* when $a,b>0$, $c=0.5$ and $d=0$, the prior is the semi-reference prior, 
+also called the *semi-informative prior*, when the arbitrary 
+Gamma prior distribution ${\cal G}(a,b)$ is assigned on $\mu$. 
+
+### Setting parameters with `brr`
+
+Use the `Brr` function to set the prior parameters, the sample sizes, and the observed counts. One can proceed step by step, for example below we start by supplying the parameters $a$ and $b$ of the prior Gamma distribution on $\mu$:
+
+```{r}
+library(brr)
+model <- Brr(a=2,b=3)
+summary(model)
+```
+
+Since $c$ and $d$ were not supplied, `brr` automatically considers the non-informative prior on $\phi$. Equivalently the same `brr` object can be defined by 
+`Brr(a=2, b=3, c=NULL, d=NULL)` or `Brr(a=2, b=3, c=0.5, d=0)`. 
+
+The `brr` object can be used itself to  update it by adding parameters, for example: 
+
+```{r}
+model <- model(c=3, d=3, S=100, T=100)
+summary(model)
+```
+
+Now that $a$, $b$, $c$, $d$, $S$ and $T$ have been supplied, the user can play with all functions related to the prior distributions.  
+For example, `dprior(model, "lambda", .)` evaluates the density of the prior distribution of $\lambda$. This is convenient to generate a graphic with the `curve` function:
+
+```{r, fig.width=3, fig.height=2.5}
+par(mar=c(4, 3, 1, 1))
+curve(dprior(model, "lambda", x), from=0, to=2, axes=FALSE, xlab=expression(lambda), ylab=NA)
+axis(1);axis(2)
+```
+
+The `brr` package also provides a way to generate a plot with automatic aesthetics:
+
+```{r, fig.width=3, fig.height=2.5}
+par(mar=c(4, 3, 1, 1))
+plot(model, dprior(lambda))
+axis(2)
+```
+
+
+### Posterior inference with `brr` 
+
+Posterior inference is available after setting the observed counts $x$ and $y$:
+
+```{r}
+model <- model(x=14, y=20)
+summary(model)
+```
+
+Posterior credibility intervals are provided by the `confint` function:
+
+```{r}
+confint(model) # print confint ?
+```
+
+

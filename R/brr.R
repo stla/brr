@@ -67,7 +67,7 @@ brr_generic <- function(fun, model, parameter, ...){
 #' @param hypothesis \code{"greater"} to return \eqn{Pr(\phi>\phi_0)}, 
 #' \code{"lower"} to return \eqn{Pr(\phi<\phi_0)}  
 #' @param table.style the style of the table to print 
-#' (passed to  \code{\link[=pander]{pander.data.frame}})
+#' (passed to  \code{\link[=pander]{pandoc.table.return}})
 #' 
 #' @return \code{Brr} returns an object of class \code{brr}, \code{summary.brr} 
 #' returns a list but prints its contents through \code{print.summary.brr}
@@ -328,14 +328,15 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
     if(! fun %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun))
     if(f %in% c("dprior", "pprior", "dpost", "ppost")){
       qfun <- paste0("q", stringr::str_sub(f, 2))
-      bounds <- try(eval(parse(text=qfun))(brr, param, c(1e-4, 1-1e-4)), silent=TRUE)
+      bounds <- try(eval(parse(text=qfun))(brr, param, c(1e-4, 1-1e-3)), silent=TRUE)
       if(class(bounds)=="try-error"){
         summ <- eval(parse(text=paste0("s", stringr::str_sub(f, 2))))(brr, param)
         bounds <- c(max(0, summ$mean-3*summ$sd), summ$mean+3*summ$sd)
       }
       if(!param %in% c("x","y")){
-        seq(bounds[1], bounds[2], length.out=100) %>% {
+        seq(bounds[1], bounds[2], length.out=301) %>% {
           plot(., eval(parse(text=f))(brr, param, .), 
+               lwd=2, 
                type="l", 
                axes=FALSE,
                ylab=ifelse(f %in% c("dprior","dpost"), NA, sprintf("P(%s \u2264 . )", greek_utf8(param))),
@@ -413,20 +414,27 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
   }
 }
 
-#' Credibility Intervals
+#' @name inference.brr
+#' @rdname inference_brr
+#' @title Credibility intervals and estimates
+#' @description Get credibility intervals and estimates from a \code{brr} object
+#' @details \code{confint.brr} is a wrapper to \code{\link{credibility_intervals}}
 #' 
-#' Wrapper to \code{\link{credibility_intervals}}
-#' 
-#' @param model a \code{link[Brr]{brr}} object
+#' @param model a \code{\link[Brr]{brr}} object
 #' @param conf confidence level
 #' @param intervals a character vector, the intervals to be returned
+#' @param style the style of the table to print 
+#' (passed to  \code{\link[=pander]{pandoc.table.return}})
 #' @param ... other aguments passed to \code{\link{credibility_intervals}} (currently nothing)
 #' 
-#' @return A list of confidence intervals
+#' @return \code{confint.brr} returns a list of confidence intervals
 #' 
 #' @examples 
 #' model <- Brr(x=10, y=10, S=100, T=100)
 #' confint(model)
+NULL
+
+#' @rdname inference_brr
 #' @export
 confint.brr <- function(model, conf=0.95, intervals="all", ...){
   params <- model()
@@ -440,10 +448,21 @@ confint.brr <- function(model, conf=0.95, intervals="all", ...){
   args <- formalArgs("credibility_intervals") %>% subset(!. %in% "...")
   if(intervals=="all") intervals <- c("equi", "equi.star", "hpd", "intrinsic")
   confints <- do.call(credibility_intervals, c(list(...), params[names(params) %in% args], list(conf=conf, intervals=intervals)))
-  for(i in seq_along(confints)){
-    cat(intervals[i], ": ")
-    pander(confints[[i]])
+  class(confints) <- "confint.brr"
+  attr(confints, "level") <- conf
+  return(confints)
+}
+#'
+#' @rdname inference_brr
+#' @importFrom pander pandoc.table.return
+#' @export
+print.confint.brr <- function(x, style="grid"){
+  cat(sprintf("%s-credibility intervals about %s", paste0(100*attr(x,"level"),"%"), greek_utf8("phi")))
+  cat("\n\n")
+  for(i in seq_along(x)){
+    cat(names(x)[i], ": ")
+    #attr(x[[i]], "caption") <- names(x)[i]
+    cat(pandoc.table.return(x[[i]], style=style))
     cat("\n")
   }
-  return(invisible(confints))
 }
