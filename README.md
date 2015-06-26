@@ -7,7 +7,7 @@ Bayesian inference on the ratio of two Poisson rates.
 The `brr` package is still under development. You can install it from `github` using the `devtools` package:
 
 ```r
-devtools::install_github('brr', 'stla')
+devtools::install_github('brr', 'stla', build_vignettes=TRUE)
 ```
 
 ### Basic usage ###
