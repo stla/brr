@@ -8,6 +8,8 @@ intrinsic_bounds(x, y, S, T, a, b, c, d, conf = 0.95, parameter = "phi",
   subd = 1000, tol = 1e-08)
 }
 \arguments{
+\item{x,y}{Observed counts}
+
 \item{S,T}{sample sizes}
 
 \item{a,b,c,d}{Prior parameters}

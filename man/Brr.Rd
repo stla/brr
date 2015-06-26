@@ -2,12 +2,39 @@
 % Please edit documentation in R/brr.R
 \name{Brr}
 \alias{Brr}
-\title{Set up}
+\alias{print.summary.brr}
+\alias{summary.brr}
+\title{Brr object}
 \usage{
 Brr(...)
+
+\method{summary}{brr}(brr, phi0 = 1, hypothesis = "greater")
+
+\method{print}{summary.brr}(summary, table.style = "grid")
+}
+\arguments{
+\item{...}{prior parameters \code{a}, \code{b}, \code{c}, \code{d},
+samples sizes \code{S}, \code{T}, observed counts \code{x}, \code{y},
+future sample sizes \code{Snew}, \code{Tnew}, to be set as in a list (see examples)}
+
+\item{phi0}{the value of interest of the rate ratio}
+
+\item{hypothesis}{\code{"greater"} to return \eqn{Pr(\phi>\phi_0)},
+\code{"lower"} to return \eqn{Pr(\phi<\phi_0)}}
+
+\item{table.style}{the style of the table to print
+(passed to  \code{\link[=pander]{pander.data.frame}})}
+}
+\value{
+\code{Brr} returns an object of class \code{brr}, \code{summary.brr}
+returns a list but prints its contents through \code{print.summary.brr}
 }
 \description{
-Set up
+Set up the Bayesian model and the observations
+
+
+
+
 }
 \examples{
 model <- Brr(a=2, b=3)
@@ -18,5 +45,15 @@ model()
 # replace parameters
 model <- model(a=10, b=11)
 model()
+model <- Brr()
+summary(model)
+model <- Brr(x=3, y=4)
+summary(model)
+model <- Brr(a=2, b=4, T=10)
+summary(model)
+model <- model(a=2, b=4, c=3, d=5, S=10, T=10)
+summary(model)
+model <- model(x=5, y=10)
+summary(model)
 }
 
