@@ -139,7 +139,7 @@ summary.brr <- function(brr, phi0=1, hypothesis="greater"){
   # remove NULL components
   params <- as.list(unlist(params)) # pas necessaire je pense - si pour print
   out$params <- params
-  if(type=="informative"){
+  if(type!="non-informative"){
     out$prior_mu <- sprior_mu(params$a, params$b)
   }else{
     params$a <- 0.5; params$b <- 0
@@ -166,33 +166,34 @@ return(out)
 }
 #' 
 #' @rdname Brr
-#' @importFrom pander pander
+#' @importFrom pander pandoc.table.return
 #' @export
 print.summary.brr <- function(summary, table.style="grid"){
   cat("----------\n")
-  cat(type <- summary$type)
+  cat(type <- summary$type, "prior")
   cat("\n\n")
-  cat(sprintf("*Prior distribution on %s*\n", greek_utf8("mu")))
-  if(type=="informative"){
+  cat(sprintf("*Prior distribution on %s*:", greek_utf8("mu")))
+  if(type!="non-informative"){
     cat(with(summary$params, sprintf("  Gamma(a=%s,b=%s)", a, b)))
-    pander(data.frame(summary$prior_mu), style=table.style)
+    cat(pandoc.table.return(data.frame(summary$prior_mu), style=table.style))
+    #cat(pander(data.frame(summary$prior_mu), style=table.style))
   }else{
-    cat("  Non-informative prior\n")
+    cat("\n  Non-informative prior")
   }
-  cat("\n")
-  cat(sprintf("*Prior distribution on %s*\n", greek_utf8("phi")))
+  #cat("\n")
+  cat(sprintf("*Prior distribution on %s*:", greek_utf8("phi")))
   if(all(c("c","d","b","S","T") %in% names(summary$params))){
     cat(with(summary$params, sprintf("  Beta2(c=%s,d=%s,scale=%s)", c, d, (T+b)/S)))
-    pander(data.frame(summary$prior_phi), style=table.style)
+    cat(pandoc.table.return(data.frame(summary$prior_phi), style=table.style))
   }else{
     if(type=="non-informative" || type=="semi-informative"){
       cat("  Non-informative prior")
     }else{
       cat("  c, d, b, S and T must be supplied")
     }
-    cat("\n")
+    cat("\n\n")
   }
-  cat("\n")
+  #cat("\n")
   params <- summary$params
   cat("*Sample sizes*\n")
   cat(sprintf("  S (treated group): %s", ifelse("S" %in% names(params), params$S, "not supplied")))
@@ -204,17 +205,17 @@ print.summary.brr <- function(summary, table.style="grid"){
   cat("\n")
   cat(sprintf("  y (control group): %s", ifelse("y" %in% names(params), params$y, "not supplied")))
   cat("\n\n")
-  cat(sprintf("*Posterior distribution on %s*\n", greek_utf8("phi")))
+  cat(sprintf("*Posterior distribution on %s*:", greek_utf8("phi")))
   if(all(c("a","b","c","d","S","T","x","y") %in% names(params))){
     cat(with(params, sprintf("  Beta2(%s,%s,scale=%s)", c+x, d+a+y, (T+b)/S)))
-    pander(data.frame(summary$post_phi), style=table.style)
+    cat(pandoc.table.return(data.frame(summary$post_phi), style=table.style))
     #cat("\n")
     cat(sprintf(" Pr('relative risk is %s than %s') = %s",
                 summary$hypothesis, summary$phi0, 
                 summary$Pr)
     )
   }else{
-    cat("  a, b, c, d, S, T, x and y must be supplied")
+    cat("\n  a, b, c, d, S, T, x and y must be supplied")
   }
   cat("\n")
 }
