@@ -139,7 +139,7 @@ summary_beta2 <- function(c, d, scale, type="list", ...){
 #' @rdname GammaInverseBetaDist
 #' @title Gamma-Inverse Beta distribution
 #' @description Density and random  generation for the Gamma-Inverse Beta distribution 
-#' with shape parameters \code{a}, \code{alpha}, \code{beta} and scale parameter \code{rho}. 
+#' with shape parameters \code{a}, \code{alpha}, \code{beta} and hyperscale parameter \code{rho}. 
 #' @details This is the mixture distribution obtained by sampling a value \eqn{b} from a Beta distribution 
 #' with shape parameters \eqn{\beta}, \eqn{\alpha} 
 #' and then sampling a Gamma distribution with shape \eqn{a} and rate \eqn{\rho/b}.
@@ -147,6 +147,7 @@ summary_beta2 <- function(c, d, scale, type="list", ...){
 #' @param x vector of quantiles
 #' @param a non-negative shape parameter of the Gamma distribution
 #' @param alpha,beta non-negative shape parameters of the mixing Beta distribution
+#' @param rho hyperscale parameter (scale of the mixing distribution)
 #' @param n number of observations to be simulated
 #' 
 #' @return \code{dGIB} gives the density, \code{rGIB} samples from the distribution, 
