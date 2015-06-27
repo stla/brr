@@ -13,15 +13,14 @@
 #' 
 #' @examples 
 #' brr_intervals(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0)
-#' brr_intervals(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0, intervals=c("left","equi"))
+#' brr_intervals(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0, intervals=c("left","equi-tailed"))
 #' brr_estimates(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0)
 NULL
-
 
 #' @rdname Inference
 #' @importFrom TeachingDemos hpd
 #' @export
-brr_intervals <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, conf=.95, intervals="equi.star", ...){
+brr_intervals <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, conf=.95, intervals="equi-tailed*", ...){
   post.icdf <- function(q){
     qpost_phi(q, a, b, c, d, S, T, x, y)
   }
@@ -37,9 +36,9 @@ brr_intervals <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, conf=.95, interval
     switch(interval, 
            left=c(0, post.icdf(conf)), 
            right=c(post.icdf(1-conf), Inf),
-           right.star=c(sign(x)*post.icdf(1-conf), Inf),
-           equi=post.icdf(c((1-conf)/2, (1+conf)/2)),
-           equi.star=c(sign(x)*post.icdf((1-conf)/2),post.icdf((1+conf)/2)),
+           "right*"=c(sign(x)*post.icdf(1-conf), Inf),
+           "equi-tailed"=post.icdf(c((1-conf)/2, (1+conf)/2)),
+           "equi-tailed*"=c(sign(x)*post.icdf((1-conf)/2),post.icdf((1+conf)/2)),
            hpd=hpd2(x, y, S, T, a, b, c, d, conf), 
            intrinsic=intrinsic_bounds(x, y, S, T, a, b, c, d, conf, ...),
     ), c("lwr", "upr")

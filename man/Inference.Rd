@@ -7,7 +7,7 @@
 \title{Inference summaries}
 \usage{
 brr_intervals(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0, conf = 0.95,
-  intervals = "equi.star", ...)
+  intervals = "equi-tailed*", ...)
 
 brr_estimates(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
   parameter = "phi", ...)
@@ -32,7 +32,7 @@ Credibility intervals, estimates
 }
 \examples{
 brr_intervals(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0)
-brr_intervals(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0, intervals=c("left","equi"))
+brr_intervals(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0, intervals=c("left","equi-tailed"))
 brr_estimates(x=4, y=5, S=10, T=10, a=0.5, b=0, c=0.5, d=0)
 }
 \seealso{

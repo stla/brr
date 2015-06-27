@@ -8,7 +8,11 @@
 
 
 greek_utf8 <- function(letter){ #' Unicode encoding of Greek letters
-  return(switch(letter, mu="\u03BC", phi="\u03d5", lambda="\u03BB"))
+  if(letter %in% c("mu", "phi", "lambda")){
+    return(switch(letter, mu="\u03BC", phi="\u03d5", lambda="\u03BB"))
+  }else{
+    return(letter)
+  }
 }
 
 

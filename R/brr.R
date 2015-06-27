@@ -418,20 +418,24 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
 #' @rdname inference_brr
 #' @title Credibility intervals and estimates
 #' @description Get credibility intervals and estimates from a \code{brr} object
-#' @details \code{confint.brr} is a wrapper to \code{\link{brr_intervals}}
+#' @details \code{confint.brr} is a wrapper to \code{\link{brr_intervals}} and 
+#' \code{coef.brr} is a wrapper to \code{\link{brr_estimates}}
 #' 
 #' @param model a \code{\link[Brr]{brr}} object
 #' @param conf confidence level
 #' @param intervals a character vector, the intervals to be returned
 #' @param style the style of the table to print 
 #' (passed to  \code{\link[=pander]{pandoc.table.return}})
-#' @param ... other aguments passed to \code{\link{brr_intervals}} (currently nothing)
+#' @param ... other aguments passed to \code{\link{brr_intervals}} or \code{\link{brr_estimates}}
 #' 
 #' @return \code{confint.brr} returns a list of confidence intervals
 #' 
 #' @examples 
 #' model <- Brr(x=10, y=10, S=100, T=100)
 #' confint(model)
+#' coef(model)
+#' 
+#' @importFrom pander pandoc.table.return
 NULL
 
 #' @rdname inference_brr
@@ -446,7 +450,7 @@ confint.brr <- function(model, conf=0.95, intervals="all", ...){
     }
   }
   args <- formalArgs("brr_intervals") %>% subset(!. %in% "...")
-  if(intervals=="all") intervals <- c("equi", "equi.star", "hpd", "intrinsic")
+  if(identical(intervals,"all")) intervals <- c("equi-tailed", "equi-tailed*", "hpd", "intrinsic")
   confints <- do.call(brr_intervals, c(list(...), params[names(params) %in% args], list(conf=conf, intervals=intervals)))
   class(confints) <- "confint.brr"
   attr(confints, "level") <- conf
@@ -454,7 +458,6 @@ confint.brr <- function(model, conf=0.95, intervals="all", ...){
 }
 #'
 #' @rdname inference_brr
-#' @importFrom pander pandoc.table.return
 #' @export
 print.confint.brr <- function(x, style="grid"){
   cat(sprintf("%s-credibility intervals about %s", paste0(100*attr(x,"level"),"%"), greek_utf8("phi")))
@@ -463,6 +466,36 @@ print.confint.brr <- function(x, style="grid"){
     cat(names(x)[i], ": ")
     #attr(x[[i]], "caption") <- names(x)[i]
     cat(pandoc.table.return(x[[i]], style=style))
+    cat("\n")
+  }
+}
+#'
+#' @rdname inference_brr
+#' @export
+coef.brr <- function(model, parameter="phi", ...){
+  params <- model()
+  type <- prior(params)
+  if(type=="semi-informative" || type=="non-informative"){
+    params$a <- 0.5; params$b <- 0
+    if(type=="non-informative"){
+      params$c <- 0.5; params$d <- 0
+    }
+  }
+  args <- formalArgs("brr_estimates") %>% subset(!. %in% "...")
+  estimates <- do.call(brr_estimates, c(list(...), list(parameter=parameter), params[names(params) %in% args]))
+  class(estimates) <- "coef.brr"
+  attr(estimates, "parameter") <- parameter
+  return(estimates)
+}
+#'
+#' @rdname inference_brr
+#' @export
+print.coef.brr <- function(x){
+  cat(sprintf("Estimates of %s", greek_utf8(attr(x, "parameter"))))
+  cat("\n\n")
+  for(i in seq_along(x)){
+    cat(names(x)[i], ": ")
+    cat(x[[i]])
     cat("\n")
   }
 }

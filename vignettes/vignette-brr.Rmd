@@ -94,10 +94,16 @@ model <- model(x=14, y=20)
 summary(model)
 ```
 
+Estimates are provided by the `coef` function:
+
+```{r}
+coef(model)
+```
+
+
 Posterior credibility intervals are provided by the `confint` function:
 
 ```{r}
-confint(model) # print confint ?
+confint(model) 
 ```
-
 

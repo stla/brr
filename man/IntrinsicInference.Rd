@@ -26,12 +26,11 @@ intrinsic_bounds(x, y, S, T, a, b, c, d, conf = 0.95, parameter = "phi",
 
 \item{a,b,c,d}{Prior parameters}
 
-\item{subd}{number of subdividisions passed to the \code{\link{integrate}} function
-through the \code{\link{intrinsic_phi0}} function}
+\item{subd}{number of subdividisions passed to the \code{\link{integrate}} function}
 
 \item{conf}{credibility level}
 
-\item{parameter}{relative risk \code{"phi"} or vaccine efficacy \code{"VE"}}
+\item{parameter}{parameter of interest: relative risk \code{"phi"} or vaccine efficacy \code{"VE"}}
 
 \item{hypothesis}{"less" for H1: \code{phi0 < phi.star},
 "greater" for  H1: \code{phi0 > phi.star}}
