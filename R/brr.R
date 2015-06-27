@@ -428,12 +428,18 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
 #' (passed to  \code{\link[=pander]{pandoc.table.return}})
 #' @param ... other aguments passed to \code{\link{brr_intervals}} or \code{\link{brr_estimates}}
 #' 
-#' @return \code{confint.brr} returns a list of confidence intervals
+#' @return \code{confint.brr} returns a list of confidence intervals, 
+#' \code{coef.brr} returns a list of estimates, 
+#' \code{predict.brr} returns a data frame.
 #' 
 #' @examples 
 #' model <- Brr(x=10, y=10, S=100, T=100)
 #' confint(model)
 #' coef(model)
+#' predict(model)
+#' predict(model, Snew=1000, Tnew=1000)
+#' model <- model(Snew=1000, Tnew=1000)
+#' predict(model)
 #' 
 #' @importFrom pander pandoc.table.return
 NULL
@@ -498,4 +504,26 @@ print.coef.brr <- function(x){
     cat(x[[i]])
     cat("\n")
   }
+}
+#' @rdname inference_brr
+#' @export
+predict.brr <- function(model, conf=0.95, ...){
+  params <- model()
+  if("Snew" %in% names(list(...))) model <- model(Snew=list(...)$Snew)
+  if("Tnew" %in% names(list(...))) model <- model(Tnew=list(...)$Tnew)
+  if(!"Snew" %in% names(model())) model <- model(Snew=params$S)
+  if(!"Tnew" %in% names(model())) model <- model(Tnew=params$T)
+  type <- prior(params)
+  if(type=="semi-informative" || type=="non-informative"){
+    params$a <- 0.5; params$b <- 0
+    if(type=="non-informative"){
+      params$c <- 0.5; params$d <- 0
+    }
+  }
+  params <- model()
+  out <- data.frame(obs=c("xnew", "ynew"), size=c(params$Snew,params$Tnew), median=NA, lwr=NA, upr=NA)
+  out[1, c("median", "lwr", "upr")] <- qpost(model, "x", c(.5, (1-conf)/2, (conf+1)/2))
+  out[2, c("median", "lwr", "upr")]  <- qpost(model, "y", c(.5, (1-conf)/2, (conf+1)/2))
+  attr(out, "level") <- conf
+  return(out)
 }

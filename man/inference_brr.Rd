@@ -4,6 +4,7 @@
 \alias{coef.brr}
 \alias{confint.brr}
 \alias{inference.brr}
+\alias{predict.brr}
 \alias{print.coef.brr}
 \alias{print.confint.brr}
 \title{Credibility intervals and estimates}
@@ -15,6 +16,8 @@
 \method{coef}{brr}(model, parameter = "phi", ...)
 
 \method{print}{coef.brr}(x)
+
+\method{predict}{brr}(model, conf = 0.95, ...)
 }
 \arguments{
 \item{model}{a \code{\link[Brr]{brr}} object}
@@ -29,7 +32,9 @@
 (passed to  \code{\link[=pander]{pandoc.table.return}})}
 }
 \value{
-\code{confint.brr} returns a list of confidence intervals
+\code{confint.brr} returns a list of confidence intervals,
+\code{coef.brr} returns a list of estimates,
+\code{predict.brr} returns a data frame.
 }
 \description{
 Get credibility intervals and estimates from a \code{brr} object
@@ -48,5 +53,9 @@ Get credibility intervals and estimates from a \code{brr} object
 model <- Brr(x=10, y=10, S=100, T=100)
 confint(model)
 coef(model)
+predict(model)
+predict(model, Snew=1000, Tnew=1000)
+model <- model(Snew=1000, Tnew=1000)
+predict(model)
 }
 
