@@ -31,6 +31,8 @@ summary_GB2(a, c, d, tau, type = "list", ...)
 
 \item{...}{arguemnts passed to \code{\link[=hypergeo]{genhypergeo}} function}
 
+\item{p}{vector of probabilities}
+
 \item{n}{number of observations to be sampled}
 
 \item{k}{the order of the moment}

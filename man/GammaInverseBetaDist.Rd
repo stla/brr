@@ -23,6 +23,10 @@ summary_GIB(a, alpha, beta, rho, type = "list", ...)
 \item{rho}{rate parameter}
 
 \item{n}{number of observations to be simulated}
+
+\item{type}{type of the \code{summary_GIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
+
+\item{...}{arguments passed to \code{\link[=pander]{pander.data.frame}}}
 }
 \value{
 \code{dGIB} gives the density, \code{rGIB} samples from the distribution,

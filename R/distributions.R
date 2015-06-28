@@ -151,6 +151,8 @@ summary_beta2 <- function(c, d, scale, type="list", ...){
 #' @param alpha,beta non-negative shape parameters of the mixing Beta distribution
 #' @param rho rate parameter 
 #' @param n number of observations to be simulated
+#' @param type type of the \code{summary_GIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
+#' @param ... arguments passed to \code{\link[=pander]{pander.data.frame}}
 #' 
 #' @return \code{dGIB} gives the density, \code{rGIB} samples from the distribution, 
 #' and \code{summary_GIB} returns a summary of the distribution.
@@ -213,6 +215,7 @@ summary_GIB <- function(a, alpha, beta, rho, type="list", ...){
 #' @param rho hyperrate parameter (rate of the mixing distribution)
 #' @param type type of the \code{summary_PGIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param n number of observations to be simulated
+#' @param ... arguments passed to \code{\link[=pander]{pander.data.frame}}
 #' 
 #' @return \code{dPGIB} gives the density, \code{rPGIB} samples from the distribution, 
 #' and \code{summary_PGIB} gives a summary of the distribution.
@@ -382,6 +385,7 @@ summary_beta_nbinom <- function(a, c, d, type="list", ...){
 #' does not work when \code{a-d} is an integer, and fails for many other cases.
 #' 
 #' @param x,q vector of non-negative quantiles
+#' @param p vector of probabilities
 #' @param a,c,d non-negative shape parameters
 #' @param tau non-negative rate parameter 
 #' @param k the order of the moment
@@ -456,7 +460,7 @@ moment_GB2 <- function(k,a,c,d,tau){
 #' @export
 summary_GB2 <- function(a, c, d, tau, type="list", ...){
   out <- list(mean=ifelse(c>1, moment_GB2(1, a, c, d, tau), Inf),
-              sd=ifelse(c>2, sqrt(moment_GB2(2, a, c, d, tau) - (moment_GB2(1, a, c, d, tau))^2))
+              sd=ifelse(c>2, sqrt(moment_GB2(2, a, c, d, tau) - (moment_GB2(1, a, c, d, tau))^2), Inf)
                 )
   if(type=="pandoc"){
     pander(data.frame(out), ...)

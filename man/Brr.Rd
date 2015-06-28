@@ -4,11 +4,11 @@
 \alias{Brr}
 \alias{print.summary.brr}
 \alias{summary.brr}
-\title{Brr object}
+\title{Creation and summary of a \code{brr} object}
 \usage{
 Brr(...)
 
-\method{summary}{brr}(brr, phi0 = 1, hypothesis = "greater")
+\method{summary}{brr}(model, phi0 = 1, hypothesis = "greater")
 
 \method{print}{summary.brr}(x, table.style = "grid")
 }
@@ -16,6 +16,8 @@ Brr(...)
 \item{...}{prior parameters \code{a}, \code{b}, \code{c}, \code{d},
 samples sizes \code{S}, \code{T}, observed counts \code{x}, \code{y},
 future sample sizes \code{Snew}, \code{Tnew}, to be set as in a list (see examples)}
+
+\item{model}{an object of class \code{brr}}
 
 \item{phi0}{the value of interest of the rate ratio}
 

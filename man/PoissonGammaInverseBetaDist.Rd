@@ -33,6 +33,8 @@ summary_PGIB(a, alpha, beta, rho, type = "list", ...)
 \item{n}{number of observations to be simulated}
 
 \item{type}{type of the \code{summary_PGIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
+
+\item{...}{arguments passed to \code{\link[=pander]{pander.data.frame}}}
 }
 \value{
 \code{dPGIB} gives the density, \code{rPGIB} samples from the distribution,

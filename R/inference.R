@@ -10,8 +10,9 @@
 #' @param x,y Observed counts
 #' @param conf confidence level
 #' @param intervals a character vector, the intervals to be returned
+#' @param parameter parameter of interest \code{"phi"} or \code{"VE"} (\code{=1-phi})
 #' @param ... arguments passed to \link{IntrinsicInference}
-#' @return A list of confidence intervals
+#' @return A list of confidence intervals (\code{brr_intervals}) or estimates (\code{brr_estimates})
 #' @seealso \code{\link{confint.brr}}
 #' 
 #' @examples 

@@ -57,12 +57,13 @@ brr_generic <- function(fun, model, parameter, ...){
 
 #' @name Brr
 #' @rdname Brr
-#' @title Brr object
+#' @title Creation and summary of a \code{brr} object
 #' @description Set up the Bayesian model and the observations
 #' 
 #' @param ... prior parameters \code{a}, \code{b}, \code{c}, \code{d}, 
 #' samples sizes \code{S}, \code{T}, observed counts \code{x}, \code{y},  
 #' future sample sizes \code{Snew}, \code{Tnew}, to be set as in a list (see examples) 
+#' @param model an object of class \code{brr}
 #' @param phi0 the value of interest of the rate ratio
 #' @param hypothesis \code{"greater"} to return \eqn{Pr(\phi>\phi_0)}, 
 #' \code{"lower"} to return \eqn{Pr(\phi<\phi_0)}  
@@ -131,10 +132,10 @@ Brr <- function(...){
 #'
 #' @rdname Brr
 #' @export 
-summary.brr <- function(brr, phi0=1, hypothesis="greater"){
+summary.brr <- function(model, phi0=1, hypothesis="greater"){
   out <- list()
   class(out) <- "summary.brr"
-  params <- brr()
+  params <- model()
   type <- prior(params)
   out$type <- type
   # remove NULL components
@@ -435,7 +436,7 @@ plot.brr <- function(model, what="summary", bounds=NULL, ...){
     }
     axis(1)
     # end
-    return(invisble)
+    return(invisble())
   }
 }
 

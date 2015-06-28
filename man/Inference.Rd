@@ -24,9 +24,11 @@ brr_estimates(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
 \item{intervals}{a character vector, the intervals to be returned}
 
 \item{...}{arguments passed to \link{IntrinsicInference}}
+
+\item{parameter}{parameter of interest \code{"phi"} or \code{"VE"} (\code{=1-phi})}
 }
 \value{
-A list of confidence intervals
+A list of confidence intervals (\code{brr_intervals}) or estimates (\code{brr_estimates})
 }
 \description{
 Credibility intervals, estimates
