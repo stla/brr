@@ -41,6 +41,7 @@ brr_intervals <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, conf=.95, interval
            "equi-tailed*"=c(sign(x)*post.icdf((1-conf)/2),post.icdf((1+conf)/2)),
            hpd=hpd2(x, y, S, T, a, b, c, d, conf), 
            intrinsic=intrinsic_bounds(x, y, S, T, a, b, c, d, conf, ...),
+           intrinsic2=if(a==0.5 && b==0) c(NA,NA) else intrinsic2_bounds(x, y, S, T, a, b, c, d, conf, ...)
     ), c("lwr", "upr")
   ), simplify=FALSE)
   if(is.null(bounds)) stop("invalid interval name")

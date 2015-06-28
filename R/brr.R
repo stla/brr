@@ -450,13 +450,13 @@ confint.brr <- function(model, conf=0.95, intervals="all", ...){
   params <- model()
   type <- prior(params)
   if(type=="semi-informative" || type=="non-informative"){
-    params$a <- 0.5; params$b <- 0
+    params$c <- 0.5; params$d <- 0
     if(type=="non-informative"){
-      params$c <- 0.5; params$d <- 0
+      params$a <- 0.5; params$b <- 0
     }
   }
   args <- formalArgs("brr_intervals") %>% subset(!. %in% "...")
-  if(identical(intervals,"all")) intervals <- c("equi-tailed", "equi-tailed*", "hpd", "intrinsic")
+  if(identical(intervals,"all")) intervals <- c("equi-tailed", "equi-tailed*", "hpd", "intrinsic", "intrinsic2")
   confints <- do.call(brr_intervals, c(list(...), params[names(params) %in% args], list(conf=conf, intervals=intervals)))
   class(confints) <- "confint.brr"
   attr(confints, "level") <- conf
