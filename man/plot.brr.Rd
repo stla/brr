@@ -4,13 +4,17 @@
 \alias{plot.brr}
 \title{plot brr}
 \usage{
-\method{plot}{brr}(model, what = "summary")
+\method{plot}{brr}(model, what = "summary", bounds = NULL, ...)
 }
 \arguments{
 \item{model}{an object of class \code{brr} (see \code{\link{Brr}})}
 
 \item{what}{\code{"summary"} to plot automatically the priors on \code{mu} and \code{phi}
 and the posterior on \code{phi}, or an expression like \code{dprior(mu)} for a specific plot (see examples)}
+
+\item{bounds}{for specific plot only, the range over which the function will be plotted; \code{NULL} for automatic bounds}
+
+\item{...}{other arguments passed to \code{\link{plot}} or \code{\link{barplot}}}
 }
 \description{
 plot brr
@@ -19,10 +23,18 @@ plot brr
 model <- Brr(a=2, b=3)
 plot(model)
 plot(model, dprior(mu))
+plot(model, dprior(mu), xlim=c(0,4), lwd=3, col="blue")
 plot(model, pprior(mu))
+plot(model, qprior(mu))
 model <- model(c=4, d=6, S=10, T=10)
 plot(model)
 plot(model, dprior(phi))
 plot(model, dprior(x))
+model <- model(y=4)
+plot(model, dprior(x_given_y))
+model <- model(x=5, y=5)
+plot(model, dpost(phi))
+model <- model(Snew=10, Tnew=10)
+plot(model, dpost(x))
 }
 

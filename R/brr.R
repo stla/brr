@@ -309,56 +309,75 @@ spost <- function(model, parameter, ...){
 #' @param model an object of class \code{brr} (see \code{\link{Brr}})
 #' @param what \code{"summary"} to plot automatically the priors on \code{mu} and \code{phi} 
 #' and the posterior on \code{phi}, or an expression like \code{dprior(mu)} for a specific plot (see examples)
+#' @param bounds for specific plot only, the range over which the function will be plotted; \code{NULL} for automatic bounds
+#' @param ... other arguments passed to \code{\link{plot}} or \code{\link{barplot}}
 #' @examples
 #' model <- Brr(a=2, b=3)
 #' plot(model)
 #' plot(model, dprior(mu))
+#' plot(model, dprior(mu), xlim=c(0,4), lwd=3, col="blue")
 #' plot(model, pprior(mu))
+#' plot(model, qprior(mu))
 #' model <- model(c=4, d=6, S=10, T=10)
 #' plot(model)
 #' plot(model, dprior(phi))
 #' plot(model, dprior(x))
-#' 
+#' model <- model(y=4)
+#' plot(model, dprior(x_given_y))
+#' model <- model(x=5, y=5)
+#' plot(model, dpost(phi))
+#' model <- model(Snew=10, Tnew=10)
+#' plot(model, dpost(x))
 #' @importFrom stringr str_sub
 #' @export
-plot.brr <- function(model, what="summary"){ # marche car plot a déjà méthode S3 ; test.brr marche pas : il faudrait définir test() avec UseMethod
+plot.brr <- function(model, what="summary", bounds=NULL, ...){ 
   params <- model()
   type <- prior(params)
   for(i in seq_along(params)) assign(names(params)[i], params[[i]])
   # specific plot 
   if(substitute(what)[1] != "summary"){
-    what <- as.character(substitute(what)) # e.g. dprior(phi) => "dprior" "phi"
+    what <- as.character(substitute(what)) 
     f <- what[1]; param <- what[2]
     fun <- paste(what, collapse="_")
     if(! fun %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun))
     if(f %in% c("dprior", "pprior", "dpost", "ppost")){
       qfun <- paste0("q", stringr::str_sub(f, 2))
-      bounds <- try(eval(parse(text=qfun))(model, param, c(1e-4, 1-1e-3)), silent=TRUE)
-      if(class(bounds)=="try-error"){
-        summ <- eval(parse(text=paste0("s", stringr::str_sub(f, 2))))(model, param)
-        bounds <- c(max(0, summ$mean-3*summ$sd), summ$mean+3*summ$sd)
+      if(is.null(bounds)){
+        bounds <- try(eval(parse(text=qfun))(model, param, c(1e-4, 1-1e-3)), silent=TRUE)
+        if(class(bounds)=="try-error"){
+          summ <- eval(parse(text=paste0("s", stringr::str_sub(f, 2))))(model, param)
+          if(summ$sd != Inf){
+            bounds <- c(max(0, summ$mean-3*summ$sd), summ$mean+3*summ$sd)
+          }else{
+            stop("automatic range not available; please set the range with the bounds argument")
+          }
+        }
       }
-      if(!param %in% c("x","y")){
+      if(!param %in% c("x","y","x_given_y")){
         seq(bounds[1], bounds[2], length.out=301) %>% {
           plot(., eval(parse(text=f))(model, param, .), 
-               lwd=2, 
                type="l", 
                axes=FALSE,
                ylab=ifelse(f %in% c("dprior","dpost"), NA, sprintf("P(%s \u2264 . )", greek_utf8(param))),
-               xlab=ifelse(f %in% c("dprior","dpost"), parse(text=param), NA)
+               xlab=ifelse(f %in% c("dprior","dpost"), parse(text=param), NA),
+               ...
           )
           if(f %in% c("dprior","dpost")) axis(1) else { axis(1); axis(2) }
         }
         return(invisible())
       } else {
-        barplot(eval(parse(text=f))(model, param, bounds[1]:bounds[2]))
+        barplot(setNames(eval(parse(text=f))(model, param, bounds[1]:bounds[2]), bounds[1]:bounds[2]), 
+                xlab=ifelse(param=="x_given_y", "x", param), ...)
         return(invisible())
       }
     } else if(f %in% c("qprior", "qpost")){
-      seq(0, 1, length.out=100) %>% {
+      seq.p <- if(is.null(bounds)) seq(0, 1-1e-3, length.out=51) else bounds
+      seq.p %>% {
         plot(., eval(parse(text=f))(model, param, .), 
              type="l", 
-             axes=FALSE, ylab="p", xlab="q")
+             xlim=c(0,1), 
+             axes=FALSE, ylab="q", xlab=sprintf("P(%s \u2264 . )", greek_utf8(param)),
+             ...)
         axis(1); axis(2)
       }
       return(invisible())
@@ -372,9 +391,10 @@ plot.brr <- function(model, what="summary"){ # marche car plot a déjà méthode
     # prior mu 
     if(type != "non-informative"){
       bounds <- qprior_mu(c(1e-4, 1-1e-4), a=a, b=b)
-      mu <- seq(bounds[1], bounds[2], length.out=100)
+      mu <- seq(bounds[1], bounds[2], length.out=301)
       mu %>% {
         plot(., dprior_mu(., a=a, b=b), 
+             lwd=2, 
              type="l", axes=FALSE, 
              xlab=expression(mu), ylab=NA, 
              main=expression(paste("Prior distribution of ", mu)) )
@@ -385,10 +405,11 @@ plot.brr <- function(model, what="summary"){ # marche car plot a déjà méthode
     # prior phi
     if(type == "informative"){
       bounds <- qprior_phi(c(1e-4, 1-1e-4), b=b, c=c, d=d, S=S, T=T)
-      phi <- seq(bounds[1], bounds[2], length.out=100)
+      phi <- seq(bounds[1], bounds[2], length.out=301)
       phi %>% {
         plot(., dprior_phi(., b=b, c=c, d=d, S=S, T=T), 
              type="l", axes=FALSE, 
+             lwd=2, 
              xlab=expression(phi), ylab=NA, 
              main=expression(paste("Prior distribution of ", phi)) )
       }
@@ -397,25 +418,24 @@ plot.brr <- function(model, what="summary"){ # marche car plot a déjà méthode
     }
     # posteriors
     if(!all(c("x","y","S","T") %in% names(params))) return(invisible())
-    missings <- NULL
-    if(!"a" %in% names(params)){
-      a <- 0.5
-      missings <- c(missings, "a")
+    if(type=="semi-informative" || type=="non-informative"){
+      c <- 0.5; d <- 0
+      if(type=="non-informative"){
+        a <- 0.5; b <- 0
+      }
     }
-    if(!"b" %in% names(params)){
-      b <- 0
-      missings <- c(missings, "b")
+    bounds <- qpost_phi(c(1e-4, 1-1e-4), a=a, b=b, c=c, d=d, S=S, T=T, x=x, y=y)
+    phi <- seq(bounds[1], bounds[2], length.out=301)
+    phi %>% {
+      plot(., dpost_phi(., a=a, b=b, c=c, d=d, S=S, T=T, x=x, y=y), 
+           type="l", axes=FALSE, 
+           lwd=2, 
+           xlab=expression(phi), ylab=NA, 
+           main=expression(paste("Posterior distribution of ", phi)) )
     }
-    if(!"c" %in% names(params)){
-      c <- 0.5
-      missings <- c(missings, "c")
-    }
-    if(!"a" %in% names(params)){
-      d <- 0
-      missings <- c(missings, "d")
-    }
-    return(missings)
-    # faire output ggplots qui s'affichent ou liste de ggplot
+    axis(1)
+    # end
+    return(invisble)
   }
 }
 
@@ -489,9 +509,9 @@ coef.brr <- function(model, parameter="phi", ...){
   params <- model()
   type <- prior(params)
   if(type=="semi-informative" || type=="non-informative"){
-    params$a <- 0.5; params$b <- 0
+    params$c <- 0.5; params$d <- 0
     if(type=="non-informative"){
-      params$c <- 0.5; params$d <- 0
+      params$a <- 0.5; params$b <- 0
     }
   }
   args <- formalArgs("brr_estimates") %>% subset(!. %in% "...")
@@ -522,9 +542,9 @@ predict.brr <- function(model, conf=0.95, ...){
   if(!"Tnew" %in% names(model())) model <- model(Tnew=params$T)
   type <- prior(params)
   if(type=="semi-informative" || type=="non-informative"){
-    params$a <- 0.5; params$b <- 0
+    params$c <- 0.5; params$d <- 0
     if(type=="non-informative"){
-      params$c <- 0.5; params$d <- 0
+      params$a <- 0.5; params$b <- 0
     }
   }
   params <- model()
