@@ -37,6 +37,8 @@ spost_phi(a, b, c, d, S, T, x, y, ...)
 
 \item{S,T}{sample sizes in control group and treated group}
 
+\item{x,y}{counts in the treated group and control group}
+
 \item{...}{other arguments passed to \code{\link{Beta2Dist}}}
 
 \item{p}{vector of probabilities}

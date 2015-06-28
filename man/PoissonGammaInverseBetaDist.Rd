@@ -20,13 +20,19 @@ rPGIB(n, a, alpha, beta, rho)
 summary_PGIB(a, alpha, beta, rho, type = "list", ...)
 }
 \arguments{
-\item{x}{vector of \strong{integer} quantiles}
+\item{x,q}{vector of \strong{integer} quantiles}
 
 \item{a}{non-negative shape parameter of the Gamma distribution}
 
 \item{alpha,beta}{non-negative shape parameters of the mixing Beta distribution}
 
+\item{rho}{hyperrate parameter (rate of the mixing distribution)}
+
+\item{p}{vector of probabilities}
+
 \item{n}{number of observations to be simulated}
+
+\item{type}{type of the \code{summary_PGIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
 }
 \value{
 \code{dPGIB} gives the density, \code{rPGIB} samples from the distribution,

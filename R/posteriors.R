@@ -119,6 +119,7 @@ spost_mu <- function(a, b, c, d, T, x, y, ...){
 #' @param a,b non-negative shape parameter and rate parameter of the prior Gamma distribution on the control incidence rate
 #' @param c,d non-negative shape parameters of the prior distribution on the relative risk 
 #' @param S,T sample sizes in control group and treated group
+#' @param x,y counts in the treated group and control group 
 #' @param n number of observations to be simulated
 #' @param ... other arguments passed to \code{\link{Beta2Dist}}
 #' 

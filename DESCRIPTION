@@ -18,3 +18,4 @@ Imports: gsl,
 Suggests: testthat,
     knitr
 VignetteBuilder: knitr
+Encoding: UTF-8

@@ -20,7 +20,7 @@ summary_GIB(a, alpha, beta, rho, type = "list", ...)
 
 \item{alpha,beta}{non-negative shape parameters of the mixing Beta distribution}
 
-\item{rho}{hyperscale parameter (scale of the mixing distribution)}
+\item{rho}{rate parameter}
 
 \item{n}{number of observations to be simulated}
 }
@@ -30,7 +30,7 @@ and \code{summary_GIB} returns a summary of the distribution.
 }
 \description{
 Density and random  generation for the Gamma-Inverse Beta distribution
-with shape parameters \code{a}, \code{alpha}, \code{beta} and hyperscale parameter \code{rho}.
+with shape parameters \code{a}, \code{alpha}, \code{beta} and rate parameter \code{rho}.
 
 
 

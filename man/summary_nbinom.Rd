@@ -9,7 +9,7 @@ summary_nbinom(a, p, type = "list", ...)
 \arguments{
 \item{a,p}{parameters of the negative binomial distribution}
 
-\item{type}{\code{"list"} (default) or \code{"pandoc"}}
+\item{type}{type of the output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
 
 \item{...}{arguments passed to \code{\link[=pander]{pander.data.frame}}}
 }

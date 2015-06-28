@@ -66,6 +66,7 @@ brr_generic <- function(fun, model, parameter, ...){
 #' @param phi0 the value of interest of the rate ratio
 #' @param hypothesis \code{"greater"} to return \eqn{Pr(\phi>\phi_0)}, 
 #' \code{"lower"} to return \eqn{Pr(\phi<\phi_0)}  
+#' @param x the output to be printed
 #' @param table.style the style of the table to print 
 #' (passed to  \code{\link[=pander]{pandoc.table.return}})
 #' 
@@ -168,7 +169,8 @@ return(out)
 #' @rdname Brr
 #' @importFrom pander pandoc.table.return
 #' @export
-print.summary.brr <- function(summary, table.style="grid"){
+print.summary.brr <- function(x, table.style="grid"){
+  summary <- x
   cat("----------\n")
   cat(type <- summary$type, "prior")
   cat("\n\n")
@@ -227,7 +229,7 @@ print.summary.brr <- function(summary, table.style="grid"){
 #' @title Prior and posterior distributions
 #' @description Generic functions for prior and posterior distributions
 #' 
-#' @param model an object of class \code{\link[=Brr]{brr}}
+#' @param model an object of class \code{brr} (see \code{\link{Brr}})
 #' @param parameter a character string among \code{mu}, \code{phi}, \code{lambda}, \code{x}, \code{y}
 #' @param ... the first argument of the function called 
 #' 
@@ -304,6 +306,9 @@ spost <- function(model, parameter, ...){
 
 #' plot brr
 #' 
+#' @param model an object of class \code{brr} (see \code{\link{Brr}})
+#' @param what \code{"summary"} to plot automatically the priors on \code{mu} and \code{phi} 
+#' and the posterior on \code{phi}, or an expression like \code{dprior(mu)} for a specific plot (see examples)
 #' @examples
 #' model <- Brr(a=2, b=3)
 #' plot(model)
@@ -316,8 +321,8 @@ spost <- function(model, parameter, ...){
 #' 
 #' @importFrom stringr str_sub
 #' @export
-plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S3 ; test.brr marche pas : il faudrait définir test() avec UseMethod
-  params <- brr()
+plot.brr <- function(model, what="summary"){ # marche car plot a déjà méthode S3 ; test.brr marche pas : il faudrait définir test() avec UseMethod
+  params <- model()
   type <- prior(params)
   for(i in seq_along(params)) assign(names(params)[i], params[[i]])
   # specific plot 
@@ -328,14 +333,14 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
     if(! fun %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun))
     if(f %in% c("dprior", "pprior", "dpost", "ppost")){
       qfun <- paste0("q", stringr::str_sub(f, 2))
-      bounds <- try(eval(parse(text=qfun))(brr, param, c(1e-4, 1-1e-3)), silent=TRUE)
+      bounds <- try(eval(parse(text=qfun))(model, param, c(1e-4, 1-1e-3)), silent=TRUE)
       if(class(bounds)=="try-error"){
-        summ <- eval(parse(text=paste0("s", stringr::str_sub(f, 2))))(brr, param)
+        summ <- eval(parse(text=paste0("s", stringr::str_sub(f, 2))))(model, param)
         bounds <- c(max(0, summ$mean-3*summ$sd), summ$mean+3*summ$sd)
       }
       if(!param %in% c("x","y")){
         seq(bounds[1], bounds[2], length.out=301) %>% {
-          plot(., eval(parse(text=f))(brr, param, .), 
+          plot(., eval(parse(text=f))(model, param, .), 
                lwd=2, 
                type="l", 
                axes=FALSE,
@@ -346,12 +351,12 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
         }
         return(invisible())
       } else {
-        barplot(eval(parse(text=f))(brr, param, bounds[1]:bounds[2]))
+        barplot(eval(parse(text=f))(model, param, bounds[1]:bounds[2]))
         return(invisible())
       }
     } else if(f %in% c("qprior", "qpost")){
       seq(0, 1, length.out=100) %>% {
-        plot(., eval(parse(text=f))(brr, param, .), 
+        plot(., eval(parse(text=f))(model, param, .), 
              type="l", 
              axes=FALSE, ylab="p", xlab="q")
         axis(1); axis(2)
@@ -424,8 +429,10 @@ plot.brr <- function(brr, what="summary"){ # marche car plot a déjà méthode S
 #' @param model a \code{\link[Brr]{brr}} object
 #' @param conf confidence level
 #' @param intervals a character vector, the intervals to be returned
+#' @param parameter parameter of interest \code{"phi"} or \code{"VE"} (\code{=1-phi})
 #' @param style the style of the table to print 
 #' (passed to  \code{\link[=pander]{pandoc.table.return}})
+#' @param x the output to be printed
 #' @param ... other aguments passed to \code{\link{brr_intervals}} or \code{\link{brr_estimates}}
 #' 
 #' @return \code{confint.brr} returns a list of confidence intervals, 

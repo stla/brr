@@ -34,6 +34,8 @@ predicted experiment}
 \item{p}{vector of probabilities}
 
 \item{n}{number of observations to be simulated}
+
+\item{...}{arguments passed to \code{\link{summary_PGIB}}}
 }
 \value{
 \code{dpost_x} gives the density, \code{ppost_x} the distribution function,

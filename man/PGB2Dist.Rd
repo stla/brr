@@ -17,7 +17,7 @@ qPGB2(p, a, c, d, tau)
 
 rPGB2(n, a, c, d, tau)
 
-summary_PGB2(a, c, d, tau, type = "list", ...)
+summary_PGB2(a, c, d, tau, type = "list")
 }
 \arguments{
 \item{x,q}{vector of non-negative \strong{integer} quantiles}
@@ -26,7 +26,11 @@ summary_PGB2(a, c, d, tau, type = "list", ...)
 
 \item{tau}{non-negative hyperrate parameter}
 
+\item{p}{vector of probabilities}
+
 \item{n}{number of observations to be sampled}
+
+\item{type}{type of the \code{summary_PGB2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
 }
 \value{
 \code{dPGB2} gives the density, \code{pPGB2} the cumulative function,

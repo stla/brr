@@ -35,7 +35,7 @@ rpost(model, parameter, ...)
 spost(model, parameter, ...)
 }
 \arguments{
-\item{model}{an object of class \code{\link[=Brr]{brr}}}
+\item{model}{an object of class \code{brr} (see \code{\link{Brr}})}
 
 \item{parameter}{a character string among \code{mu}, \code{phi}, \code{lambda}, \code{x}, \code{y}}
 

@@ -28,8 +28,12 @@
 
 \item{...}{other aguments passed to \code{\link{brr_intervals}} or \code{\link{brr_estimates}}}
 
+\item{x}{the output to be printed}
+
 \item{style}{the style of the table to print
 (passed to  \code{\link[=pander]{pandoc.table.return}})}
+
+\item{parameter}{parameter of interest \code{"phi"} or \code{"VE"} (\code{=1-phi})}
 }
 \value{
 \code{confint.brr} returns a list of confidence intervals,

@@ -8,6 +8,10 @@ summary_gamma(a, b, type = "list", ...)
 }
 \arguments{
 \item{a,b}{Shape and rate parameters.}
+
+\item{type}{type of the output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
+
+\item{...}{arguments passed to \code{\link[=pander]{pander.data.frame}}}
 }
 \description{
 Mode, mean, variance, and quartiles for a Gamma distribution

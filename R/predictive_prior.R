@@ -115,7 +115,7 @@ rprior_x <- function(n, a, b, c, d, T){
 #' @rdname Prior_x
 #' @export 
 sprior_x <- function(a, b, c, d, T){
-  return( sPGB2(a,d,c,b/(b+T)) )
+  return( summary_PGB2(a,d,c,b/(b+T)) )
 }
 
 
@@ -136,6 +136,7 @@ sprior_x <- function(a, b, c, d, T){
 #' @param a non-negative shape parameter of the Gamma prior distribution on the rate \eqn{\mu}
 #' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
 #' @param n number of observations to be simulated
+#' @param ... arguments passed to \code{\link{summary_beta_nbinom}}
 #' 
 #' @return \code{dprior_x_given_y} gives the density, 
 #' \code{pprior_x_given_y} the distribution function, 
@@ -186,12 +187,12 @@ qprior_x_given_y <- function(p, y, a, c, d){
 #'
 #' @rdname Prior_x_given_y
 #' @export 
-rprior_x_given_y <- function(n, a, c, d){
+rprior_x_given_y <- function(n, y, a, c, d){
   return( rbeta_nbinom(n,a+y,d,c) )
 }
 #'
 #' @rdname Prior_x_given_y
 #' @export 
-sprior_x_given_y <- function(a, c, d, ...){
+sprior_x_given_y <- function(y, a, c, d, ...){
   return( summary_beta_nbinom(a+y,d,c,...) )
 }

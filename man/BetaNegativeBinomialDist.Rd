@@ -32,6 +32,8 @@ summary_beta_nbinom(a, c, d, type = "list", ...)
 \item{p}{vector of probabilities}
 
 \item{n}{number of observations to be sampled}
+
+\item{type}{type of the \code{summary_beta_nbinom} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
 }
 \value{
 \code{dbeta_nbinom} gives the density,

@@ -15,6 +15,7 @@
 #' @param S,Snew sample sizes of the treated group in the observed experiment and the
 #' predicted experiment
 #' @param n number of observations to be simulated
+#' @param ... arguments passed to \code{\link{summary_PGIB}}
 #' 
 #' @return \code{dpost_x} gives the density, \code{ppost_x} the distribution function, 
 #' \code{qpost_x} the quantile function, \code{rpost_x} samples from the distribution, 
@@ -92,6 +93,7 @@ spost_x <- function(Snew, a=0.5, c=0.5, d=0, x, y, S, ...){
 #' @param T,Tnew sample sizes of the control group in the observed experiment and the
 #' predicted experiment
 #' @param n number of observations to be simulated
+#' @param ... arguments passed to \code{\link{summary_PGIB}}
 #' 
 #' @return \code{dpost_y} gives the density, \code{ppost_y} the distribution function, 
 #' \code{qpost_y} the quantile function, \code{rpost_y} samples from the distribution, 

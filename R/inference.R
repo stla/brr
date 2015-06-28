@@ -5,6 +5,9 @@
 #' @description Credibility intervals, estimates
 #' @note \code{Inference} is a generic name for the functions documented. 
 #' 
+#' @param a,b,c,d Prior parameters
+#' @param S,T sample sizes
+#' @param x,y Observed counts
 #' @param conf confidence level
 #' @param intervals a character vector, the intervals to be returned
 #' @param ... arguments passed to \link{IntrinsicInference}

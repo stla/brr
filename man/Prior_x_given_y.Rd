@@ -16,9 +16,9 @@ pprior_x_given_y(q, y, a, c, d)
 
 qprior_x_given_y(p, y, a, c, d)
 
-rprior_x_given_y(n, a, c, d)
+rprior_x_given_y(n, y, a, c, d)
 
-sprior_x_given_y(a, c, d, ...)
+sprior_x_given_y(y, a, c, d, ...)
 }
 \arguments{
 \item{x,q}{vector of non-negative \strong{integer} quantiles}
@@ -32,6 +32,8 @@ sprior_x_given_y(a, c, d, ...)
 \item{p}{vector of probabilities}
 
 \item{n}{number of observations to be simulated}
+
+\item{...}{arguments passed to \code{\link{summary_beta_nbinom}}}
 }
 \value{
 \code{dprior_x_given_y} gives the density,

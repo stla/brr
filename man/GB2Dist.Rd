@@ -29,7 +29,13 @@ summary_GB2(a, c, d, tau, type = "list", ...)
 
 \item{tau}{non-negative rate parameter}
 
+\item{...}{arguemnts passed to \code{\link[=hypergeo]{genhypergeo}} function}
+
 \item{n}{number of observations to be sampled}
+
+\item{k}{the order of the moment}
+
+\item{type}{type of the \code{summary_GB2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
 }
 \value{
 \code{dGB2} gives the density, \code{pGB2} the cumulative function,
@@ -40,7 +46,7 @@ of the distribution.
 Density and random generation
 for the  Gamma-Beta2 distribution
 with shape parameters \code{a}, \code{c}, \code{d}
-and hyperrate parameter \code{tau} (scale of the Beta2 distribution).
+and rate parameter \code{tau} (scale of the Beta2 distribution).
 
 
 

@@ -10,7 +10,7 @@ Brr(...)
 
 \method{summary}{brr}(brr, phi0 = 1, hypothesis = "greater")
 
-\method{print}{summary.brr}(summary, table.style = "grid")
+\method{print}{summary.brr}(x, table.style = "grid")
 }
 \arguments{
 \item{...}{prior parameters \code{a}, \code{b}, \code{c}, \code{d},
@@ -21,6 +21,8 @@ future sample sizes \code{Snew}, \code{Tnew}, to be set as in a list (see exampl
 
 \item{hypothesis}{\code{"greater"} to return \eqn{Pr(\phi>\phi_0)},
 \code{"lower"} to return \eqn{Pr(\phi<\phi_0)}}
+
+\item{x}{the output to be printed}
 
 \item{table.style}{the style of the table to print
 (passed to  \code{\link[=pander]{pandoc.table.return}})}
