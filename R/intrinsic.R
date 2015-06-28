@@ -55,25 +55,29 @@ intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, subd=1000,
   post.a <- x+y+a
   lambda <- (T+b)/S
   K <- post.a*post.d/(post.c+post.d)*T/(T+b)
-  integrande <- function(u){
-    phi <- lambda * u/(1-u)
-    rho(phi, phi0, S, T)*dbeta(u, post.c, post.d+1)
-  }
-  i <- -3
-  old.value <- 0
-  value <- Inf
-  while(abs(value-old.value)>tol){
-    old.value <- value
-    i <- i-1
-    M <- qbeta(1-10^i,post.c, post.d+1)
-    value <- integrate(integrande, 0, M, subdivisions=subd)$value
-  }
+  value <- vapply(phi0, 
+                  FUN = function(phi0){
+                    integrande <- function(u){
+                      phi <- lambda * u/(1-u)
+                      rho(phi, phi0, S, T)*dbeta(u, post.c, post.d+1)
+                    }
+                    i <- -3
+                    old.value <- 0
+                    value <- Inf
+                    while(abs(value-old.value)>tol){
+                      old.value <- value
+                      i <- i-1
+                      M <- qbeta(1-10^i,post.c, post.d+1)
+                      value <- integrate(integrande, 0, M, subdivisions=subd)$value
+                    }
+                    return(value)
+                  }, FUN.VALUE=numeric(1))
   return( K*value )
 }
 #'
 #' @rdname IntrinsicInference
 #' @export
-intrinsic_estimate <- function(x, y, S, T, a, b, c, d, subd=1000, tol = 1e-08){
+intrinsic_estimate <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, subd=1000, tol = 1e-08){
   post.cost <- function(u0){
     phi0 <- u0/(1-u0)
     intrinsic_phi0(phi0, x, y, S, T, a, b, c, d, subd)
@@ -108,7 +112,7 @@ intrinsic_H0 <- function(phi.star, alternative, x, y, S, T, a=0.5, b=0, c=0.5, d
 #' 
 #' @rdname IntrinsicInference 
 #' @export
-intrinsic_bounds <- function(x, y, S, T, a, b, c, d, conf=.95, parameter="phi", subd=1000, tol = 1e-08){
+intrinsic_bounds <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, conf=.95, parameter="phi", subd=1000, tol = 1e-08){
   post.cost <- function(phi0){
     intrinsic_phi0(phi0, x, y, S, T, a, b, c, d, subd=subd)
   }

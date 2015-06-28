@@ -11,13 +11,14 @@
 intrinsic_phi0(phi0, x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
   subd = 1000, tol = 1e-06)
 
-intrinsic_estimate(x, y, S, T, a, b, c, d, subd = 1000, tol = 1e-08)
+intrinsic_estimate(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
+  subd = 1000, tol = 1e-08)
 
 intrinsic_H0(phi.star, alternative, x, y, S, T, a = 0.5, b = 0, c = 0.5,
   d = 0, subd = 10000, tol = 1e-06)
 
-intrinsic_bounds(x, y, S, T, a, b, c, d, conf = 0.95, parameter = "phi",
-  subd = 1000, tol = 1e-08)
+intrinsic_bounds(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
+  conf = 0.95, parameter = "phi", subd = 1000, tol = 1e-08)
 }
 \arguments{
 \item{x,y}{Observed counts}
