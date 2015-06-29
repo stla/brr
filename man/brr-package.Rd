@@ -26,10 +26,9 @@ Stéphane Laurent
 }
 
 \references{
-S. Laurent, C. Legrand (2011): 
+S. Laurent, C. Legrand (2012): 
 A Bayesian framework for the ratio of two Poisson rates in the context of vaccine efficacy trials.
-ESAIM, Probability \& Statistics (2011). Published online by Cambridge University Press
-(doi:10.1051/ps/2010018)
+ESAIM, Probability \& Statistics 16 (2012), 375--398.
 
 S. Laurent (2012):  
 Some Poisson mixtures  distributions with a hyperscale parameter. 
