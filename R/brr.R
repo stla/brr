@@ -495,13 +495,18 @@ confint.brr <- function(model, conf=0.95, intervals="all", ...){
 #' @export
 print.confint.brr <- function(x, style="grid"){
   cat(sprintf("%s-credibility intervals about %s", paste0(100*attr(x,"level"),"%"), greek_utf8("phi")))
-  cat("\n\n")
-  for(i in seq_along(x)){
-    cat(names(x)[i], ": ")
-    #attr(x[[i]], "caption") <- names(x)[i]
-    cat(pandoc.table.return(x[[i]], style=style))
-    cat("\n")
-  }
+  #cat("\n\n")
+  table <- data.frame(t(vapply(x, function(x) x, numeric(2))))
+  table <- cbind(interval=rownames(table), table)
+  rownames(table) <- NULL
+  #dimnames(table) <- setNames(dimnames(table), c("interval", ""))
+  cat(pandoc.table.return(table, style=style))
+#   for(i in seq_along(x)){
+#     cat(names(x)[i], ": ")
+#     #attr(x[[i]], "caption") <- names(x)[i]
+#     cat(pandoc.table.return(x[[i]], style=style))
+#     cat("\n")
+#   }
 }
 #'
 #' @rdname inference_brr
