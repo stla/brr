@@ -71,6 +71,6 @@ with shape parameters \eqn{c} and \eqn{d} and scale parameter \eqn{(T+b)/S}.
 }
 \examples{
 curve(dprior_phi(x, 2, 2, 2, 10, 10), from=0, to=7)
-sprior_phi(2, 2, 2, 10, 10, type="pandoc")
+sprior_phi(2, 2, 2, 10, 10, ouput="pandoc")
 }
 

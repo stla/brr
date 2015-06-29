@@ -75,7 +75,7 @@ spost_lambda <- function(a, c, d, S, x, y, ...){
 #' @examples 
 #' curve(dpost_mu(x, 2, 2, 2, 2, 10, 3, 8), from=0, to=2)
 #' lines(density(rpost_mu(1e6, 2, 2, 2, 2, 10, 3, 8)), col="red", lty="dashed")
-#' spost_mu(2, 2, 2, 2, 10, 3, 8, type="pandoc")
+#' spost_mu(2, 2, 2, 2, 10, 3, 8, output="pandoc")
 #' 
 NULL
 #'
@@ -131,7 +131,7 @@ spost_mu <- function(a, b, c, d, T, x, y, ...){
 #' 
 #' @examples 
 #' a <- 2; b <- 2; c <- 3; d <- 4; S <- 1; T <- 1; x <- 2; y <- 6
-#' spost_phi(a, b, c, d, S, T, x, y, type="pandoc")
+#' spost_phi(a, b, c, d, S, T, x, y, output="pandoc")
 #' phi <- seq(0, 6, length.out=100)
 #' phi %>% { plot(., dpost_phi(., a, b, c, d, S, T, x, y), type="l") }
 #' phi %>% { lines(., dprior_phi(., b, c, d, S, T),  col="red") }

@@ -24,7 +24,7 @@ sprior_mu(a, b, ...)
 
 \item{a,b}{non-negative shape parameter and rate parameter}
 
-\item{...}{other arguments passed to \code{\link{GammaDist}}}
+\item{...}{other arguments passed to \code{\link{GammaDist}} or to \code{\link{summary_gamma}}}
 
 \item{p}{vector of probabilities}
 

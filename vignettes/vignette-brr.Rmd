@@ -107,3 +107,11 @@ Posterior credibility intervals are provided by the `confint` function:
 confint(model) 
 ```
 
+
+Predictions are provided by the `predict` function after adding the sample sizes of the future experiment:
+
+```{r}
+model <- model(Snew=500, Tnew=500)
+predict(model)
+```
+

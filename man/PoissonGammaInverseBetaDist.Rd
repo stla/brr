@@ -17,7 +17,7 @@ qPGIB(p, a, alpha, beta, rho)
 
 rPGIB(n, a, alpha, beta, rho)
 
-summary_PGIB(a, alpha, beta, rho, type = "list", ...)
+summary_PGIB(a, alpha, beta, rho, output = "list", ...)
 }
 \arguments{
 \item{x,q}{vector of \strong{integer} quantiles}
@@ -32,7 +32,7 @@ summary_PGIB(a, alpha, beta, rho, type = "list", ...)
 
 \item{n}{number of observations to be simulated}
 
-\item{type}{type of the \code{summary_PGIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
+\item{output}{type of the \code{summary_PGIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
 
 \item{...}{arguments passed to \code{\link[=pander]{pander.data.frame}}}
 }

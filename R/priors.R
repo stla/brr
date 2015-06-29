@@ -10,7 +10,7 @@
 #' @param p vector of probabilities
 #' @param a,b non-negative shape parameter and rate parameter
 #' @param n number of observations to be simulated
-#' @param ... other arguments passed to \code{\link{GammaDist}}
+#' @param ... other arguments passed to \code{\link{GammaDist}} or to \code{\link{summary_gamma}}
 #' 
 #' @return \code{dprior_mu} gives the density, \code{pprior_mu} the distribution function, \code{qprior_mu} the quantile function, and \code{rprior_mu} samples from the distribution.
 #' 
@@ -75,7 +75,7 @@ sprior_mu <- function(a, b, ...){
 #' 
 #' @examples 
 #' curve(dprior_phi(x, 2, 2, 2, 10, 10), from=0, to=7)
-#' sprior_phi(2, 2, 2, 10, 10, type="pandoc")
+#' sprior_phi(2, 2, 2, 10, 10, ouput="pandoc")
 #' 
 NULL
 #'

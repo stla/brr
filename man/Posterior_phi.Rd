@@ -75,7 +75,7 @@ with shape parameters \eqn{c} and \eqn{d} and scale parameter \eqn{(T+b)/S}.
 }
 \examples{
 a <- 2; b <- 2; c <- 3; d <- 4; S <- 1; T <- 1; x <- 2; y <- 6
-spost_phi(a, b, c, d, S, T, x, y, type="pandoc")
+spost_phi(a, b, c, d, S, T, x, y, output="pandoc")
 phi <- seq(0, 6, length.out=100)
 phi \%>\% { plot(., dpost_phi(., a, b, c, d, S, T, x, y), type="l") }
 phi \%>\% { lines(., dprior_phi(., b, c, d, S, T),  col="red") }

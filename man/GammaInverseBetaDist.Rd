@@ -11,7 +11,7 @@ dGIB(x, a, alpha, beta, rho)
 
 rGIB(n, a, alpha, beta, rho)
 
-summary_GIB(a, alpha, beta, rho, type = "list", ...)
+summary_GIB(a, alpha, beta, rho, output = "list", ...)
 }
 \arguments{
 \item{x}{vector of quantiles}
@@ -24,7 +24,7 @@ summary_GIB(a, alpha, beta, rho, type = "list", ...)
 
 \item{n}{number of observations to be simulated}
 
-\item{type}{type of the \code{summary_GIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
+\item{output}{type of the \code{summary_GIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
 
 \item{...}{arguments passed to \code{\link[=pander]{pander.data.frame}}}
 }
@@ -56,6 +56,6 @@ sims <- rgamma(100000, 3, 2.5/rbeta(100000,2,4))
 lines(density(sims, from=0), col="red")
 lines(density(rGIB(100000, 3, 4, 2, 2.5), from=0), col="green")
 mean(sims); var(sims)
-summary_GIB(3,4,2,2.5,type="pandoc")
+summary_GIB(3,4,2,2.5,output="pandoc")
 }
 

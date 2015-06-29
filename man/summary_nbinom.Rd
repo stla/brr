@@ -4,12 +4,12 @@
 \alias{summary_nbinom}
 \title{Summary of a Negative Binomial distribution}
 \usage{
-summary_nbinom(a, p, type = "list", ...)
+summary_nbinom(a, p, output = "list", ...)
 }
 \arguments{
 \item{a,p}{parameters of the negative binomial distribution}
 
-\item{type}{type of the output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
+\item{output}{\code{"list"} to return a list, \code{"pandoc"} to print a table}
 
 \item{...}{arguments passed to \code{\link[=pander]{pander.data.frame}}}
 }
@@ -18,6 +18,6 @@ Mode, mean, variance, and quartiles for a Negative Binomial distribution
 with shape parameter \code{a} and probability parameter \code{p}.
 }
 \examples{
-summary_nbinom(a=2, p=0.4, type="pandoc", style="rmarkdown")
+summary_nbinom(a=2, p=0.4, output="pandoc", style="rmarkdown")
 }
 

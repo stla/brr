@@ -17,7 +17,7 @@ qbeta2(p, c, d, scale, ...)
 
 rbeta2(n, c, d, scale)
 
-summary_beta2(c, d, scale, type = "list", ...)
+summary_beta2(c, d, scale, output = "list", ...)
 }
 \arguments{
 \item{x,q}{vector of quantiles}
@@ -32,7 +32,7 @@ summary_beta2(c, d, scale, type = "list", ...)
 
 \item{n}{number of observations to be simulated}
 
-\item{type}{type of the \code{summary_beta2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
+\item{output}{type of the \code{summary_beta2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
 }
 \value{
 \code{dbeta2} gives the density, \code{pbeta2} the distribution function, \code{qbeta2} the quantile function, and \code{rbeta2} generates random observations,

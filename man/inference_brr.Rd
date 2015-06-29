@@ -20,7 +20,7 @@
 \method{predict}{brr}(model, conf = 0.95, ...)
 }
 \arguments{
-\item{model}{a \code{\link[Brr]{brr}} object}
+\item{model}{a \code{\link[=Brr]{brr}} object}
 
 \item{conf}{confidence level}
 

@@ -4,12 +4,12 @@
 \alias{summary_gamma}
 \title{Summary of a Gamma distribution}
 \usage{
-summary_gamma(a, b, type = "list", ...)
+summary_gamma(a, b, output = "list", ...)
 }
 \arguments{
 \item{a,b}{Shape and rate parameters.}
 
-\item{type}{type of the output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
+\item{output}{\code{"list"} to return a list, \code{"pandoc"} to print a table}
 
 \item{...}{arguments passed to \code{\link[=pander]{pander.data.frame}}}
 }
@@ -18,6 +18,6 @@ Mode, mean, variance, and quartiles for a Gamma distribution
 with shape parameter \code{a} and rate parameter \code{b}.
 }
 \examples{
-summary_gamma(a=2, b=4, type="pandoc", style="rmarkdown")
+summary_gamma(a=2, b=4, output="pandoc", style="rmarkdown")
 }
 

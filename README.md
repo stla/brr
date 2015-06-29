@@ -1,6 +1,10 @@
 ## brr package for R
 Bayesian inference on the ratio of two Poisson rates.
 
+### What does it do ? ###
+
+Suppose you have two counts of events and, assuming each count follows a Poisson distributio with an unknown incidence rate, you are interested in the ratio of the two rates (or *relative risk*).  The `brr` package allows to perform the Bayesian analysis of the relative risk using the natural semi-conjugate family of prior distributions, with a default non-informative prior  (see references).
+
 
 ### Install ###
 
@@ -12,7 +16,7 @@ devtools::install_github('brr', 'stla', build_vignettes=TRUE)
 
 ### Basic usage ###
 
-Create a `brr` object with the `Brr` function to set the prior parameters `a`, `b`, `c`, `d`, the two Poisson counts `x` and `y` and the samples sizes (times at risk) `S` and `T`. Simply do not set the prior parameters to use the non-informative prior:
+Create a `brr` object with the `Brr` function to set the prior parameters `a`, `b`, `c`, `d`, the two Poisson counts `x` and `y` and the samples sizes (times at risk) `S` and `T` in the two groups. Simply do not set the prior parameters to use the non-informative prior:
 
 ```r
 model <- Brr(x=2, S=17877, y=9, T=16674)
@@ -40,7 +44,7 @@ Update the `brr` object to include new sample sizes and get a summary of the pos
 
 ```r
 model <- model(Snew=10000, Tnew=10000)
-spost(model, "x", type="pandoc")
+spost(model, "x", output="pandoc")
 ```
 
 ### To learn more ###

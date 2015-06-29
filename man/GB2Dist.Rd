@@ -20,7 +20,7 @@ rGB2(n, a, c, d, tau)
 
 moment_GB2(k, a, c, d, tau)
 
-summary_GB2(a, c, d, tau, type = "list", ...)
+summary_GB2(a, c, d, tau, output = "list", ...)
 }
 \arguments{
 \item{x,q}{vector of non-negative quantiles}
@@ -37,7 +37,7 @@ summary_GB2(a, c, d, tau, type = "list", ...)
 
 \item{k}{the order of the moment}
 
-\item{type}{type of the \code{summary_GB2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
+\item{output}{type of the \code{summary_GB2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table}
 }
 \value{
 \code{dGB2} gives the density, \code{pGB2} the cumulative function,

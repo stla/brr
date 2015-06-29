@@ -447,7 +447,7 @@ plot.brr <- function(model, what="summary", bounds=NULL, ...){
 #' @details \code{confint.brr} is a wrapper to \code{\link{brr_intervals}} and 
 #' \code{coef.brr} is a wrapper to \code{\link{brr_estimates}}
 #' 
-#' @param model a \code{\link[Brr]{brr}} object
+#' @param model a \code{\link[=Brr]{brr}} object
 #' @param conf confidence level
 #' @param intervals a character vector, the intervals to be returned
 #' @param parameter parameter of interest \code{"phi"} or \code{"VE"} (\code{=1-phi})

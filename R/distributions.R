@@ -4,13 +4,13 @@
 #' with shape parameter \code{a} and rate parameter \code{b}.
 #'
 #' @param a,b Shape and rate parameters.
-#' @param type type of the output: \code{"list"} to return a list, \code{"pandoc"} to print a table
+#' @param output \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param ... arguments passed to \code{\link[=pander]{pander.data.frame}}
 #' @examples
-#' summary_gamma(a=2, b=4, type="pandoc", style="rmarkdown")
+#' summary_gamma(a=2, b=4, output="pandoc", style="rmarkdown")
 #' @importFrom pander pander
 #' @export
-summary_gamma <- function(a, b, type="list", ...){
+summary_gamma <- function(a, b, output="list", ...){
   out <- list(mode=ifelse(a>1, (a-1)/b, 0),  
        mean=a/b,  
        sd=sqrt(a)/b,  
@@ -18,7 +18,7 @@ summary_gamma <- function(a, b, type="list", ...){
        Q2=qgamma(0.5,a,b),
        Q3=qgamma(0.75,a,b)
   )
-  if(type=="pandoc"){
+  if(output=="pandoc"){
     pander(data.frame(out), ...)
     return(invisible())
   }else{
@@ -32,14 +32,14 @@ summary_gamma <- function(a, b, type="list", ...){
 #' with shape parameter \code{a} and probability parameter \code{p}.
 #'
 #' @param a,p parameters of the negative binomial distribution
-#' @param type type of the output: \code{"list"} to return a list, \code{"pandoc"} to print a table
+#' @param output \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param ... arguments passed to \code{\link[=pander]{pander.data.frame}}
 #'
 #' @examples
-#' summary_nbinom(a=2, p=0.4, type="pandoc", style="rmarkdown")
+#' summary_nbinom(a=2, p=0.4, output="pandoc", style="rmarkdown")
 #' @importFrom pander pander
 #' @export
-summary_nbinom <- function(a, p, type="list", ...){
+summary_nbinom <- function(a, p, output="list", ...){
   out <- list(mode=ifelse(a>1, floor((1-p)*(a-1)/p), 0),  
               mean=a*(1-p)/p,  
               sd=sqrt(a*(1-p))/p,  
@@ -47,7 +47,7 @@ summary_nbinom <- function(a, p, type="list", ...){
               Q2=qnbinom(0.5, a, p),
               Q3=qnbinom(0.75, a, p)
   )
-  if(type=="pandoc"){
+  if(output=="pandoc"){
     pander(data.frame(out), ...)
     return(invisible())
   }else{
@@ -74,7 +74,7 @@ summary_nbinom <- function(a, p, type="list", ...){
 #' @param c,d non-negative shape parameters
 #' @param scale non-negative scale parameter
 #' @param n number of observations to be simulated
-#' @param type type of the \code{summary_beta2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
+#' @param output type of the \code{summary_beta2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param ... other arguments passed to \code{\link{FDist}}
 #' 
 #' @return \code{dbeta2} gives the density, \code{pbeta2} the distribution function, \code{qbeta2} the quantile function, and \code{rbeta2} generates random observations, 
@@ -120,7 +120,7 @@ rbeta2 <- function(n, c, d, scale){
 }
 #' @rdname Beta2Dist
 #' @export
-summary_beta2 <- function(c, d, scale, type="list", ...){
+summary_beta2 <- function(c, d, scale, output="list", ...){
   out <- list(mode=ifelse(c>1, scale*(c-1)/(d+1), 0),  
        mean=ifelse(d>1, scale*c/(d-1), Inf),  
        sd=ifelse(d>2, sqrt(scale^2*c*(c+d-1)/((d-1)^2*(d-2))), Inf),  
@@ -128,7 +128,7 @@ summary_beta2 <- function(c, d, scale, type="list", ...){
        Q2=qbeta2(0.5,c,d,scale),
        Q3=qbeta2(0.75,c,d,scale)
   )
-  if(type=="pandoc"){
+  if(output=="pandoc"){
     pander(data.frame(out), ...)
     return(invisible())
   }else{
@@ -151,7 +151,7 @@ summary_beta2 <- function(c, d, scale, type="list", ...){
 #' @param alpha,beta non-negative shape parameters of the mixing Beta distribution
 #' @param rho rate parameter 
 #' @param n number of observations to be simulated
-#' @param type type of the \code{summary_GIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
+#' @param output type of the \code{summary_GIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param ... arguments passed to \code{\link[=pander]{pander.data.frame}}
 #' 
 #' @return \code{dGIB} gives the density, \code{rGIB} samples from the distribution, 
@@ -167,7 +167,7 @@ summary_beta2 <- function(c, d, scale, type="list", ...){
 #' lines(density(sims, from=0), col="red")
 #' lines(density(rGIB(100000, 3, 4, 2, 2.5), from=0), col="green")
 #' mean(sims); var(sims)
-#' summary_GIB(3,4,2,2.5,type="pandoc")
+#' summary_GIB(3,4,2,2.5,output="pandoc")
 #' 
 NULL
 #'
@@ -185,11 +185,11 @@ rGIB <- function(n,a,alpha,beta,rho){
 #'
 #' @rdname GammaInverseBetaDist
 #' @export
-summary_GIB <- function(a, alpha, beta, rho, type="list", ...){
+summary_GIB <- function(a, alpha, beta, rho, output="list", ...){
   out <- list(mean=a*beta/(alpha+beta)/rho,
        sd = sqrt(a*(1+a)*beta*(beta+1)/(alpha+beta)/(alpha+beta+1)/rho^2 - (a*beta/(alpha+beta)/rho)^2)
        )
-  if(type=="pandoc"){
+  if(output=="pandoc"){
     pander(data.frame(out), ...)
     return(invisible())
   }else{
@@ -213,7 +213,7 @@ summary_GIB <- function(a, alpha, beta, rho, type="list", ...){
 #' @param a non-negative shape parameter of the Gamma distribution
 #' @param alpha,beta non-negative shape parameters of the mixing Beta distribution
 #' @param rho hyperrate parameter (rate of the mixing distribution)
-#' @param type type of the \code{summary_PGIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
+#' @param output type of the \code{summary_PGIB} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param n number of observations to be simulated
 #' @param ... arguments passed to \code{\link[=pander]{pander.data.frame}}
 #' 
@@ -263,14 +263,14 @@ rPGIB <- function(n, a, alpha, beta, rho){
 #'
 #' @rdname PoissonGammaInverseBetaDist
 #' @export
-summary_PGIB <- function(a, alpha, beta, rho, type="list", ...){
+summary_PGIB <- function(a, alpha, beta, rho, output="list", ...){
   out <- list(mean=a*beta/(alpha+beta)/rho,
               sd = sqrt( a*beta/rho*( 1/(alpha+beta) + (alpha*(a+beta+1)+beta*(beta+1))/(alpha+beta)^2/(alpha+beta+1)/rho )),
               Q1 = qPGIB(0.25, a, alpha, beta, rho),
               Q2 = qPGIB(0.5, a, alpha, beta, rho),
               Q3 = qPGIB(0.75, a, alpha, beta, rho)
   )
-  if(type=="pandoc"){
+  if(output=="pandoc"){
     pander(data.frame(out), ...)
     return(invisible())
   }else{
@@ -294,7 +294,7 @@ summary_PGIB <- function(a, alpha, beta, rho, type="list", ...){
 #' @param p vector of probabilities
 #' @param a,c,d non-negative shape parameters
 #' @param n number of observations to be sampled
-#' @param type type of the \code{summary_beta_nbinom} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
+#' @param output type of the \code{summary_beta_nbinom} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param ... other arguments passed to \code{\link[SuppDists]{ghyper}}
 #' 
 #' @return \code{dbeta_nbinom} gives the density, 
@@ -347,7 +347,7 @@ sbeta_nbinom <- function(a, c, d){
 #'
 #' @rdname BetaNegativeBinomialDist
 #' @export 
-summary_beta_nbinom <- function(a, c, d, type="list", ...){
+summary_beta_nbinom <- function(a, c, d, output="list", ...){
   out <- c(with(sghyper(-d, -a, c-1), 
               list(mean=Mean,
                    mode=Mode,
@@ -358,7 +358,7 @@ summary_beta_nbinom <- function(a, c, d, type="list", ...){
                    Q3=qbeta_nbinom(.75, a, c, d)
                    )
            )
-  if(type=="pandoc"){
+  if(output=="pandoc"){
     pander(data.frame(out), ...)
     return(invisible())
   }else{
@@ -389,7 +389,7 @@ summary_beta_nbinom <- function(a, c, d, type="list", ...){
 #' @param a,c,d non-negative shape parameters
 #' @param tau non-negative rate parameter 
 #' @param k the order of the moment
-#' @param type type of the \code{summary_GB2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
+#' @param output type of the \code{summary_GB2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param ... arguemnts passed to \code{\link[=hypergeo]{genhypergeo}} function
 #' @param n number of observations to be sampled
 #' 
@@ -458,11 +458,11 @@ moment_GB2 <- function(k,a,c,d,tau){
 #'
 #' @rdname GB2Dist
 #' @export
-summary_GB2 <- function(a, c, d, tau, type="list", ...){
+summary_GB2 <- function(a, c, d, tau, output="list", ...){
   out <- list(mean=ifelse(c>1, moment_GB2(1, a, c, d, tau), Inf),
               sd=ifelse(c>2, sqrt(moment_GB2(2, a, c, d, tau) - (moment_GB2(1, a, c, d, tau))^2), Inf)
                 )
-  if(type=="pandoc"){
+  if(output=="pandoc"){
     pander(data.frame(out), ...)
     return(invisible())
   }else{
@@ -490,7 +490,7 @@ summary_GB2 <- function(a, c, d, tau, type="list", ...){
 #' @param p vector of probabilities
 #' @param a,c,d non-negative shape parameters
 #' @param tau non-negative hyperrate parameter 
-#' @param type type of the \code{summary_PGB2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
+#' @param output type of the \code{summary_PGB2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param n number of observations to be sampled
 #' 
 #' @return \code{dPGB2} gives the density, \code{pPGB2} the cumulative function, 
@@ -538,7 +538,7 @@ rPGB2 <- function(n, a, c, d, tau){
 #'
 #' @rdname PGB2Dist
 #' @export
-summary_PGB2 <- function(a, c, d, tau, type="list"){
+summary_PGB2 <- function(a, c, d, tau, output="list"){
   m1 <- moment_GB2(1, a, c, d, tau)
   out <- list(mean = ifelse(c>1, m1, Inf),
               sd = ifelse(c>2, sqrt(m1 + moment_GB2(2, a, c, d, tau) - m1^2)),
@@ -546,7 +546,7 @@ summary_PGB2 <- function(a, c, d, tau, type="list"){
               Q2 = qPGB2(0.5, a, c, d, tau),
               Q3 = qPGB2(0.75, a, c, d, tau)
   )
-  if(type=="pandoc"){
+  if(output=="pandoc"){
     pander(data.frame(out))
     return(invisible())
   }else{
