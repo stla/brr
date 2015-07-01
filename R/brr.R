@@ -255,51 +255,62 @@ NULL
 #' @rdname PriorAndPosterior
 #' @export
 dprior <- function(model, parameter, ...){
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
   return( brr_generic("dprior", model, parameter, ...) )
 }
 #' @rdname PriorAndPosterior
 #' @export
 pprior <- function(model, parameter, ...){
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
   return( brr_generic("pprior", model, parameter, ...) )
 }
 #' @rdname PriorAndPosterior
 #' @export
 qprior <- function(model, parameter, ...){
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
   return( brr_generic("qprior", model, parameter, ...) )
 }
 #' @rdname PriorAndPosterior
 #' @export
 rprior <- function(model, parameter, ...){
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
   return( brr_generic("rprior", model, parameter, ...) )
 }
 #' @rdname PriorAndPosterior
 #' @export
 sprior <- function(model, parameter, ...){
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
   return( brr_generic("sprior", model, parameter, ...) )
 }
 #' @rdname PriorAndPosterior
 #' @export
 dpost <- function(model, parameter, ...){
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
   return( brr_generic("dpost", model, parameter, ...) )
 }
 #' @rdname PriorAndPosterior
 #' @export
 ppost <- function(model, parameter, ...){
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
   return( brr_generic("ppost", model, parameter, ...) )
 }
 #' @rdname PriorAndPosterior
 #' @export
 qpost <- function(model, parameter, ...){
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
   return( brr_generic("qpost", model, parameter, ...) )
 }
 #' @rdname PriorAndPosterior
 #' @export
 rpost <- function(model, parameter, ...){
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
   return( brr_generic("rpost", model, parameter, ...) )
 }
 #' @rdname PriorAndPosterior
 #' @export
 spost <- function(model, parameter, ...){
+  if(class(parameter)!="character") stop("Second argument must be the parameter as a string.")
   return( brr_generic("spost", model, parameter, ...) )
 }
 
