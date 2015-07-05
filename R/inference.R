@@ -11,7 +11,7 @@
 #' @param conf confidence level
 #' @param intervals a character vector, the intervals to be returned
 #' @param parameter parameter of interest \code{"phi"} or \code{"VE"} (\code{=1-phi})
-#' @param ... arguments passed to \link{IntrinsicInference}
+#' @param ... arguments passed to \link{IntrinsicInference} and \link{Intrinsic2Inference}
 #' @return A list of confidence intervals (\code{brr_intervals}) or estimates (\code{brr_estimates})
 #' @seealso \code{\link{confint.brr}}
 #' 
@@ -59,7 +59,8 @@ brr_estimates <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, parameter="phi", .
   estimates <- spost_phi(a, b, c, d, S, T, x, y)[c("mode","mean","Q2")]
   names(estimates)[3] <- "median"
   intrinsic <- intrinsic_estimate(x, y, S, T, a, b, c, d, ...)
-  out <- c(estimates, intrinsic=intrinsic)
+  intrinsic2 <- ifelse(a==0.5 && b==0, NA, intrinsic2_estimate(x, y, S, T, a, b, c, d, ...))
+  out <- c(estimates, intrinsic=intrinsic, intrinsic2=intrinsic2)
   if(parameter=="VE") out <- lapply(out, function(x) 1-x)
   return(out)
 }

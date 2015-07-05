@@ -17,7 +17,16 @@ return( pmin(G,H) )
 #   result
 # }
 
-intrinsic_discrepancy <- function(phi, phi0, mu, S, T){
+#' Intrinsic discrepancy
+#' 
+#' Intrinsic discrepancy from \code{phi0} to \code{(mu,phi)}
+#' 
+#' @param phi0 the proxy value of \code{phi}
+#' @param mu,phi the true values of the parameters
+#' @param S,T sample sizes
+#' @return A number, the intrinsic discrepancy from \code{phi0} to \code{(mu,phi)}.
+#' @export
+intrinsic_discrepancy <- function(phi0, mu, phi, S, T){
   return( mu * T * rho(phi, phi0, S, T) )
 }
 

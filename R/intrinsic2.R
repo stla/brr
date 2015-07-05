@@ -1,4 +1,14 @@
-intrinsic2_discrepancy <- function(phi, phi0, a, b, S, T){
+#' Second intrinsic discrepancy
+#' 
+#' Intrinsic discrepancy from \code{phi0} to \code{phi} in the marginal model
+#' 
+#' @param phi0 the proxy value of \code{phi}
+#' @param phi the true value of the parameter
+#' @param a,b, the parameters of the prior Gamma distribution on \eqn{\mu}
+#' @param S,T sample sizes
+#' @return A number, the intrinsic discrepancy from \code{phi0} to \code{phi}.
+#' @export
+intrinsic2_discrepancy <- function(phi0, phi, a, b, S, T){
   tmp <- phi
   phi <- pmin(phi,phi0)
   phi0 <- pmax(tmp,phi0)
@@ -43,7 +53,7 @@ intrinsic2_phi0 <- function(phi0, x, y,  S, T, a, b, c=0.5, d=0, subd=1000, tol=
   lambda <- (T+b)/S
   return( vapply(phi0, FUN = function(phi0){ 
     integrande <- function(u){
-      return( intrinsic2_discrepancy(lambda * u/(1-u), phi0, a=a, b=b, S=S, T=T)*dbeta(u, post.c, post.d) )
+      return( intrinsic2_discrepancy(phi0, lambda * u/(1-u), a=a, b=b, S=S, T=T)*dbeta(u, post.c, post.d) )
     }
     i <- -3
     old.value <- 0
@@ -81,7 +91,7 @@ intrinsic2_H0 <- function(phi.star, alternative, x, y, S, T, a, b, c=0.5, d=0, s
   post.d <- y+a+d
   lambda <- (T+b)/S
   integrande <- function(u){
-    intrinsic2_discrepancy(lambda * u/(1-u), phi.star, S=S, T=T, a=a, b=b)*dbeta(u, post.c, post.d)
+    intrinsic2_discrepancy(phi.star, lambda * u/(1-u), S=S, T=T, a=a, b=b)*dbeta(u, post.c, post.d)
   }
   psi.star <- phi.star/lambda
   u.star <- psi.star/(1+psi.star)

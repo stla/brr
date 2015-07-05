@@ -23,7 +23,7 @@ brr_estimates(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
 
 \item{intervals}{a character vector, the intervals to be returned}
 
-\item{...}{arguments passed to \link{IntrinsicInference}}
+\item{...}{arguments passed to \link{IntrinsicInference} and \link{Intrinsic2Inference}}
 
 \item{parameter}{parameter of interest \code{"phi"} or \code{"VE"} (\code{=1-phi})}
 }
