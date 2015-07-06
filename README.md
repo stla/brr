@@ -3,7 +3,7 @@ Bayesian inference on the ratio of two Poisson rates.
 
 ### What does it do ? ###
 
-Suppose you have two counts of events and, assuming each count follows a Poisson distributio with an unknown incidence rate, you are interested in the ratio of the two rates (or *relative risk*).  The `brr` package allows to perform the Bayesian analysis of the relative risk using the natural semi-conjugate family of prior distributions, with a default non-informative prior  (see references).
+Suppose you have two counts of events and, assuming each count follows a Poisson distribution with an unknown incidence rate, you are interested in the ratio of the two rates (or *relative risk*).  The `brr` package allows to perform the Bayesian analysis of the relative risk using the natural semi-conjugate family of prior distributions, with a default non-informative prior  (see references).
 
 
 ### Install ###
@@ -56,6 +56,8 @@ Look at the vignettes:
 ```r
 browseVignettes(package = "brr")
 ```
+
+There is only one available vignette for the moment. A companion paper is under progress.
 
 ### Find a bug ? Suggestion for improvment ?
 
