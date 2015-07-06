@@ -172,8 +172,8 @@ return(out)
 #' @export
 print.summary.brr <- function(x, table.style="grid"){
   summary <- x
-  cat("----------\n")
-  cat(type <- summary$type, "prior")
+  #cat("----------\n")
+  cat("Type of prior distribution:", type <- summary$type, "prior")
   cat("\n\n")
   cat(sprintf("*Prior distribution on %s*:", greek_utf8("mu")))
   if(type!="non-informative"){
@@ -199,14 +199,14 @@ print.summary.brr <- function(x, table.style="grid"){
   #cat("\n")
   params <- summary$params
   cat("*Sample sizes*\n")
-  cat(sprintf("  S (treated group): %s", ifelse("S" %in% names(params), params$S, "not supplied")))
+  cat(sprintf("  S (treated group): %s", ifelse("S" %in% names(params), params$S, "not supplied yet")))
   cat("\n")
-  cat(sprintf("  T (control group): %s", ifelse("T" %in% names(params), params$T, "not supplied")))
+  cat(sprintf("  T (control group): %s", ifelse("T" %in% names(params), params$T, "not supplied yet")))
   cat("\n\n")
   cat("*Observed counts*\n")
-  cat(sprintf("  x (treated group): %s", ifelse("x" %in% names(params), params$x, "not supplied")))
+  cat(sprintf("  x (treated group): %s", ifelse("x" %in% names(params), params$x, "not supplied yet")))
   cat("\n")
-  cat(sprintf("  y (control group): %s", ifelse("y" %in% names(params), params$y, "not supplied")))
+  cat(sprintf("  y (control group): %s", ifelse("y" %in% names(params), params$y, "not supplied yet")))
   cat("\n\n")
   cat(sprintf("*Posterior distribution on %s*:", greek_utf8("phi")))
   if(all(c("a","b","c","d","S","T","x","y") %in% names(params))){
