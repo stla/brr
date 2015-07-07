@@ -7,6 +7,7 @@
 \alias{predict.brr}
 \alias{print.coef.brr}
 \alias{print.confint.brr}
+\alias{print.predict.brr}
 \title{Credibility intervals and estimates}
 \usage{
 \method{confint}{brr}(model, conf = 0.95, intervals = "all", ...)
@@ -18,6 +19,8 @@
 \method{print}{coef.brr}(x)
 
 \method{predict}{brr}(model, conf = 0.95, ...)
+
+\method{print}{predict.brr}(x, style = "grid")
 }
 \arguments{
 \item{model}{a \code{\link[=Brr]{brr}} object}

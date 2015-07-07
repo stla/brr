@@ -374,12 +374,12 @@ plot.brr <- function(model, what="summary", bounds=NULL, ...){
                xlab=ifelse(f %in% c("dprior","dpost"), parse(text=param), NA),
                ...
           )
-          if(f %in% c("dprior","dpost")) axis(1) else { axis(1); axis(2) }
+          if(f %in% c("dprior","dpost")) axis(1, cex.axis=list(...)$cex.axis) else { axis(1); axis(2) }
         }
         return(invisible())
       } else {
         barplot(setNames(eval(parse(text=f))(model, param, bounds[1]:bounds[2]), bounds[1]:bounds[2]), 
-                xlab=ifelse(param=="x_given_y", "x", param), ...)
+                xlab=ifelse(param=="x_given_y", expression(italic(x)), do.call(identity, list(bquote(expression(italic(.(param))))))), ...)
         return(invisible())
       }
     } else if(f %in% c("qprior", "qpost")){
@@ -569,5 +569,12 @@ predict.brr <- function(model, conf=0.95, ...){
   out[1, c("median", "lwr", "upr")] <- qpost(model, "x", c(.5, (1-conf)/2, (conf+1)/2))
   out[2, c("median", "lwr", "upr")]  <- qpost(model, "y", c(.5, (1-conf)/2, (conf+1)/2))
   attr(out, "level") <- conf
+  class(out) <- "predict.brr"
   return(out)
+}
+#' @rdname inference_brr
+#' @export
+print.predict.brr <- function(x, style="grid"){
+  cat(sprintf("Predictions and %s-credibility prediction intervals", paste0(100*attr(x,"level"),"%")))
+  cat(pandoc.table.return(data.frame(unclass(x)), style=style))
 }
