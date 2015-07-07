@@ -1,10 +1,10 @@
 ---
-title: "brr: an R package for Bayesian inference on the ratio of two Poisson rates"
+title: "brr: Basic usage."
 author: "Stéphane Laurent"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Basic usage}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
