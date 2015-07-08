@@ -137,8 +137,8 @@ summary_beta2 <- function(c, d, scale, output="list", ...){
 }
 
 
-#' @name GammaInverseBetaDist 
-#' @rdname GammaInverseBetaDist
+#' @name GIBDist 
+#' @rdname GIBDist
 #' @title Gamma-Inverse Beta distribution
 #' @description Density and random  generation for the Gamma-Inverse Beta distribution 
 #' with shape parameters \code{a}, \code{alpha}, \code{beta} and rate parameter \code{rho}. 
@@ -157,7 +157,7 @@ summary_beta2 <- function(c, d, scale, output="list", ...){
 #' @return \code{dGIB} gives the density, \code{rGIB} samples from the distribution, 
 #' and \code{summary_GIB} returns a summary of the distribution.
 #' 
-#' @note \code{GammaInverseBetaDist} is a generic name for the functions documented. 
+#' @note \code{GIBDist} is a generic name for the functions documented. 
 #' 
 #' @importFrom gsl lnpoch lngamma hyperg_U
 #' @importFrom pander pander
@@ -171,19 +171,19 @@ summary_beta2 <- function(c, d, scale, output="list", ...){
 #' 
 NULL
 #'
-#' @rdname GammaInverseBetaDist
+#' @rdname GIBDist
 #' @export
 dGIB <- function(x,a,alpha,beta,rho){
   exp(lnpoch(beta,alpha)-lngamma(a))*rho^a*x^(a-1)*exp(-rho*x)*hyperg_U(alpha,a-beta+1,rho*x)
 }
 #'
-#' @rdname GammaInverseBetaDist
+#' @rdname GIBDist
 #' @export
 rGIB <- function(n,a,alpha,beta,rho){
   rbeta(n,beta,alpha)*rgamma(n, a, rho)
 }
 #'
-#' @rdname GammaInverseBetaDist
+#' @rdname GIBDist
 #' @export
 summary_GIB <- function(a, alpha, beta, rho, output="list", ...){
   out <- list(mean=a*beta/(alpha+beta)/rho,
@@ -196,16 +196,15 @@ summary_GIB <- function(a, alpha, beta, rho, output="list", ...){
     return(out)
   }
 }
-  
 
 
-#' @name PoissonGammaInverseBetaDist 
-#' @rdname PoissonGammaInverseBetaDist
+#' @name PoissonGIBDist 
+#' @rdname PoissonGIBDist
 #' @title Poisson-Gamma-Inverse Beta distribution
 #' @description Density and random  generation for the Poisson-Gamma-Inverse Beta distribution 
 #' with shape parameters \code{a}, \code{c}, \code{d} and scale parameter \code{rho}. 
 #' @details This is the mixture distribution obtained by sampling a value from a 
-#' \link[=GammaInverseBetaDist]{Gamma-Inverse Beta distribution} and then sampling from 
+#' \link[=GIBDist]{Gamma-Inverse Beta distribution} and then sampling from 
 #' a Poisson distribution having this value as mean.
 #' 
 #' @param x,q vector of \strong{integer} quantiles
@@ -220,7 +219,7 @@ summary_GIB <- function(a, alpha, beta, rho, output="list", ...){
 #' @return \code{dPGIB} gives the density, \code{rPGIB} samples from the distribution, 
 #' and \code{summary_PGIB} gives a summary of the distribution.
 #' 
-#' @note \code{PoissonGammaInverseBetaDist} is a generic name for the functions documented. 
+#' @note \code{PoissonGIBDist} is a generic name for the functions documented. 
 #' 
 #' @importFrom gsl lnpoch lngamma lnfact
 #' @importFrom pander pander
@@ -233,7 +232,7 @@ summary_GIB <- function(a, alpha, beta, rho, output="list", ...){
 #'  # => et j'échange rho 1/rho dans dPGIB => différence avec code_vD dans dpost_x/y
 NULL
 #'
-#' @rdname PoissonGammaInverseBetaDist
+#' @rdname PoissonGIBDist
 #' @export
 dPGIB <- function(x,a,alpha,beta,rho){
   ccpoch <- exp(lnpoch(a,x)+lnpoch(beta,x)-lnpoch(alpha+beta,x)-lnfact(x))
@@ -241,27 +240,27 @@ dPGIB <- function(x,a,alpha,beta,rho){
     Gauss2F1(beta+x, a+x, alpha+beta+x, -1/rho)
 }
 #'
-#' @rdname PoissonGammaInverseBetaDist
+#' @rdname PoissonGIBDist
 #' @export
 pPGIB <- function(q, a, alpha, beta, rho){
   return( vapply(q, FUN=function(x) sum(dPGIB(0:x, a, alpha, beta, rho)), 
                  FUN.VALUE=numeric(1)) )
 }
 #'
-#' @rdname PoissonGammaInverseBetaDist
+#' @rdname PoissonGIBDist
 #' @export
 qPGIB <- function(p, a, alpha, beta, rho){
   return( vapply(p, FUN=function(x) icdf(dPGIB, x, a=a, alpha=alpha, beta=beta, rho=rho),
                  FUN.VALUE=numeric(1)) )
 }
 #'
-#' @rdname PoissonGammaInverseBetaDist
+#' @rdname PoissonGIBDist
 #' @export
 rPGIB <- function(n, a, alpha, beta, rho){
   return( rpois(n, rGIB(n, a, alpha, beta, rho)) )
 }
 #'
-#' @rdname PoissonGammaInverseBetaDist
+#' @rdname PoissonGIBDist
 #' @export
 summary_PGIB <- function(a, alpha, beta, rho, output="list", ...){
   out <- list(mean=a*beta/(alpha+beta)/rho,
