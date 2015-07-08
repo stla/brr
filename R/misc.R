@@ -11,7 +11,7 @@ greek_utf8 <- function(letter){ #' Unicode encoding of Greek letters
   if(letter %in% c("mu", "phi", "lambda")){
     return(switch(letter, 
                   mu="\u03BC", #rawToChar(as.raw(c(0xc2, 0xb5))) (micron)
-                  phi=rawToChar(as.raw(c(0xcf, 0x95))), #"\u03d5", 
+                  phi=intToUtf8(0x03D5L), #rawToChar(as.raw(c(0xcf, 0x95))), #"\u03d5", 
                   lambda="\u03BB"))
   }else{
     return(letter)
