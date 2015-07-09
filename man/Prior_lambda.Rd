@@ -27,8 +27,9 @@ sprior_lambda(a, b, c, d, S, T, ...)
 
 \item{n}{number of observations to be simulated}
 
-\item{...}{other arguments passed to \code{\link{genhypergeo}},
-such as \code{series=FALSE} to use the continued fraction expansion}
+\item{...}{other arguments passed to \code{\link{genhypergeo}} through \code{\link{pGB2}},
+such as \code{series=FALSE} to use the continued fraction expansion,
+or passed to \code{\link{summary_GB2}} (for \code{sprior_lambda})}
 }
 \value{
 \code{dprior_lambda} gives the density, \code{pprior_lambda} the distribution function
@@ -60,8 +61,6 @@ does not work when \code{a-c} is an integer.
 }
 \examples{
 curve(dprior_lambda(x, 2, 2, 2.5, 2, 10, 10), from=0, to=5)
-pprior_lambda(1, 2, 2, 2.5, 2, 10, 10)
-ecdf(rprior_lambda(1e6, 2, 2, 2.5, 2, 10, 10))(1)
-integrate(function(x) dprior_lambda(x, 2, 2, 2.5, 2, 10, 10), lower=0, upper=1)
+sprior_lambda(2, 2, 2.5, 2, 10, 10)
 }
 

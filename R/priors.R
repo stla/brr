@@ -18,6 +18,7 @@
 #' 
 #' @examples 
 #' curve(dprior_mu(x, 2, 2), from=0, to=3)
+#' sprior_mu(2, 2, output="pandoc")
 #' 
 NULL
 #'
@@ -75,7 +76,7 @@ sprior_mu <- function(a, b, ...){
 #' 
 #' @examples 
 #' curve(dprior_phi(x, 2, 2, 2, 10, 10), from=0, to=7)
-#' sprior_phi(2, 2, 2, 10, 10, ouput="pandoc")
+#' sprior_phi(2, 2, 2, 10, 10, output="pandoc")
 #' 
 NULL
 #'
@@ -145,8 +146,9 @@ sprior_phi <- function(b, c, d, S, T, ...){
 #' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
 #' @param S,T sample sizes in control group and treated group
 #' @param n number of observations to be simulated
-#' @param ... other arguments passed to \code{\link{genhypergeo}}, 
-#' such as \code{series=FALSE} to use the continued fraction expansion
+#' @param ... other arguments passed to \code{\link{genhypergeo}} through \code{\link{pGB2}}, 
+#' such as \code{series=FALSE} to use the continued fraction expansion, 
+#' or passed to \code{\link{summary_GB2}} (for \code{sprior_lambda})
 #' 
 #' @return \code{dprior_lambda} gives the density, \code{pprior_lambda} the distribution function 
 #' (see Details), \code{rprior_lambda} samples from the distribution, and 
@@ -156,18 +158,13 @@ sprior_phi <- function(b, c, d, S, T, ...){
 #' 
 #' @examples 
 #' curve(dprior_lambda(x, 2, 2, 2.5, 2, 10, 10), from=0, to=5)
-#' pprior_lambda(1, 2, 2, 2.5, 2, 10, 10)
-#' ecdf(rprior_lambda(1e6, 2, 2, 2.5, 2, 10, 10))(1)
-#' integrate(function(x) dprior_lambda(x, 2, 2, 2.5, 2, 10, 10), lower=0, upper=1)
+#' sprior_lambda(2, 2, 2.5, 2, 10, 10)
 NULL
 #'
 #' @rdname Prior_lambda
 #' @importFrom gsl lnpoch lnbeta hyperg_U
 #' @export 
 dprior_lambda <- function(lambda, a, b, c, d, S, T){  
-#   ifelse(c>1 & lambda<.Machine$double.eps, 0, 
-#          (b*S/(b+T))^a*exp(lnpoch(a,d)-lnbeta(c,d)+(a-1)*log(lambda)+log(hyperg_U(a+d,a-c+1,b*S/(b+T)*lambda)))
-#   )
   return( dGB2(lambda, a=a, c=d, d=c, tau=b*S/(T+b)) )
 }
 #'
@@ -182,12 +179,8 @@ rprior_lambda <- function(n,a,b,c,d,S,T){
 #' @importFrom hypergeo genhypergeo
 #' @export 
 pprior_lambda <- function(q, a, b, c, d, S, T, ...){ 
-#     exp(a*log(b*S/(b+T)) + lnpoch(a,d) - lnbeta(c,d))*
-#     (sign(c-a)*exp(a*log(p)+lngamma(c-a)-lngamma(c+d)-log(a))*genhypergeo(U=c(a,a+d), L=c(1+a,1+a-c), b*S/(b+T)*p, ...) +
-#       sign(a-c)*exp((c-a)*log(b*S/(b+T))+c*log(p)+lngamma(a-c)-lngamma(a+d)-log(c))*genhypergeo(U=c(c,c+d), L=c(1+c,1+c-a), b*S/(b+T)*p, ...)
-#     )
   if(a-c == floor(a-c)) stop("pprior_lambda() does not work when a-c is an integer.")
-  return( pGB2(q, a=a, c=d, d=c, tau=b*S/(T+b)) )
+  return( pGB2(q, a=a, c=d, d=c, tau=b*S/(T+b), ...) )
 }
 #'
 #' @rdname Prior_lambda

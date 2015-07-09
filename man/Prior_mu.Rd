@@ -56,5 +56,6 @@ with shape parameter \eqn{a} and rate parameter \eqn{b}
 }
 \examples{
 curve(dprior_mu(x, 2, 2), from=0, to=3)
+sprior_mu(2, 2, output="pandoc")
 }
 

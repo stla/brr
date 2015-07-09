@@ -73,3 +73,14 @@ test_that("Check GB2 using simulations", {
   I <- integrate(function(x) dGB2(x, a, c, d, tau), lower=0, upper=1)
   expect_equal(p, I$value, tolerance=1e-5)
 })
+
+test_that("Check dprior_lambda using simulations", {
+  set.seed(666)
+  a <- 2 ; b <- 2 ; c <- 2.5 ; d <- 3 ; S <- T <- 10
+  nsims <- 1e6
+  sims <- rprior_lambda(nsims, a, b, c, d, S, T)
+  summ <- sprior_lambda(a,b,c,d,S,T)
+  expect_equal(mean(sims), summ$mean, tolerance=0.05)
+  expect_equal(sd(sims), summ$sd, tolerance=0.05)
+  expect_equal(pprior_lambda(1, a,b,c,d,S,T), ecdf(sims)(1), tolerance=0.001)
+})
