@@ -14,7 +14,8 @@
 #' @param a,b non-negative shape parameter and rate parameter of the Gamma prior distribution on the rate \eqn{\mu}
 #' @param T sample size of the control group
 #' @param n number of observations to be simulated
-#' @param ... other arguments passed to \code{\link[stats]{NegBinomial}}
+#' @param ... other arguments passed to \code{\link[stats]{NegBinomial}} 
+#' or \code{\link{summary_nbinom}} (for \code{sprior_y})
 #' 
 #' @return \code{dprior_y} gives the density, \code{pprior_y} the distribution function, 
 #' \code{qprior_y} the quantile function, \code{rprior_y} samples from the distribution, 
@@ -24,6 +25,7 @@
 #' 
 #' @examples 
 #' barplot(dprior_y(0:10, 2, 2, 1))
+#' sprior_y(2, 2, 1, output="pandoc")
 #' 
 NULL
 #'
@@ -53,8 +55,8 @@ rprior_y <- function(n, a, b, T){
 #'
 #' @rdname Prior_y
 #' @export 
-sprior_y <- function(a, b, T){
-  return( summary_nbinom(a, b/(b+T)) )
+sprior_y <- function(a, b, T, ...){
+  return( summary_nbinom(a, b/(b+T), ...) )
 }
 
 
@@ -74,6 +76,7 @@ sprior_y <- function(a, b, T){
 #' @param c,d non-negative shape parameters of the prior distribution on \eqn{\phi} 
 #' @param T sample size of the control group
 #' @param n number of observations to be simulated
+#' @param ... passed to \code{\link{summary_PGB2}}
 #' 
 #' @return \code{dprior_x} gives the density, \code{pprior_x} the distribution function, 
 #' \code{qprior_x} the quantile function, \code{rprior_x} samples from the distribution, 
@@ -82,9 +85,8 @@ sprior_y <- function(a, b, T){
 #' @note \code{Prior_x} is a generic name for the functions documented. 
 #' 
 #' @examples 
-#' barplot(dprior_x(0:10, 2, 3, 4, 5, 10))
-#' qprior_x(0.5, 2, 3, 4, 5, 10)
-#' pprior_x(5, 2, 3, 4, 5, 10)
+#' barplot(dprior_x(0:30, 2, 3, 4, 5, 10))
+#' sprior_x(2, 3, 4, 5, 10, output="pandoc")
 #' 
 NULL
 #'
@@ -114,8 +116,8 @@ rprior_x <- function(n, a, b, c, d, T){
 #'
 #' @rdname Prior_x
 #' @export 
-sprior_x <- function(a, b, c, d, T){
-  return( summary_PGB2(a,d,c,b/(b+T)) )
+sprior_x <- function(a, b, c, d, T, ...){
+  return( summary_PGB2(a,d,c,b/(b+T), ...) )
 }
 
 

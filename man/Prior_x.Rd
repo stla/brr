@@ -17,7 +17,7 @@ qprior_x(p, a, b, c, d, T)
 
 rprior_x(n, a, b, c, d, T)
 
-sprior_x(a, b, c, d, T)
+sprior_x(a, b, c, d, T, ...)
 }
 \arguments{
 \item{x,q}{vector of non-negative \strong{integer} quantiles}
@@ -31,6 +31,8 @@ sprior_x(a, b, c, d, T)
 \item{p}{vector of probabilities}
 
 \item{n}{number of observations to be simulated}
+
+\item{...}{passed to \code{\link{summary_PGB2}}}
 }
 \value{
 \code{dprior_x} gives the density, \code{pprior_x} the distribution function,
@@ -61,8 +63,7 @@ and hyperrate parameter \eqn{b/(b+T)}.
 \code{Prior_x} is a generic name for the functions documented.
 }
 \examples{
-barplot(dprior_x(0:10, 2, 3, 4, 5, 10))
-qprior_x(0.5, 2, 3, 4, 5, 10)
-pprior_x(5, 2, 3, 4, 5, 10)
+barplot(dprior_x(0:30, 2, 3, 4, 5, 10))
+sprior_x(2, 3, 4, 5, 10, output="pandoc")
 }
 

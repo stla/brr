@@ -17,7 +17,7 @@ qprior_y(p, a, b, T, ...)
 
 rprior_y(n, a, b, T)
 
-sprior_y(a, b, T)
+sprior_y(a, b, T, ...)
 }
 \arguments{
 \item{y,q}{vector of non-negative \strong{integer} quantiles}
@@ -26,7 +26,8 @@ sprior_y(a, b, T)
 
 \item{T}{sample size of the control group}
 
-\item{...}{other arguments passed to \code{\link[stats]{NegBinomial}}}
+\item{...}{other arguments passed to \code{\link[stats]{NegBinomial}}
+or \code{\link{summary_nbinom}} (for \code{sprior_y})}
 
 \item{p}{vector of probabilities}
 
@@ -63,5 +64,6 @@ the negative binomial distribution with shape \eqn{a} and probability of success
 }
 \examples{
 barplot(dprior_y(0:10, 2, 2, 1))
+sprior_y(2, 2, 1, output="pandoc")
 }
 
