@@ -150,11 +150,7 @@ sprior_x <- function(a, b, c, d, T, ...){
 #' 
 #' @examples 
 #' barplot(dprior_x_given_y(0:10, 5, 3, 10, 20))
-#' dprior_x_given_y(5, 0:5, 3, 10, 20) 
-#' a <- 3; b <- 1; c <- 10; d <- 20
-#' T <- 2
-#' dprior_x(x=5, a=a, b=b, c=c, d=d, T=T)
-#' sum(dprior_x_given_y(x=5, y=0:100, a, c, d)*dprior_y(0:100, a, b, T))
+#' sprior_x_given_y(5, 3, 10, 20, output="pandoc") 
 NULL
 #'
 #' @rdname Prior_x_given_y
