@@ -37,8 +37,10 @@ intrinsic_discrepancy <- function(phi0, mu, phi, S, T){
 #' @param a,b,c,d Prior parameters
 #' @param S,T sample sizes
 #' @param x,y Observed counts
+#' @param phi0 the proxy value of \code{phi}
 #' @param conf credibility level
-#' @param hypothesis "less" for H1: \code{phi0 < phi.star}, 
+#' @param phi.star the hypothesized value of \code{phi} 
+#' @param alternative alternative hypothesis, "less" for H1: \code{phi0 < phi.star}, 
 #' "greater" for  H1: \code{phi0 > phi.star} 
 #' @param parameter parameter of interest: relative risk \code{"phi"} or vaccine efficacy \code{"VE"}
 #' @param subd number of subdividisions passed to the \code{\link{integrate}} function 
@@ -49,7 +51,7 @@ intrinsic_discrepancy <- function(phi0, mu, phi, S, T){
 #' \code{intrinsic_bounds} returns the intrinsic credibility interval. 
 #' 
 #' @examples
-#'  a<-0.5; b<-0; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20
+#' a<-0.5; b<-0; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20
 #' intrinsic_phi0(0.5, x, y, S, T, a, b, c, d)
 #' intrinsic_estimate(x, y, S, T, a, b, c, d)
 #' bounds <- intrinsic_bounds(x, y, S, T, a, b, c, d, conf=0.95); bounds
@@ -57,7 +59,7 @@ intrinsic_discrepancy <- function(phi0, mu, phi, S, T){
 NULL
 #'
 #' @rdname IntrinsicInference
-#'@export
+#' @export
 intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, subd=1000, tol=1e-6){
   post.c <- x+c
   post.d <- y+a+d

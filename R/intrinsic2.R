@@ -26,8 +26,10 @@ return( a/b*(T+b)*(N+ifelse(bphi<.Machine$double.eps^5, 0, bphi*(N+log(bphi/bphi
 #' @param a,b,c,d Prior parameters
 #' @param S,T sample sizes
 #' @param x,y Observed counts
+#' @param phi0 the proxy value of \code{phi}
 #' @param conf credibility level
-#' @param hypothesis "less" for H1: \code{phi0 < phi.star}, 
+#' @param phi.star the hypothesized value of \code{phi} 
+#' @param alternative alternative hypothesis, "less" for H1: \code{phi0 < phi.star}, 
 #' "greater" for  H1: \code{phi0 > phi.star} 
 #' @param parameter parameter of interest: relative risk \code{"phi"} or vaccine efficacy \code{"VE"}
 #' @param subd number of subdividisions passed to the \code{\link{integrate}} function 

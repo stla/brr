@@ -21,6 +21,8 @@ intrinsic_bounds(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
   conf = 0.95, parameter = "phi", subd = 1000, tol = 1e-08)
 }
 \arguments{
+\item{phi0}{the proxy value of \code{phi}}
+
 \item{x,y}{Observed counts}
 
 \item{S,T}{sample sizes}
@@ -29,12 +31,14 @@ intrinsic_bounds(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
 
 \item{subd}{number of subdividisions passed to the \code{\link{integrate}} function}
 
+\item{phi.star}{the hypothesized value of \code{phi}}
+
+\item{alternative}{alternative hypothesis, "less" for H1: \code{phi0 < phi.star},
+"greater" for  H1: \code{phi0 > phi.star}}
+
 \item{conf}{credibility level}
 
 \item{parameter}{parameter of interest: relative risk \code{"phi"} or vaccine efficacy \code{"VE"}}
-
-\item{hypothesis}{"less" for H1: \code{phi0 < phi.star},
-"greater" for  H1: \code{phi0 > phi.star}}
 }
 \value{
 \code{intrinsic_phi0} returns the posterior expected loss,
