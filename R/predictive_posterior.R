@@ -5,7 +5,7 @@
 #' @description Density, distribution function, quantile function and random 
 #' generation for the posterior predictive distribution of the count in the treated group.
 #' @details The posterior predictive distribution of the count in the treated group is a  
-#' \code{\link[=GammaInverseBetaDist]{Gamma-Inverse Beta distribution}}.
+#' \code{\link[=PGIBDist]{Poisson-Gamma-Inverse Beta distribution}}.
 #' 
 #' @param xnew,q vector of non-negative \strong{integer} quantiles 
 #' @param x,y counts (integer) in the treated group and control group of the observed experiment
@@ -83,7 +83,7 @@ spost_x <- function(Snew, a=0.5, c=0.5, d=0, x, y, S, ...){
 #' @description Density, distribution function, quantile function and random 
 #' generation for the posterior predictive distribution of the count in the control group.
 #' @details The posterior predictive distribution of the count in the treated group is a  
-#' \code{\link[=GammaInverseBetaDist]{Gamma-Inverse Beta distribution}}.
+#' \code{\link[=PGIBDist]{Poisson-Gamma-Inverse Beta distribution}}.
 #' 
 #' @param ynew,q vector of non-negative \strong{integer} quantiles 
 #' @param x,y counts (integer) in the treated group and control group of the observed experiment

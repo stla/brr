@@ -58,7 +58,7 @@ generation for the posterior predictive distribution of the count in the control
 }
 \details{
 The posterior predictive distribution of the count in the treated group is a
-\code{\link[=GammaInverseBetaDist]{Gamma-Inverse Beta distribution}}.
+\code{\link[=PGIBDist]{Poisson-Gamma-Inverse Beta distribution}}.
 }
 \note{
 \code{Post_y} is a generic name for the functions documented.

@@ -72,6 +72,7 @@ summary_nbinom <- function(size, prob, output="list", ...){
 #' @param c,d non-negative shape parameters
 #' @param scale non-negative scale parameter
 #' @param n number of observations to be simulated
+#' @param log logical; if true, returns the logarithm of the result
 #' @param output type of the \code{summary_beta2} output: \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param ... other arguments passed to \code{\link{FDist}}
 #' 
@@ -481,7 +482,7 @@ summary_GB2 <- function(a, c, d, tau, output="list", ...){
 #' @note \code{PGB2Dist} is a generic name for the functions documented. 
 #' 
 #' @examples
-#' a <- 2 ; c <- 5 ; d <- 30
+#' a <- 2 ; c <- 5 ; d <- 30; tau <- 2
 #' barplot(dPGB2(0:40, a, c, d, tau), names=0:40)
 #' summary_PGB2(a,c,d,tau, output="pandoc")
 NULL

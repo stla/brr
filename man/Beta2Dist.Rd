@@ -26,6 +26,8 @@ summary_beta2(c, d, scale, output = "list", ...)
 
 \item{scale}{non-negative scale parameter}
 
+\item{log}{logical; if true, returns the logarithm of the result}
+
 \item{...}{other arguments passed to \code{\link{FDist}}}
 
 \item{p}{vector of probabilities}
