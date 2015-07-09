@@ -59,7 +59,7 @@ given \eqn{y}.
 }
 \details{
 The prior predictive distribution of the count \eqn{x} is the
-\code{\link[=BetaNegativeBinomialDist]{Beta-negative binomial distribution}}
+\code{\link[=BNBDist]{Beta-negative binomial distribution}}
 with shape parameters \eqn{a+y}, \eqn{d}, \eqn{c}.
 }
 \note{

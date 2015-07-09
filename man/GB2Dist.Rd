@@ -45,8 +45,7 @@ summary_GB2(a, c, d, tau, output = "list", ...)
 of the distribution.
 }
 \description{
-Density and random generation
-for the  Gamma-Beta2 distribution
+Density and random generation for the  Gamma-Beta2 distribution
 with shape parameters \code{a}, \code{c}, \code{d}
 and rate parameter \code{tau} (scale of the Beta2 distribution).
 
@@ -66,23 +65,19 @@ from the \link[=Beta2Dist]{Beta2 distribution} with shape parameters \eqn{c}, \e
 and scale \eqn{\tau} and
 then sampling a value  from the Gamma distribution with
 shape \eqn{a} and rate \eqn{y}.
-The pdf  involves
+The pdf involves
 the Kummer confluent hypergeometric function of the second kind.
 The cdf involves the generalized hypergeometric function. Its current implementation
-does not work when \code{a-d} is an integer, and fails for many other cases.
+does not work when \code{a-d} is an integer, and also fails for many other cases.
 }
 \note{
 \code{GB2Dist} is a generic name for the functions documented.
 }
 \examples{
-a <- 2 ; c <- 4 ; d <- 3
-tau <- 20/12
-nsims <- 1e6
-sims <- rGB2(nsims, a, c, d, tau)
-length(sims[sims<=1])/nsims
-integrate(function(x) dGB2(x, a, c, d, tau), lower=0, upper=1)
-pGB2(1, a, c, d-1e-5, tau)
+a <- 2 ; c <- 4 ; d <- 3; tau <- 1.67
+sims <- rGB2(1e6, a, c, d, tau)
 mean(sims); moment_GB2(1,a,c,d,tau)
 mean(sims^2); moment_GB2(2,a,c,d,tau)
+summary_GB2(a,c,d,tau)
 }
 

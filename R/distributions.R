@@ -29,23 +29,23 @@ summary_gamma <- function(a, b, output="list", ...){
 #' Summary of a Negative Binomial distribution
 #' 
 #' Mode, mean, variance, and quartiles for a Negative Binomial distribution 
-#' with shape parameter \code{a} and probability parameter \code{p}.
+#' with shape parameter \code{size} and probability parameter \code{prob}.
 #'
-#' @param a,p parameters of the negative binomial distribution
+#' @param size,prob parameters of the negative binomial distribution (as for \code{\link[stats]{NegBinomial}})
 #' @param output \code{"list"} to return a list, \code{"pandoc"} to print a table
 #' @param ... arguments passed to \code{\link[=pander]{pander.data.frame}}
 #'
 #' @examples
-#' summary_nbinom(a=2, p=0.4, output="pandoc", style="rmarkdown")
+#' summary_nbinom(size=2, prob=0.4, output="pandoc", style="rmarkdown")
 #' @importFrom pander pander
 #' @export
-summary_nbinom <- function(a, p, output="list", ...){
-  out <- list(mode=ifelse(a>1, floor((1-p)*(a-1)/p), 0),  
-              mean=a*(1-p)/p,  
-              sd=sqrt(a*(1-p))/p,  
-              Q1=qnbinom(0.25, a, p),
-              Q2=qnbinom(0.5, a, p),
-              Q3=qnbinom(0.75, a, p)
+summary_nbinom <- function(size, prob, output="list", ...){
+  out <- list(mode=ifelse(size>1, floor((1-prob)*(size-1)/prob), 0),  
+              mean=size*(1-prob)/prob,  
+              sd=sqrt(size*(1-prob))/prob,  
+              Q1=qnbinom(0.25, size, prob),
+              Q2=qnbinom(0.5, size, prob),
+              Q3=qnbinom(0.75, size, prob)
   )
   if(output=="pandoc"){
     pander(data.frame(out), ...)
@@ -66,8 +66,6 @@ summary_nbinom <- function(a, p, output="list", ...){
 #' \eqn{c>0} and \eqn{d>0} and scale parameter \eqn{k>0} is the distribution of 
 #' \eqn{k*(U/(1-U))} where \eqn{U} is a random variable following the Beta distribution 
 #' with shape parameters  \eqn{c} and \eqn{d}. 
-#' \cr
-#' It is also the distribution of 
 #' 
 #' @param x,q vector of quantiles 
 #' @param p vector of probabilities
@@ -87,7 +85,7 @@ summary_nbinom <- function(a, p, output="list", ...){
 #' curve(dbeta2(x, 3, 10, scale=2), from=0, to=3)
 #' u <- rbeta(1e5, 3, 10)
 #' lines(density(2*u/(1-u)), col="blue", lty="dashed")
-#' summary_beta2(3,2,10)
+#' summary_beta2(3,10,2)
 #' 
 NULL
 #'
@@ -162,12 +160,8 @@ summary_beta2 <- function(c, d, scale, output="list", ...){
 #' @importFrom gsl lnpoch lngamma hyperg_U
 #' @importFrom pander pander
 #' @examples
-#' curve(dGIB(x,3,4,2,2.5), from=0, to=3)
-#' sims <- rgamma(100000, 3, 2.5/rbeta(100000,2,4))
-#' lines(density(sims, from=0), col="red")
-#' lines(density(rGIB(100000, 3, 4, 2, 2.5), from=0), col="green")
-#' mean(sims); var(sims)
-#' summary_GIB(3,4,2,2.5,output="pandoc")
+#' curve(dGIB(x, 3, 4, 2, 2.5), from=0, to=3)
+#' summary_GIB(3, 4, 2, 2.5, output="pandoc", style="grid")
 #' 
 NULL
 #'
@@ -198,8 +192,8 @@ summary_GIB <- function(a, alpha, beta, rho, output="list", ...){
 }
 
 
-#' @name PoissonGIBDist 
-#' @rdname PoissonGIBDist
+#' @name PGIBDist 
+#' @rdname PGIBDist
 #' @title Poisson-Gamma-Inverse Beta distribution
 #' @description Density and random  generation for the Poisson-Gamma-Inverse Beta distribution 
 #' with shape parameters \code{a}, \code{c}, \code{d} and scale parameter \code{rho}. 
@@ -219,48 +213,43 @@ summary_GIB <- function(a, alpha, beta, rho, output="list", ...){
 #' @return \code{dPGIB} gives the density, \code{rPGIB} samples from the distribution, 
 #' and \code{summary_PGIB} gives a summary of the distribution.
 #' 
-#' @note \code{PoissonGIBDist} is a generic name for the functions documented. 
+#' @note \code{PGIBDist} is a generic name for the functions documented. 
 #' 
 #' @importFrom gsl lnpoch lngamma lnfact
 #' @importFrom pander pander
 #' @examples
-#' barplot(dPGIB(0:5, a=13, alpha=4, beta=2, rho=2.5))
+#' barplot(dPGIB(0:5, a=13, alpha=4, beta=2, rho=2.5), names=0:5)
 #' summary_PGIB(13, 4, 2, 2.5)
-#'  # !!!! code_vD : alpha beta inversés et rho 1/rho
-#'  # => j'échange alpha beta dans dGIB (conséquence dpost_lambda/mu différence avec code_vD)
-#'  # => ainsi PGIB cohérent avec papier hyperscaled poisson
-#'  # => et j'échange rho 1/rho dans dPGIB => différence avec code_vD dans dpost_x/y
 NULL
 #'
-#' @rdname PoissonGIBDist
+#' @rdname PGIBDist
 #' @export
 dPGIB <- function(x,a,alpha,beta,rho){
-  ccpoch <- exp(lnpoch(a,x)+lnpoch(beta,x)-lnpoch(alpha+beta,x)-lnfact(x))
-  ccpoch*1/rho^x*
-    Gauss2F1(beta+x, a+x, alpha+beta+x, -1/rho)
+    exp(lnpoch(a,x)+lnpoch(beta,x)-lnpoch(alpha+beta,x)-lnfact(x)-x*log(rho))*
+      Gauss2F1(beta+x, a+x, alpha+beta+x, -1/rho)
 }
 #'
-#' @rdname PoissonGIBDist
+#' @rdname PGIBDist
 #' @export
 pPGIB <- function(q, a, alpha, beta, rho){
   return( vapply(q, FUN=function(x) sum(dPGIB(0:x, a, alpha, beta, rho)), 
                  FUN.VALUE=numeric(1)) )
 }
 #'
-#' @rdname PoissonGIBDist
+#' @rdname PGIBDist
 #' @export
 qPGIB <- function(p, a, alpha, beta, rho){
   return( vapply(p, FUN=function(x) icdf(dPGIB, x, a=a, alpha=alpha, beta=beta, rho=rho),
                  FUN.VALUE=numeric(1)) )
 }
 #'
-#' @rdname PoissonGIBDist
+#' @rdname PGIBDist
 #' @export
 rPGIB <- function(n, a, alpha, beta, rho){
   return( rpois(n, rGIB(n, a, alpha, beta, rho)) )
 }
 #'
-#' @rdname PoissonGIBDist
+#' @rdname PGIBDist
 #' @export
 summary_PGIB <- function(a, alpha, beta, rho, output="list", ...){
   out <- list(mean=a*beta/(alpha+beta)/rho,
@@ -277,8 +266,8 @@ summary_PGIB <- function(a, alpha, beta, rho, output="list", ...){
   }
 }
 
-#' @name BetaNegativeBinomialDist
-#' @rdname BetaNegativeBinomialDist
+#' @name BNBDist
+#' @rdname BNBDist
 #' @title Beta-negative binomial distribution
 #' @description Density, cumulative function, quantile function and random generation 
 #' for the  Beta-negative binomial distribution 
@@ -302,49 +291,47 @@ summary_PGIB <- function(a, alpha, beta, rho, output="list", ...){
 #' \code{rbeta_nbinom} samples from the distribution, 
 #' \code{sbeta_nbinom} and \code{summary_beta_nbinom} give some summaries of the distribution.
 #' 
-#' @note \code{BetaNegativeBinomialDist} is a generic name for the functions documented. 
+#' @note \code{BNBDist} is a generic name for the functions documented. 
 #' 
 #' @importFrom SuppDists dghyper pghyper qghyper rghyper sghyper
 #' @importFrom pander pander
 #' @examples
 #' a <- 2 ; c <- 5 ; d <- 30
-#' nsims <- 1e6
-#' sims <- rbeta2(nsims, c, d, scale=1) %>% rgamma(nsims, a, .) %>% rpois(nsims, .)
-#' length(sims[sims<=12])/nsims
-#' pbeta_nbinom(12, a, c, d)
+#' barplot(dbeta_nbinom(0:50, a, c, d), names=0:50)
+#' summary_beta_nbinom(a, c, d)
 NULL
 #'
-#' @rdname BetaNegativeBinomialDist
+#' @rdname BNBDist
 #' @export
 dbeta_nbinom <- function(x, a, c, d, ...){
   dghyper(x, -d, -a, c-1, ...)
 }
 #
-#' @rdname BetaNegativeBinomialDist
+#' @rdname BNBDist
 #' @export
 pbeta_nbinom <- function(q, a, c, d, ...){
   pghyper(q, -d, -a, c-1, ...)
 }
 #'
-#' @rdname BetaNegativeBinomialDist
+#' @rdname BNBDist
 #' @export 
 qbeta_nbinom <- function(p, a, c, d, ...){
   qghyper(p, -d, -a, c-1, ...)
 }
 #'
-#' @rdname BetaNegativeBinomialDist
+#' @rdname BNBDist
 #' @export 
 rbeta_nbinom <- function(n, a, c, d){
   rghyper(n, -d, -a, c-1)
 }
 #'
-#' @rdname BetaNegativeBinomialDist
+#' @rdname BNBDist
 #' @export 
 sbeta_nbinom <- function(a, c, d){
   sghyper(-d, -a, c-1)
 }
 #'
-#' @rdname BetaNegativeBinomialDist
+#' @rdname BNBDist
 #' @export 
 summary_beta_nbinom <- function(a, c, d, output="list", ...){
   out <- c(with(sghyper(-d, -a, c-1), 
@@ -369,8 +356,7 @@ summary_beta_nbinom <- function(a, c, d, output="list", ...){
 #' @name GB2Dist
 #' @rdname GB2Dist
 #' @title Gamma-Beta2 distribution
-#' @description Density and random generation 
-#' for the  Gamma-Beta2 distribution
+#' @description Density and random generation for the  Gamma-Beta2 distribution
 #' with shape parameters \code{a}, \code{c}, \code{d} 
 #' and rate parameter \code{tau} (scale of the Beta2 distribution). 
 #' @details This is the mixture distribution obtained by sampling a value \eqn{y} 
@@ -378,10 +364,10 @@ summary_beta_nbinom <- function(a, c, d, output="list", ...){
 #' and scale \eqn{\tau} and 
 #' then sampling a value  from the Gamma distribution with 
 #' shape \eqn{a} and rate \eqn{y}.
-#' The pdf  involves 
+#' The pdf involves 
 #' the Kummer confluent hypergeometric function of the second kind. 
 #' The cdf involves the generalized hypergeometric function. Its current implementation 
-#' does not work when \code{a-d} is an integer, and fails for many other cases.
+#' does not work when \code{a-d} is an integer, and also fails for many other cases.
 #' 
 #' @param x,q vector of non-negative quantiles
 #' @param p vector of probabilities
@@ -402,15 +388,11 @@ summary_beta_nbinom <- function(a, c, d, output="list", ...){
 #' @importFrom pander pander
 #' 
 #' @examples
-#' a <- 2 ; c <- 4 ; d <- 3
-#' tau <- 20/12
-#' nsims <- 1e6
-#' sims <- rGB2(nsims, a, c, d, tau)
-#' length(sims[sims<=1])/nsims
-#' integrate(function(x) dGB2(x, a, c, d, tau), lower=0, upper=1)
-#' pGB2(1, a, c, d-1e-5, tau)
+#' a <- 2 ; c <- 4 ; d <- 3; tau <- 1.67
+#' sims <- rGB2(1e6, a, c, d, tau)
 #' mean(sims); moment_GB2(1,a,c,d,tau)
 #' mean(sims^2); moment_GB2(2,a,c,d,tau)
+#' summary_GB2(a,c,d,tau)
 NULL
 #'
 #' @rdname GB2Dist
@@ -477,7 +459,7 @@ summary_GB2 <- function(a, c, d, tau, output="list", ...){
 #' for the  Poisson-Gamma-Beta2 distribution
 #' with shape parameters \code{a}, \code{c}, \code{d} 
 #' and hyperrate parameter \code{tau} (scale of the Beta2 distribution). 
-#' For \code{tau=1} this is the same as the \link[=BetaNegativeBinomialDist]{Beta-negative binomial distribution}.
+#' For \code{tau=1} this is the same as the \link[=BNBDist]{Beta-negative binomial distribution}.
 #' @details This is the mixture distribution obtained by sampling a value \eqn{y} 
 #' from the \link[=Beta2Dist]{Beta2 distribution} with shape parameters \eqn{c}, \eqn{d}, 
 #' and scale \eqn{\tau},   
@@ -500,12 +482,8 @@ summary_GB2 <- function(a, c, d, tau, output="list", ...){
 #' 
 #' @examples
 #' a <- 2 ; c <- 5 ; d <- 30
-#' all(dPGB2(0:10, a, c, d, tau=1)==dbeta_nbinom(0:10, a, c, d))
-#' tau <- 2
-#' nsims <- 1e6
-#' sims <- rbeta2(nsims, c, d, scale=tau) %>% rgamma(nsims, a, .) %>% rpois(nsims, .)
-#' length(sims[sims<=12])/nsims
-#' sum(dPGB2(0:12, a, c, d, tau))
+#' barplot(dPGB2(0:40, a, c, d, tau), names=0:40)
+#' summary_PGB2(a,c,d,tau, output="pandoc")
 NULL
 #'
 #' @rdname PGB2Dist

@@ -127,7 +127,7 @@ sprior_x <- function(a, b, c, d, T){
 #' generation for the conditional prior predictive distribution of \eqn{x} 
 #' given \eqn{y}. 
 #' @details The prior predictive distribution of the count \eqn{x} is the 
-#' \code{\link[=BetaNegativeBinomialDist]{Beta-negative binomial distribution}} 
+#' \code{\link[=BNBDist]{Beta-negative binomial distribution}} 
 #' with shape parameters \eqn{a+y}, \eqn{d}, \eqn{c}.
 #' 
 #' @param x,q vector of non-negative \strong{integer} quantiles 

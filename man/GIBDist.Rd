@@ -51,11 +51,7 @@ and then sampling a Gamma distribution with shape \eqn{a} and rate \eqn{\rho/b}.
 \code{GIBDist} is a generic name for the functions documented.
 }
 \examples{
-curve(dGIB(x,3,4,2,2.5), from=0, to=3)
-sims <- rgamma(100000, 3, 2.5/rbeta(100000,2,4))
-lines(density(sims, from=0), col="red")
-lines(density(rGIB(100000, 3, 4, 2, 2.5), from=0), col="green")
-mean(sims); var(sims)
-summary_GIB(3,4,2,2.5,output="pandoc")
+curve(dGIB(x, 3, 4, 2, 2.5), from=0, to=3)
+summary_GIB(3, 4, 2, 2.5, output="pandoc", style="grid")
 }
 

@@ -42,7 +42,7 @@ Density and random generation
 for the  Poisson-Gamma-Beta2 distribution
 with shape parameters \code{a}, \code{c}, \code{d}
 and hyperrate parameter \code{tau} (scale of the Beta2 distribution).
-For \code{tau=1} this is the same as the \link[=BetaNegativeBinomialDist]{Beta-negative binomial distribution}.
+For \code{tau=1} this is the same as the \link[=BNBDist]{Beta-negative binomial distribution}.
 
 
 
@@ -65,11 +65,7 @@ then sampling the Poisson distribution with mean \eqn{\lambda}.
 }
 \examples{
 a <- 2 ; c <- 5 ; d <- 30
-all(dPGB2(0:10, a, c, d, tau=1)==dbeta_nbinom(0:10, a, c, d))
-tau <- 2
-nsims <- 1e6
-sims <- rbeta2(nsims, c, d, scale=tau) \%>\% rgamma(nsims, a, .) \%>\% rpois(nsims, .)
-length(sims[sims<=12])/nsims
-sum(dPGB2(0:12, a, c, d, tau))
+barplot(dPGB2(0:40, a, c, d, tau), names=0:40)
+summary_PGB2(a,c,d,tau, output="pandoc")
 }
 

@@ -56,8 +56,6 @@ The Beta distribution of the second kind with shape parameters
 \eqn{c>0} and \eqn{d>0} and scale parameter \eqn{k>0} is the distribution of
 \eqn{k*(U/(1-U))} where \eqn{U} is a random variable following the Beta distribution
 with shape parameters  \eqn{c} and \eqn{d}.
-\cr
-It is also the distribution of
 }
 \note{
 \code{Beta2Dist} is a generic name for the functions documented.
@@ -66,6 +64,6 @@ It is also the distribution of
 curve(dbeta2(x, 3, 10, scale=2), from=0, to=3)
 u <- rbeta(1e5, 3, 10)
 lines(density(2*u/(1-u)), col="blue", lty="dashed")
-summary_beta2(3,2,10)
+summary_beta2(3,10,2)
 }
 
