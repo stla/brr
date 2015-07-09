@@ -1,17 +1,10 @@
-#' Pipe operator
-#' 
-#' Pipe operator from \code{\link{magrittr}}
-#' 
-#' @importFrom magrittr "%>%"
-#' @export
-'%>%' <- magrittr::`%>%`
 
 
 greek_utf8 <- function(letter){ #' Unicode encoding of Greek letters
   if(letter %in% c("mu", "phi", "lambda")){
     return(switch(letter, 
                   mu="\u03BC", #rawToChar(as.raw(c(0xc2, 0xb5))) (micron)
-                  phi=intToUtf8(0x03D5L), #rawToChar(as.raw(c(0xcf, 0x95))), #"\u03d5", 
+                  phi= rawToChar(as.raw(c(0xcf, 0x95))), #"\u03d5", intToUtf8(0x03D5L)
                   lambda="\u03BB"))
   }else{
     return(letter)

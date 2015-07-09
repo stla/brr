@@ -1,18 +1,5 @@
 prior <- function(params){
-  #   # remove NULL components
-  #   params <- as.list(unlist(params))
-  #   if(all(c("a","b","c","d","S","T") %in% names(params))){
-  #     return("informative")
-  #   }else{
-  #     if(!all(c("a","b") %in% names(params))){
-  #       return("non-informative")
-  #     }else{
-  #       if(all(c("a","b") %in% names(params))){
-  #         return("semi-informative")
-  #       }
-  #     }
-  #   }
-  params <- as.list(unlist(params))
+  params <- as.list(unlist(params)) # remove NULL components
   for(i in seq_along(params)) assign(names(params)[i], params[[i]])
   if((all(c("a","b","c","d") %in% names(params))) && all(c(a,b,c,d)>0)){
     return("informative")
@@ -26,8 +13,8 @@ prior <- function(params){
 }
 
 #' @importFrom stringr str_detect
+#' @importFrom magrittr "%>%"
 brr_generic <- function(fun, model, parameter, ...){
-  # virer les NULL mais mettre les valeurs pour posterior => mettre ça en attribut de prior()
   if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
   fun_ <- sprintf("%s_%s", fun, parameter)
   if(! fun_ %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun_))
@@ -112,17 +99,8 @@ Brr <- function(...){
     if(length(list(...))==0){
       return(parameters)
     }else{
-#       P <- list(...)
-#       return(function(...){
-#         if(length(list(...))==0){
-#           return(c(parameters, do.call(Brr,P)()))
-#         }else{
-#           return(c(parameters, Brr(...)()))
-#         }
-#       })
-    #return(do.call(Brr, c(list(...), parameters))) # pb error message : "Erreur dans function()" au lieu de "Erreur dans Brr"
     parameters <- c(list(...), parameters[!names(parameters) %in% names(list(...))])
-    return( eval(parse(
+    return( eval(parse( # using do.call: "Erreur dans function()" instead of "Erreur dans Brr"
       text=sprintf("Brr(%s)", paste(sprintf("%s=%s", names(parameters), sapply(parameters, function(x) if(is.null(x)) "NULL" else as.character(x))), collapse=",")))) )
     }
   }
@@ -341,6 +319,7 @@ spost <- function(model, parameter, ...){
 #' model <- model(Snew=10, Tnew=10)
 #' plot(model, dpost(x))
 #' @importFrom stringr str_sub
+#' @importFrom magrittr "%>%"
 #' @export
 plot.brr <- function(model, what="summary", bounds=NULL, ...){ 
   params <- model()
@@ -481,6 +460,7 @@ plot.brr <- function(model, what="summary", bounds=NULL, ...){
 #' predict(model)
 #' 
 #' @importFrom pander pandoc.table.return
+#' @importFrom magrittr "%>%"
 NULL
 
 #' @rdname inference_brr
@@ -510,14 +490,7 @@ print.confint.brr <- function(x, style="grid"){
   table <- data.frame(t(vapply(x, function(x) x, numeric(2))))
   table <- cbind(interval=rownames(table), table)
   rownames(table) <- NULL
-  #dimnames(table) <- setNames(dimnames(table), c("interval", ""))
   cat(pandoc.table.return(table, style=style))
-#   for(i in seq_along(x)){
-#     cat(names(x)[i], ": ")
-#     #attr(x[[i]], "caption") <- names(x)[i]
-#     cat(pandoc.table.return(x[[i]], style=style))
-#     cat("\n")
-#   }
 }
 #'
 #' @rdname inference_brr
