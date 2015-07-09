@@ -76,7 +76,6 @@ spost_x <- function(Snew, a=0.5, c=0.5, d=0, x, y, S, ...){
 }
 
 
-
 #' @name Post_y 
 #' @rdname Post_y
 #' @title Posterior predictive distribution of the count in the control group
@@ -103,8 +102,7 @@ spost_x <- function(Snew, a=0.5, c=0.5, d=0, x, y, S, ...){
 #' 
 #' @examples 
 #' barplot(dpost_y(0:10, 10, 2, 7, 3, 4, 5, 3, 10))
-#' qpost_y(0.5, 10, 2, 7, 3, 4, 5, 3, 10)
-#' ppost_y(2:3, 10, 2, 7, 3, 4, 5, 3, 10)
+#' spost_y(10, 2, 7, 3, 4, 5, 3, 10, output="pandoc")
 #' 
 NULL
 #'
