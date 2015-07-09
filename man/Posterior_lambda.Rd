@@ -24,7 +24,7 @@ spost_lambda(a, c, d, S, x, y, ...)
 
 \item{x,y}{counts in the treated group and control group}
 
-\item{...}{other arguments passed to \code{\link{dGIB}}}
+\item{...}{other arguments passed to \code{\link{GIBDist}}}
 
 \item{n}{number of observations to be simulated}
 }
@@ -52,6 +52,6 @@ the Kummer confluent hypergeometric function of the second kind.
 }
 \examples{
 curve(dpost_lambda(x, 2, 2, 2, 20, 1, 10), from=0, to=0.4)
-spost_lambda( 2, 2, 2, 20, 1, 10)
+spost_lambda(2, 2, 2, 20, 1, 10)
 }
 

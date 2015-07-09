@@ -57,8 +57,6 @@ Look at the vignettes:
 browseVignettes(package = "brr")
 ```
 
-There is only one available vignette for the moment. A companion paper is under progress.
-
 ### Find a bug ? Suggestion for improvment ?
 
 Please report at https://github.com/stla/brr/issues

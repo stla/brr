@@ -24,7 +24,7 @@ spost_mu(a, b, c, d, T, x, y, ...)
 
 \item{x,y}{counts in the treated group and control group}
 
-\item{...}{other arguments passed to \code{\link{dGIB}}}
+\item{...}{other arguments passed to \code{\link{GIBDist}}}
 
 \item{n}{number of observations to be simulated}
 }
@@ -52,7 +52,6 @@ the Kummer confluent hypergeometric function of the second kind.
 }
 \examples{
 curve(dpost_mu(x, 2, 2, 2, 2, 10, 3, 8), from=0, to=2)
-lines(density(rpost_mu(1e6, 2, 2, 2, 2, 10, 3, 8)), col="red", lty="dashed")
 spost_mu(2, 2, 2, 2, 10, 3, 8, output="pandoc")
 }
 
