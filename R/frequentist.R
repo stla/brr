@@ -1,4 +1,4 @@
-#' @name Frequentist Inference
+#' @name FrequentistInference
 #' @rdname frequentist 
 #' 
 #' @title Frequentist inference about the relative risk

@@ -65,7 +65,6 @@ The posterior predictive distribution of the count in the treated group is a
 }
 \examples{
 barplot(dpost_y(0:10, 10, 2, 7, 3, 4, 5, 3, 10))
-qpost_y(0.5, 10, 2, 7, 3, 4, 5, 3, 10)
-ppost_y(2:3, 10, 2, 7, 3, 4, 5, 3, 10)
+spost_y(10, 2, 7, 3, 4, 5, 3, 10, output="pandoc")
 }
 
