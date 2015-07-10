@@ -159,7 +159,7 @@ print.summary.brr <- function(x, table.style="grid"){
     cat(pandoc.table.return(data.frame(summary$prior_mu), style=table.style))
     #cat(pander(data.frame(summary$prior_mu), style=table.style))
   }else{
-    cat("\n  Non-informative prior")
+    cat("  Non-informative prior\n\n")
   }
   #cat("\n")
   cat(sprintf("*Prior distribution on %s*:", greek_utf8("phi")))
