@@ -16,8 +16,6 @@ Imports: gsl,
     pander,
     stringr
 Suggests: testthat,
-    knitr,
     R.rsp
-VignetteBuilder: knitr,
-    R.rsp
+VignetteBuilder: R.rsp
 Encoding: UTF-8

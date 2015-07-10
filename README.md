@@ -14,8 +14,6 @@ The `brr` package is still under development. You can install it from `github` u
 devtools::install_github('brr', 'stla', build_vignettes=TRUE)
 ```
 
-You need a recent version of RStudio to get a correct rendering of the vignettes, or you need to have Pandoc installed on your system.
-
 ### Basic usage ###
 
 Create a `brr` object with the `Brr` function to set the prior parameters `a`, `b`, `c`, `d`, the two Poisson counts `x` and `y` and the samples sizes (times at risk) `S` and `T` in the two groups. Simply do not set the prior parameters to use the non-informative prior:
