@@ -9,14 +9,13 @@
 \alias{intrinsic2_phi0_sims}
 \title{Intrinsic inference on the rates ratio based on the second intrinsic discrepancy}
 \usage{
-intrinsic2_phi0(phi0, x, y, S, T, a, b, c = 0.5, d = 0, subd = 1000,
-  tol = 1e-06)
+intrinsic2_phi0(phi0, x, y, S, T, a, b, c = 0.5, d = 0, tol = 1e-08,
+  subd = 1000, ...)
 
 intrinsic2_phi0_sims(phi0, x, y, S, T, a, b, c = 0.5, d = 0,
   nsims = 1e+06)
 
-intrinsic2_estimate(x, y, S, T, a, b, c = 0.5, d = 0, subd = 1000,
-  tol = 1e-08)
+intrinsic2_estimate(x, y, S, T, a, b, c = 0.5, d = 0, otol = 1e-08, ...)
 
 intrinsic2_H0(phi.star, alternative, x, y, S, T, a, b, c = 0.5, d = 0,
   subd = 1000, tol = 1e-08)
@@ -33,9 +32,15 @@ intrinsic2_bounds(x, y, S, T, a, b, c = 0.5, d = 0, conf = 0.95,
 
 \item{a,b,c,d}{Prior parameters}
 
-\item{subd}{number of subdividisions passed to the \code{\link{integrate}} function}
+\item{tol}{accuracy requested}
+
+\item{subd}{number of subdivisions passed to the \code{\link{integrate}} function}
+
+\item{...}{other arguments passed to \code{\link{integrate}}}
 
 \item{nsims}{number of simulations}
+
+\item{otol}{desired accuracy for optimization}
 
 \item{phi.star}{the hypothesized value of \code{phi}}
 
@@ -68,6 +73,7 @@ Intrinsic inference on the rates ratio based on the second intrinsic discrepancy
 \examples{
 a<-2; b<-10; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20
 intrinsic2_phi0(0.5, x, y, S, T, a, b, c, d)
+intrinsic2_phi0_sims(0.5, x, y, S, T, a, b, c, d)
 intrinsic2_estimate(x, y, S, T, a, b, c, d)
 bounds <- intrinsic2_bounds(x, y, S, T, a, b, c, d, conf=0.95); bounds
 ppost_phi(bounds[2], a, b, c, d, S, T,  x, y)- ppost_phi(bounds[1], a, b, c, d, S, T, x, y)

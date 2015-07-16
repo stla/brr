@@ -44,7 +44,10 @@ intrinsic_discrepancy <- function(phi0, mu, phi, S, T){
 #' @param alternative alternative hypothesis, "less" for H1: \code{phi0 < phi.star}, 
 #' "greater" for  H1: \code{phi0 > phi.star} 
 #' @param parameter parameter of interest: relative risk \code{"phi"} or vaccine efficacy \code{"VE"}
-#' @param subd number of subdividisions passed to the \code{\link{integrate}} function 
+#' @param tol accuracy requested
+#' @param subd number of subdivisions passed to the \code{\link{integrate}} function 
+#' @param ... other arguments passed to \code{\link{integrate}}
+#' @param otol desired accuracy for optimization
 #'
 #' @return \code{intrinsic_phi0} returns the posterior expected loss, 
 #' \code{intrinsic_estimate} returns the intrinsic estimate, 
@@ -62,7 +65,7 @@ NULL
 #'
 #' @rdname IntrinsicInference
 #' @export
-intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, subd=1000, tol=1e-6){
+intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, tol=1e-8, subd=1000, ...){
   post.c <- x+c
   post.d <- y+a+d
   post.a <- x+y+a
@@ -85,11 +88,11 @@ intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, subd=1000,
 #                     }
 #                     return(value)
                     f <- function(u) rho(lambda * u/(1-u), phi0, S, T)
-                    range <- beta_integration_range(post.c, post.d+1, f)
+                    range <- beta_integration_range(post.c, post.d+1, f, accuracy=tol)
                     integrande <- function(u){
                       return( f(u)*dbeta(u, post.c, post.d+1) )
                     }
-                    I <- integrate(integrande, range[1], range[2], subdivisions=subd)
+                    I <- integrate(integrande, range[1], range[2], subdivisions=subd, ...)
                     return(I$value)
                   }, FUN.VALUE=numeric(1))
   return( K*value )
@@ -114,12 +117,12 @@ intrinsic_phi0_sims <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, nsims
 #'
 #' @rdname IntrinsicInference
 #' @export
-intrinsic_estimate <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, subd=1000, tol = 1e-08){
+intrinsic_estimate <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, otol = 1e-08, ...){
   post.cost <- function(u0){
     phi0 <- u0/(1-u0)
-    intrinsic_phi0(phi0, x, y, S, T, a, b, c, d, subd)
+    intrinsic_phi0(phi0, x, y, S, T, a, b, c, d, ...)
   }
-  optimize <- optimize(post.cost, c(0, 1), tol=tol)
+  optimize <- optimize(post.cost, c(0, 1), tol=otol)
   u0.min <- optimize$minimum
   estimate <- u0.min/(1-u0.min)
   loss <- optimize$objective

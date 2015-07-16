@@ -33,7 +33,10 @@ return( a/b*(T+b)*(N+ifelse(bphi<.Machine$double.eps^5, 0, bphi*(N+log(bphi/bphi
 #' @param alternative alternative hypothesis, "less" for H1: \code{phi0 < phi.star}, 
 #' "greater" for  H1: \code{phi0 > phi.star} 
 #' @param parameter parameter of interest: relative risk \code{"phi"} or vaccine efficacy \code{"VE"}
-#' @param subd number of subdividisions passed to the \code{\link{integrate}} function 
+#' @param tol accuracy requested
+#' @param subd number of subdivisions passed to the \code{\link{integrate}} function 
+#' @param ... other arguments passed to \code{\link{integrate}}
+#' @param otol desired accuracy for optimization
 #'
 #' @return \code{intrinsic2_phi0} returns the posterior expected loss, 
 #' \code{intrinsic2_estimate} returns the intrinsic estimate, 
@@ -41,8 +44,9 @@ return( a/b*(T+b)*(N+ifelse(bphi<.Machine$double.eps^5, 0, bphi*(N+log(bphi/bphi
 #' \code{intrinsic2_bounds} returns the intrinsic credibility interval. 
 #' 
 #' @examples
-#'  a<-2; b<-10; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20
+#' a<-2; b<-10; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20
 #' intrinsic2_phi0(0.5, x, y, S, T, a, b, c, d)
+#' intrinsic2_phi0_sims(0.5, x, y, S, T, a, b, c, d)
 #' intrinsic2_estimate(x, y, S, T, a, b, c, d)
 #' bounds <- intrinsic2_bounds(x, y, S, T, a, b, c, d, conf=0.95); bounds
 #' ppost_phi(bounds[2], a, b, c, d, S, T,  x, y)- ppost_phi(bounds[1], a, b, c, d, S, T, x, y)
@@ -50,13 +54,13 @@ NULL
 #'
 #' @rdname Intrinsic2Inference
 #' @export
-intrinsic2_phi0 <- function(phi0, x, y,  S, T, a, b, c=0.5, d=0, subd=1000, tol=1e-6){
+intrinsic2_phi0 <- function(phi0, x, y,  S, T, a, b, c=0.5, d=0, tol=1e-8, subd=1000, ...){
   post.c <- x+c
   post.d <- y+a+d
   lambda <- (T+b)/S
   return( vapply(phi0, FUN = function(phi0){ 
     f <- function(u) intrinsic2_discrepancy(phi0, lambda * u/(1-u), a=a, b=b, S=S, T=T)
-    range <- beta_integration_range(post.c, post.d, f)
+    range <- beta_integration_range(post.c, post.d, f, accuracy=tol)
     integrande <- function(u){
       return( f(u)*dbeta(u, post.c, post.d) )
     }
@@ -69,7 +73,7 @@ intrinsic2_phi0 <- function(phi0, x, y,  S, T, a, b, c=0.5, d=0, subd=1000, tol=
 #       M <- qbeta(1-10^i,post.c, post.d)
 #       value <- integrate(integrande, 0, M, subdivisions=subd)$value
 #     }
-    I <- integrate(integrande, range[1], range[2], subdivisions=subd)
+    I <- integrate(integrande, range[1], range[2], subdivisions=subd, ...)
     return(I$value)
   }, FUN.VALUE=numeric(1)) )
 }
@@ -89,12 +93,12 @@ intrinsic2_phi0_sims <- function(phi0, x, y, S, T, a, b, c=0.5, d=0, nsims=1e6){
 #'
 #' @rdname Intrinsic2Inference
 #' @export
-intrinsic2_estimate <- function(x, y, S, T, a, b, c=0.5, d=0, subd=1000, tol = 1e-08){
+intrinsic2_estimate <- function(x, y, S, T, a, b, c=0.5, d=0, otol = 1e-8, ...){
   post.cost <- function(u0){
     phi0 <- u0/(1-u0)
-    intrinsic2_phi0(phi0, x, y, S, T, a, b, c, d, subd)
+    intrinsic2_phi0(phi0, x, y, S, T, a, b, c, d, ...)
   }
-  optimize <- optimize(post.cost, c(0, 1), tol=tol)
+  optimize <- optimize(post.cost, c(0, 1), tol=otol)
   u0.min <- optimize$minimum
   estimate <- u0.min/(1-u0.min)
   loss <- optimize$objective
