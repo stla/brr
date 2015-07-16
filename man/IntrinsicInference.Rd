@@ -10,7 +10,7 @@
 \title{Intrinsic inference on the rates ratio}
 \usage{
 intrinsic_phi0(phi0, x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
-  tol = 1e-08, subd = 1000, ...)
+  tol = 1e-08, ...)
 
 intrinsic_phi0_sims(phi0, x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
   nsims = 1e+06)
@@ -19,10 +19,10 @@ intrinsic_estimate(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
   otol = 1e-08, ...)
 
 intrinsic_H0(phi.star, alternative, x, y, S, T, a = 0.5, b = 0, c = 0.5,
-  d = 0, subd = 10000, tol = 1e-06)
+  d = 0, ...)
 
 intrinsic_bounds(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
-  conf = 0.95, parameter = "phi", subd = 1000, tol = 1e-08)
+  conf = 0.95, parameter = "phi", otol = 1e-08, ...)
 }
 \arguments{
 \item{phi0}{the proxy value of \code{phi}}
@@ -34,8 +34,6 @@ intrinsic_bounds(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
 \item{a,b,c,d}{Prior parameters}
 
 \item{tol}{accuracy requested}
-
-\item{subd}{number of subdivisions passed to the \code{\link{integrate}} function}
 
 \item{...}{other arguments passed to \code{\link{integrate}}}
 
@@ -51,6 +49,8 @@ intrinsic_bounds(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
 \item{conf}{credibility level}
 
 \item{parameter}{parameter of interest: relative risk \code{"phi"} or vaccine efficacy \code{"VE"}}
+
+\item{subd}{number of subdivisions passed to the \code{\link{integrate}} function}
 }
 \value{
 \code{intrinsic_phi0} returns the posterior expected loss,

@@ -65,7 +65,7 @@ NULL
 #'
 #' @rdname IntrinsicInference
 #' @export
-intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, tol=1e-8, subd=1000, ...){
+intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, tol=1e-8, ...){
   post.c <- x+c
   post.d <- y+a+d
   post.a <- x+y+a
@@ -73,26 +73,12 @@ intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, tol=1e-8, 
   K <- post.a*post.d/(post.c+post.d)*T/(T+b)
   value <- vapply(phi0, 
                   FUN = function(phi0){
-#                     integrande <- function(u){
-#                       phi <- lambda * u/(1-u)
-#                       rho(phi, phi0, S, T)*dbeta(u, post.c, post.d+1)
-#                     }
-#                     i <- -3
-#                     old.value <- 0
-#                     value <- Inf
-#                     while(abs(value-old.value)>tol){
-#                       old.value <- value
-#                       i <- i-1
-#                       M <- qbeta(1-10^i,post.c, post.d+1)
-#                       value <- integrate(integrande, 0, M, subdivisions=subd)$value
-#                     }
-#                     return(value)
                     f <- function(u) rho(lambda * u/(1-u), phi0, S, T)
                     range <- beta_integration_range(post.c, post.d+1, f, accuracy=tol)
                     integrande <- function(u){
                       return( f(u)*dbeta(u, post.c, post.d+1) )
                     }
-                    I <- integrate(integrande, range[1], range[2], subdivisions=subd, ...)
+                    I <- integrate(integrande, range[1], range[2], ...)
                     return(I$value)
                   }, FUN.VALUE=numeric(1))
   return( K*value )
@@ -133,7 +119,7 @@ intrinsic_estimate <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, otol = 1e-08,
 #'
 #' @rdname IntrinsicInference
 #'  @export 
-intrinsic_H0 <- function(phi.star, alternative, x, y, S, T, a=0.5, b=0, c=0.5, d=0, subd=10000, tol=1e-6){
+intrinsic_H0 <- function(phi.star, alternative, x, y, S, T, a=0.5, b=0, c=0.5, d=0, ...){
   post.c <- x+c
   post.d <- y+a+d
   post.a <- x+y+a
@@ -146,15 +132,15 @@ intrinsic_H0 <- function(phi.star, alternative, x, y, S, T, a=0.5, b=0, c=0.5, d
   psi.star <- phi.star/lambda
   u.star <- psi.star/(1+psi.star)
   bounds <- switch(alternative, less=c(0,u.star), greater=c(u.star, 1))
-  value <- integrate(integrande, bounds[1], bounds[2], subdivisions=subd, rel.tol=tol)$value
-  K*value
+  value <- integrate(integrande, bounds[1], bounds[2], ...)$value
+  return(K*value)
 }
 #' 
 #' @rdname IntrinsicInference 
 #' @export
-intrinsic_bounds <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, conf=.95, parameter="phi", subd=1000, tol = 1e-08){
+intrinsic_bounds <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, conf=.95, parameter="phi", otol = 1e-08, ...){
   post.cost <- function(phi0){
-    intrinsic_phi0(phi0, x, y, S, T, a, b, c, d, subd=subd)
+    intrinsic_phi0(phi0, x, y, S, T, a, b, c, d, ...)
   }
   post.icdf <- function(p){
     qpost_phi(p, a=a, b=b, c=c, d=d, S=S, T=T, x=x, y=y)
@@ -166,7 +152,7 @@ intrinsic_bounds <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, conf=.95, param
     (post.cost(u.phi)-post.cost(l.phi))^2
   }
   minimize <- optimize(f, c(0, conf), post.icdf = post.icdf, 
-                       conf = conf, tol=tol)$minimum
+                       conf = conf, tol=otol)$minimum
   out <- switch(parameter, 
                 phi=c(post.icdf(minimize), post.icdf(1 - conf + minimize)),
                 VE = sort(1-c(post.icdf(minimize), post.icdf(1 - conf + minimize))))

@@ -12,11 +12,11 @@ test_that("Figure 20 Master", {
   a <- 4; b <- 1000; S <- T <- 5000
   x <- 4; y <- 20
   #seq(0.001, 0.9, by=0.05) %>% {plot(., intrinsic2_phi0(. , x, y, S, T, a, b), type="l")}
-  l1 <- intrinsic2_phi0(0.2 , x, y, S, T, a, b)
-  l2 <- intrinsic2_phi0(0.8 , x, y, S, T, a, b)
+  l1 <- intrinsic2_phi0(0.2 , x, y, S, T, a, b, subdivisions=100)
+  l2 <- intrinsic2_phi0(0.8 , x, y, S, T, a, b, subdivisions=100)
   expect_equal(l1, 0.4374621, tol=1e-6)
   expect_equal(l2, 4.276004, tol=1e-6)
-  estimate <- intrinsic2_estimate(x, y, S, T, a, b)
+  estimate <- intrinsic2_estimate(x, y, S, T, a, b, subdivisions=100)
   expect_equal(estimate, 0.2173689, tolerance=1e-6, check.attributes=FALSE)
   expect_equal(attr(estimate, "loss"), 0.4276275, tolerance=1e-6)
 #   a<-2; b<-10; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20

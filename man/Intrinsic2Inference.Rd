@@ -9,19 +9,17 @@
 \alias{intrinsic2_phi0_sims}
 \title{Intrinsic inference on the rates ratio based on the second intrinsic discrepancy}
 \usage{
-intrinsic2_phi0(phi0, x, y, S, T, a, b, c = 0.5, d = 0, tol = 1e-08,
-  subd = 1000, ...)
+intrinsic2_phi0(phi0, x, y, S, T, a, b, c = 0.5, d = 0, tol = 1e-08, ...)
 
 intrinsic2_phi0_sims(phi0, x, y, S, T, a, b, c = 0.5, d = 0,
   nsims = 1e+06)
 
 intrinsic2_estimate(x, y, S, T, a, b, c = 0.5, d = 0, otol = 1e-08, ...)
 
-intrinsic2_H0(phi.star, alternative, x, y, S, T, a, b, c = 0.5, d = 0,
-  subd = 1000, tol = 1e-08)
+intrinsic2_H0(phi.star, alternative, x, y, S, T, a, b, c = 0.5, d = 0, ...)
 
 intrinsic2_bounds(x, y, S, T, a, b, c = 0.5, d = 0, conf = 0.95,
-  parameter = "phi", subd = 1000, tol = 1e-08)
+  parameter = "phi", otol = 1e-08, ...)
 }
 \arguments{
 \item{phi0}{the proxy value of \code{phi}}
@@ -34,9 +32,7 @@ intrinsic2_bounds(x, y, S, T, a, b, c = 0.5, d = 0, conf = 0.95,
 
 \item{tol}{accuracy requested}
 
-\item{subd}{number of subdivisions passed to the \code{\link{integrate}} function}
-
-\item{...}{other arguments passed to \code{\link{integrate}}}
+\item{...}{arguments passed to \code{\link{integrate}}}
 
 \item{nsims}{number of simulations}
 
