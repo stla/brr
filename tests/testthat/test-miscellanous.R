@@ -1,5 +1,36 @@
 context("Test miscellanous")
 
+test_that("Beta integration range", {
+  f <- function(x) 1/x^.2
+  c <- 0.5; d<- 100
+  range <- brr:::beta_integration_range(c,d,f) 
+  I1 <- integrate(function(x) f(x)*dbeta(x,c,d), lower=0, upper=1)
+  I2 <- integrate(function(x) f(x)*dbeta(x,c,d), lower=0, upper=range[2])
+  expect_equal(I1$value, I2$value, tolerance=1e-5)
+  #
+  g <- function(x) f(1-x)
+  c <- 100; d<- 0.5
+  range <- brr:::beta_integration_range(c,d,g) 
+  I3 = integrate(function(x) g(x)*dbeta(x,c,d), lower=range[1], upper=1)
+  expect_equal(I2$value, I3$value, tolerance=1e-9)  
+  # 
+  c <- 1
+  expect_identical(brr:::beta_integration_range(c,d,f), c(0,1))
+  #
+  c <- 100; d <- 10
+  f <- function(x) dbeta(x, 0.5, 0.5)
+  range <- brr:::beta_integration_range(c,d,f) 
+  I1 <- integrate(function(x) f(x)*dbeta(x,c,d), lower=0, upper=1)
+  I2 <- integrate(function(x) f(x)*dbeta(x,c,d), lower=0, upper=range[2])
+  expect_equal(I1$value, I2$value, tolerance=1e-5)
+  #
+  f <- function(x) dbeta(x, 15, 15)
+  range <- brr:::beta_integration_range(c,d,f) 
+  I1 <- integrate(function(x) f(x)*dbeta(x,c,d), lower=0, upper=1)
+  I2 <- integrate(function(x) f(x)*dbeta(x,c,d), lower=0, upper=range[2])
+  expect_equal(I1$value, I2$value, tolerance=1e-5)  
+})
+
 test_that("dd_moment", {
   set.seed(666)
   tol <- 1e-10

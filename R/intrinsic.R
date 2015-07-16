@@ -92,12 +92,9 @@ intrinsic_phi0_sims <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, nsims
   post.a <- x+y+a
   lambda <- (T+b)/S
   K <-  post.a*post.d/(post.c+post.d)*T/(T+b)
-  sims <- rbeta(nsims, post.c, post.d+1)
+  sims <- rbeta2(nsims, post.c, post.d+1, lambda)
   return( vapply(phi0, FUN = function(phi0){ 
-    g <- function(u){
-      return( brr:::rho(lambda * u/(1-u), phi0, S=S, T=T) )
-    }
-    return(K*mean(g(sims)))
+    return(K*mean(brr:::rho(sims, phi0, S=S, T=T)))
   }, FUN.VALUE=numeric(1)) )
 }
 #'

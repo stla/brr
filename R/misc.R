@@ -91,7 +91,7 @@ beta_integration_range <- function(c, d, f, accuracy=1e-8){
     }
   }
   if(c<=1) return(c(0,ubound)) 
-  if(d<=1) return(rev(1-beta_integration_range(d, c, function(x) f(1-x))))
+  if(d<=1) return(rev(1-beta_integration_range(d, c, function(x) f(1-x), accuracy)))
   #
   i <- -3
   lbound <- qbeta(10^i, c, d)
