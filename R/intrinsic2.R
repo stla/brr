@@ -54,19 +54,22 @@ intrinsic2_phi0 <- function(phi0, x, y,  S, T, a, b, c=0.5, d=0, subd=1000, tol=
   post.d <- y+a+d
   lambda <- (T+b)/S
   return( vapply(phi0, FUN = function(phi0){ 
+    f <- function(u) intrinsic2_discrepancy(phi0, lambda * u/(1-u), a=a, b=b, S=S, T=T)
+    range <- beta_integration_range(post.c, post.d, f)
     integrande <- function(u){
-      return( intrinsic2_discrepancy(phi0, lambda * u/(1-u), a=a, b=b, S=S, T=T)*dbeta(u, post.c, post.d) )
+      return( f(u)*dbeta(u, post.c, post.d) )
     }
-    i <- -3
-    old.value <- 0
-    value <- Inf
-    while(abs(value-old.value)>tol){
-      old.value <- value
-      i <- i-1
-      M <- qbeta(1-10^i,post.c, post.d)
-      value <- integrate(integrande, 0, M, subdivisions=subd)$value
-    }
-    return(value)
+#     i <- -3
+#     old.value <- 0
+#     value <- Inf
+#     while(abs(value-old.value)>tol){
+#       old.value <- value
+#       i <- i-1
+#       M <- qbeta(1-10^i,post.c, post.d)
+#       value <- integrate(integrande, 0, M, subdivisions=subd)$value
+#     }
+    I <- integrate(integrande, range[1], range[2], subdivisions=subd)
+    return(I$value)
   }, FUN.VALUE=numeric(1)) )
 }
 #'

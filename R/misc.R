@@ -68,3 +68,42 @@ dd_moment <- function(pmf, k=1, accuracy=.Machine$double.eps, ...){
  }
  return(m1)
 }
+
+# Integration range for beta expectation of a nonnegative function on (0,1)
+# @param c,d shape parameters
+# f 
+beta_integration_range <- function(c, d, f, accuracy=1e-8){
+  # 
+  if(c<=1 && d<=1) return(c(0,1))
+  if(c>1 && d>1) accuracy <- accuracy/2
+  if(d>1){
+    i <- -3
+    ubound <- qbeta(1-10^i, c, d)
+    if(ubound>.999){
+      ubound <- 1
+    }else{
+      value <- f(ubound)*dbeta(ubound,c,d)
+      while(value>accuracy){
+        i <- i-1
+        ubound <- qbeta(1-10^i, c, d)
+        value <- f(ubound)*dbeta(ubound,c,d)
+      }
+    }
+  }
+  if(c<=1) return(c(0,ubound)) 
+  if(d<=1) return(rev(1-beta_integration_range(d, c, function(x) f(1-x))))
+  #
+  i <- -3
+  lbound <- qbeta(10^i, c, d)
+  if(lbound<0.001){
+    lbound <- 0
+  }else{
+    value <- f(lbound)*dbeta(lbound,c,d)
+    while(value>accuracy){
+      i <- i-1
+      lbound <- qbeta(10^i, c, d)
+      value <- f(lbound)*dbeta(lbound,c,d)
+    }
+    return(c(lbound,ubound))
+  }
+}
