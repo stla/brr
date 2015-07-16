@@ -38,6 +38,7 @@ intrinsic_discrepancy <- function(phi0, mu, phi, S, T){
 #' @param S,T sample sizes
 #' @param x,y Observed counts
 #' @param phi0 the proxy value of \code{phi}
+#' @param nsims number of simulations
 #' @param conf credibility level
 #' @param phi.star the hypothesized value of \code{phi} 
 #' @param alternative alternative hypothesis, "less" for H1: \code{phi0 < phi.star}, 
@@ -53,6 +54,7 @@ intrinsic_discrepancy <- function(phi0, mu, phi, S, T){
 #' @examples
 #' a<-0.5; b<-0; c<-1/2; d<-0; S<-100; T<-S; x<-0; y<-20
 #' intrinsic_phi0(0.5, x, y, S, T, a, b, c, d)
+#' intrinsic_phi0_sims(0.5, x, y, S, T, a, b, c, d)
 #' intrinsic_estimate(x, y, S, T, a, b, c, d)
 #' bounds <- intrinsic_bounds(x, y, S, T, a, b, c, d, conf=0.95); bounds
 #' ppost_phi(bounds[2], a, b, c, d, S, T,  x, y)- ppost_phi(bounds[1], a, b, c, d, S, T, x, y)
@@ -91,6 +93,23 @@ intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, subd=1000,
                     return(I$value)
                   }, FUN.VALUE=numeric(1))
   return( K*value )
+}
+#'
+#'@rdname IntrinsicInference
+#'@export
+intrinsic_phi0_sims <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, nsims=1e6){
+  post.c <- x+c
+  post.d <- y+a+d
+  post.a <- x+y+a
+  lambda <- (T+b)/S
+  K <-  post.a*post.d/(post.c+post.d)*T/(T+b)
+  sims <- rbeta(nsims, post.c, post.d+1)
+  return( vapply(phi0, FUN = function(phi0){ 
+    g <- function(u){
+      return( brr:::rho(lambda * u/(1-u), phi0, S=S, T=T) )
+    }
+    return(K*mean(g(sims)))
+  }, FUN.VALUE=numeric(1)) )
 }
 #'
 #' @rdname IntrinsicInference

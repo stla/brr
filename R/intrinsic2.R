@@ -27,6 +27,7 @@ return( a/b*(T+b)*(N+ifelse(bphi<.Machine$double.eps^5, 0, bphi*(N+log(bphi/bphi
 #' @param S,T sample sizes
 #' @param x,y Observed counts
 #' @param phi0 the proxy value of \code{phi}
+#' @param nsims number of simulations
 #' @param conf credibility level
 #' @param phi.star the hypothesized value of \code{phi} 
 #' @param alternative alternative hypothesis, "less" for H1: \code{phi0 < phi.star}, 
@@ -48,7 +49,7 @@ return( a/b*(T+b)*(N+ifelse(bphi<.Machine$double.eps^5, 0, bphi*(N+log(bphi/bphi
 NULL
 #'
 #' @rdname Intrinsic2Inference
-#'@export
+#' @export
 intrinsic2_phi0 <- function(phi0, x, y,  S, T, a, b, c=0.5, d=0, subd=1000, tol=1e-6){
   post.c <- x+c
   post.d <- y+a+d
@@ -70,6 +71,19 @@ intrinsic2_phi0 <- function(phi0, x, y,  S, T, a, b, c=0.5, d=0, subd=1000, tol=
 #     }
     I <- integrate(integrande, range[1], range[2], subdivisions=subd)
     return(I$value)
+  }, FUN.VALUE=numeric(1)) )
+}
+#'
+#' @rdname Intrinsic2Inference
+#' @export
+intrinsic2_phi0_sims <- function(phi0, x, y, S, T, a, b, c=0.5, d=0, nsims=1e6){
+  post.c <- x+c
+  post.d <- y+a+d
+  lambda <- (T+b)/S
+  sims <- rbeta(nsims, post.c, post.d)
+  return( vapply(phi0, FUN = function(phi0){ 
+    g <- function(u) intrinsic2_discrepancy(phi0, lambda * u/(1-u), a=a, b=b, S=S, T=T)
+    return(mean(g(sims)))
   }, FUN.VALUE=numeric(1)) )
 }
 #'

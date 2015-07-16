@@ -6,10 +6,14 @@
 \alias{intrinsic2_bounds}
 \alias{intrinsic2_estimate}
 \alias{intrinsic2_phi0}
+\alias{intrinsic2_phi0_sims}
 \title{Intrinsic inference on the rates ratio based on the second intrinsic discrepancy}
 \usage{
 intrinsic2_phi0(phi0, x, y, S, T, a, b, c = 0.5, d = 0, subd = 1000,
   tol = 1e-06)
+
+intrinsic2_phi0_sims(phi0, x, y, S, T, a, b, c = 0.5, d = 0,
+  nsims = 1e+06)
 
 intrinsic2_estimate(x, y, S, T, a, b, c = 0.5, d = 0, subd = 1000,
   tol = 1e-08)
@@ -31,6 +35,8 @@ intrinsic2_bounds(x, y, S, T, a, b, c = 0.5, d = 0, conf = 0.95,
 
 \item{subd}{number of subdividisions passed to the \code{\link{integrate}} function}
 
+\item{nsims}{number of simulations}
+
 \item{phi.star}{the hypothesized value of \code{phi}}
 
 \item{alternative}{alternative hypothesis, "less" for H1: \code{phi0 < phi.star},
@@ -48,6 +54,8 @@ intrinsic2_bounds(x, y, S, T, a, b, c = 0.5, d = 0, conf = 0.95,
 }
 \description{
 Intrinsic inference on the rates ratio based on the second intrinsic discrepancy
+
+
 
 
 
