@@ -7,10 +7,10 @@
 \alias{intrinsic_estimate}
 \alias{intrinsic_phi0}
 \alias{intrinsic_phi0_sims}
-\title{Intrinsic inference on the rates ratio}
+\title{Intrinsic inference on the rate ratio.}
 \usage{
 intrinsic_phi0(phi0, x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
-  tol = 1e-08, ...)
+  beta_range = TRUE, tol = 1e-08, ...)
 
 intrinsic_phi0_sims(phi0, x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
   nsims = 1e+06)
@@ -32,6 +32,8 @@ intrinsic_bounds(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
 \item{S,T}{sample sizes}
 
 \item{a,b,c,d}{Prior parameters}
+
+\item{beta_range}{logical, if \code{TRUE} (default), an internal method is used to avoid a possible failure in numerical integration; see the main vignette for details}
 
 \item{tol}{accuracy requested}
 
@@ -59,7 +61,7 @@ intrinsic_bounds(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
 \code{intrinsic_bounds} returns the intrinsic credibility interval.
 }
 \description{
-Intrinsic inference on the rates ratio
+Intrinsic inference on the rate ratio.
 
 
 

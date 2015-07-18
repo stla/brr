@@ -7,9 +7,10 @@
 \alias{intrinsic2_estimate}
 \alias{intrinsic2_phi0}
 \alias{intrinsic2_phi0_sims}
-\title{Intrinsic inference on the rates ratio based on the second intrinsic discrepancy}
+\title{Intrinsic inference on the rates ratio based on the second intrinsic discrepancy.}
 \usage{
-intrinsic2_phi0(phi0, x, y, S, T, a, b, c = 0.5, d = 0, tol = 1e-08, ...)
+intrinsic2_phi0(phi0, x, y, S, T, a, b, c = 0.5, d = 0, beta_range = TRUE,
+  tol = 1e-08, ...)
 
 intrinsic2_phi0_sims(phi0, x, y, S, T, a, b, c = 0.5, d = 0,
   nsims = 1e+06)
@@ -29,6 +30,8 @@ intrinsic2_bounds(x, y, S, T, a, b, c = 0.5, d = 0, conf = 0.95,
 \item{S,T}{sample sizes}
 
 \item{a,b,c,d}{Prior parameters}
+
+\item{beta_range}{logical, if \code{TRUE} (default), an internal method is used to avoid a possible failure in numerical integration; see the main vignette for details}
 
 \item{tol}{accuracy requested}
 
@@ -54,7 +57,7 @@ intrinsic2_bounds(x, y, S, T, a, b, c = 0.5, d = 0, conf = 0.95,
 \code{intrinsic2_bounds} returns the intrinsic credibility interval.
 }
 \description{
-Intrinsic inference on the rates ratio based on the second intrinsic discrepancy
+Intrinsic inference on the rates ratio based on the second intrinsic discrepancy.
 
 
 

@@ -19,6 +19,6 @@ intrinsic2_discrepancy(phi0, phi, a, b, S, T)
 A number, the intrinsic discrepancy from \code{phi0} to \code{phi}.
 }
 \description{
-Intrinsic discrepancy from \code{phi0} to \code{phi} in the marginal model
+Intrinsic discrepancy from \code{phi0} to \code{phi} in the marginal model.
 }
 

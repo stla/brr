@@ -17,6 +17,6 @@ intrinsic_discrepancy(phi0, mu, phi, S, T)
 A number, the intrinsic discrepancy from \code{phi0} to \code{(mu,phi)}.
 }
 \description{
-Intrinsic discrepancy from \code{phi0} to \code{(mu,phi)}
+Intrinsic discrepancy from \code{phi0} to \code{(mu,phi)}.
 }
 

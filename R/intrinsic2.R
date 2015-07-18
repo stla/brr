@@ -1,6 +1,6 @@
 #' Second intrinsic discrepancy
 #' 
-#' Intrinsic discrepancy from \code{phi0} to \code{phi} in the marginal model
+#' Intrinsic discrepancy from \code{phi0} to \code{phi} in the marginal model.
 #' 
 #' @param phi0 the proxy value of \code{phi}
 #' @param phi the true value of the parameter
@@ -21,12 +21,13 @@ return( a/b*(T+b)*(N+ifelse(bphi<.Machine$double.eps^5, 0, bphi*(N+log(bphi/bphi
 
 #' @name Intrinsic2Inference
 #' @rdname Intrinsic2Inference
-#' @title Intrinsic inference on the rates ratio based on the second intrinsic discrepancy
+#' @title Intrinsic inference on the rates ratio based on the second intrinsic discrepancy.
 #' 
 #' @param a,b,c,d Prior parameters
 #' @param S,T sample sizes
 #' @param x,y Observed counts
 #' @param phi0 the proxy value of \code{phi}
+#' @param beta_range logical, if \code{TRUE} (default), an internal method is used to avoid a possible failure in numerical integration; see the main vignette for details
 #' @param nsims number of simulations
 #' @param conf credibility level
 #' @param phi.star the hypothesized value of \code{phi} 
@@ -53,13 +54,13 @@ NULL
 #'
 #' @rdname Intrinsic2Inference
 #' @export
-intrinsic2_phi0 <- function(phi0, x, y,  S, T, a, b, c=0.5, d=0, tol=1e-8, ...){
+intrinsic2_phi0 <- function(phi0, x, y,  S, T, a, b, c=0.5, d=0, beta_range=TRUE, tol=1e-8, ...){
   post.c <- x+c
   post.d <- y+a+d
   lambda <- (T+b)/S
   return( vapply(phi0, FUN = function(phi0){ 
     f <- function(u) intrinsic2_discrepancy(phi0, lambda * u/(1-u), a=a, b=b, S=S, T=T)
-    range <- beta_integration_range(post.c, post.d, f, accuracy=tol)
+    range <- if(beta_range) beta_integration_range(post.c, post.d, f, accuracy=tol) else c(0,1)
     integrande <- function(u){
       return( f(u)*dbeta(u, post.c, post.d) )
     }

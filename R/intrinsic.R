@@ -19,7 +19,7 @@ return( pmin(G,H) )
 
 #' Intrinsic discrepancy
 #' 
-#' Intrinsic discrepancy from \code{phi0} to \code{(mu,phi)}
+#' Intrinsic discrepancy from \code{phi0} to \code{(mu,phi)}.
 #' 
 #' @param phi0 the proxy value of \code{phi}
 #' @param mu,phi the true values of the parameters
@@ -32,12 +32,13 @@ intrinsic_discrepancy <- function(phi0, mu, phi, S, T){
 
 #' @name IntrinsicInference
 #' @rdname IntrinsicInference
-#' @title Intrinsic inference on the rates ratio 
+#' @title Intrinsic inference on the rate ratio. 
 #' 
 #' @param a,b,c,d Prior parameters
 #' @param S,T sample sizes
 #' @param x,y Observed counts
 #' @param phi0 the proxy value of \code{phi}
+#' @param beta_range logical, if \code{TRUE} (default), an internal method is used to avoid a possible failure in numerical integration; see the main vignette for details
 #' @param nsims number of simulations
 #' @param conf credibility level
 #' @param phi.star the hypothesized value of \code{phi} 
@@ -65,7 +66,7 @@ NULL
 #'
 #' @rdname IntrinsicInference
 #' @export
-intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, tol=1e-8, ...){
+intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, beta_range=TRUE, tol=1e-8, ...){
   post.c <- x+c
   post.d <- y+a+d
   post.a <- x+y+a
@@ -74,7 +75,7 @@ intrinsic_phi0 <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, tol=1e-8, 
   value <- vapply(phi0, 
                   FUN = function(phi0){
                     f <- function(u) rho(lambda * u/(1-u), phi0, S, T)
-                    range <- beta_integration_range(post.c, post.d+1, f, accuracy=tol)
+                    range <- if(beta_range) beta_integration_range(post.c, post.d+1, f, accuracy=tol) else c(0,1)
                     integrande <- function(u){
                       return( f(u)*dbeta(u, post.c, post.d+1) )
                     }

@@ -7,7 +7,7 @@
 /temp_scripts
 /temp_code
 inst/doc/*
-!inst/doc/brr-paper_00.pdf
+!inst/doc/brr-paper_01.pdf
 !inst/doc/brr-BasicUsage.pdf
 paper
 vignettes_sources
