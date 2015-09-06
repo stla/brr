@@ -51,8 +51,6 @@ intrinsic_bounds(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
 \item{conf}{credibility level}
 
 \item{parameter}{parameter of interest: relative risk \code{"phi"} or vaccine efficacy \code{"VE"}}
-
-\item{subd}{number of subdivisions passed to the \code{\link{integrate}} function}
 }
 \value{
 \code{intrinsic_phi0} returns the posterior expected loss,

@@ -46,7 +46,6 @@ intrinsic_discrepancy <- function(phi0, mu, phi, S, T){
 #' "greater" for  H1: \code{phi0 > phi.star} 
 #' @param parameter parameter of interest: relative risk \code{"phi"} or vaccine efficacy \code{"VE"}
 #' @param tol accuracy requested
-#' @param subd number of subdivisions passed to the \code{\link{integrate}} function 
 #' @param ... other arguments passed to \code{\link{integrate}}
 #' @param otol desired accuracy for optimization
 #'
@@ -95,7 +94,7 @@ intrinsic_phi0_sims <- function(phi0, x, y,  S, T, a=0.5, b=0, c=0.5, d=0, nsims
   K <-  post.a*post.d/(post.c+post.d)*T/(T+b)
   sims <- rbeta2(nsims, post.c, post.d+1, lambda)
   return( vapply(phi0, FUN = function(phi0){ 
-    return(K*mean(brr:::rho(sims, phi0, S=S, T=T)))
+    return(K*mean(rho(sims, phi0, S=S, T=T)))
   }, FUN.VALUE=numeric(1)) )
 }
 #'
