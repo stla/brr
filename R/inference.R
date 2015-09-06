@@ -23,6 +23,7 @@ NULL
 
 #' @rdname Inference
 #' @importFrom TeachingDemos hpd
+#' @importFrom stats setNames
 #' @export
 brr_intervals <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, level=.95, intervals="equi-tailed*", ...){
   post.icdf <- function(q){

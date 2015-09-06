@@ -29,6 +29,7 @@
 #' rr_intervals(x, y, S, T)
 #' brr_intervals(x, y, S, T)
 #' 
+#' @importFrom stats qnorm qbeta
 NULL 
 #' 
 #' @rdname frequentist

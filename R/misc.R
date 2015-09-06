@@ -71,7 +71,8 @@ dd_moment <- function(pmf, k=1, accuracy=.Machine$double.eps, ...){
 
 # Integration range for beta expectation of a nonnegative function on (0,1)
 # @param c,d shape parameters
-# f 
+# @param f the function 
+#' @importFrom stats dbeta qbeta
 beta_integration_range <- function(c, d, f, min=100, accuracy=1e-8){
   # 
   if(c+d<min || (c<=1 && d<=1)) return(c(0,1))

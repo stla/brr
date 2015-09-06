@@ -9,6 +9,7 @@
 #' @examples
 #' summary_gamma(a=2, b=4, output="pandoc", style="rmarkdown")
 #' @importFrom pander pander
+#' @importFrom stats qgamma
 #' @export
 summary_gamma <- function(a, b, output="list", ...){
   out <- list(mode=ifelse(a>1, (a-1)/b, 0),  
@@ -38,6 +39,7 @@ summary_gamma <- function(a, b, output="list", ...){
 #' @examples
 #' summary_nbinom(size=2, prob=0.4, output="pandoc", style="rmarkdown")
 #' @importFrom pander pander
+#' @importFrom stats qnbinom
 #' @export
 summary_nbinom <- function(size, prob, output="list", ...){
   out <- list(mode=ifelse(size>1, floor((1-prob)*(size-1)/prob), 0),  
@@ -82,6 +84,7 @@ summary_nbinom <- function(size, prob, output="list", ...){
 #' @note \code{Beta2Dist} is a generic name for the functions documented. 
 #' 
 #' @importFrom pander pander
+#' @importFrom stats df pf qf rf
 #' @examples 
 #' curve(dbeta2(x, 3, 10, scale=2), from=0, to=3)
 #' u <- rbeta(1e5, 3, 10)
@@ -160,6 +163,7 @@ summary_beta2 <- function(c, d, scale, output="list", ...){
 #' 
 #' @importFrom gsl lnpoch lngamma hyperg_U
 #' @importFrom pander pander
+#' @importFrom stats rgamma rbeta
 #' @examples
 #' curve(dGIB(x, 3, 4, 2, 2.5), from=0, to=3)
 #' summary_GIB(3, 4, 2, 2.5, output="pandoc", style="grid")
@@ -218,6 +222,7 @@ summary_GIB <- function(a, alpha, beta, rho, output="list", ...){
 #' 
 #' @importFrom gsl lnpoch lngamma lnfact
 #' @importFrom pander pander
+#' @importFrom stats rpois
 #' @examples
 #' barplot(dPGIB(0:5, a=13, alpha=4, beta=2, rho=2.5), names=0:5)
 #' summary_PGIB(13, 4, 2, 2.5)
@@ -387,6 +392,7 @@ summary_beta_nbinom <- function(a, c, d, output="list", ...){
 #' 
 #' @importFrom gsl lnpoch lnbeta hyperg_U
 #' @importFrom pander pander
+#' @importFrom stats rgamma
 #' 
 #' @examples
 #' a <- 2 ; c <- 4 ; d <- 3; tau <- 1.67
@@ -478,6 +484,8 @@ summary_GB2 <- function(a, c, d, tau, output="list", ...){
 #' @return \code{dPGB2} gives the density, \code{pPGB2} the cumulative function, 
 #' \code{rPGB2} samples from the distribution, and \code{summary_PGB2} gives 
 #' a summary of the distribution. 
+#' 
+#' @importFrom stats rnbinom
 #' 
 #' @note \code{PGB2Dist} is a generic name for the functions documented. 
 #' 

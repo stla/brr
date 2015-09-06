@@ -1,23 +1,25 @@
 ## Release summary
 
-This release add a few minor features, but is mostly concerned with fixing crashing bugs and memory errors. (It also fixes the new NOTEs about functions imported from "base" packages).
+This is my first submission.
 
 ## Test environments
 
 * ubuntu 14.04, R 3.2.2
 * windows 7 64bit, R 3.0.2
+* online win-builder.r-project.org
 
 ## R CMD check results
 
 There were no ERRORs or WARNINGs. 
 
-Status: 2 NOTEs
+There were 3 NOTEs.
+
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Stéphane Laurent <laurent_step@yahoo.fr>’
+New submission
 
 * checking top-level files ... NOTE
-Non-standard file/directory found at top level:
-  ‘cran-comments.md’
-  
-  This is my first submission.
+File README.md cannot be checked without ‘pandoc’ being installed.
   
 * checking R code for possible problems ... NOTE
 
@@ -35,4 +37,8 @@ prior: no visible binding for global variable ‘d’
 
   The dot ‘.’ is related to the pipe operator %>% of the magrittr package.
   The messages about the plot.brr() anf prior() functions are due to the use of assign() in the code. I think it is OK.
+
+
+
+
 

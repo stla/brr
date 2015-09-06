@@ -61,6 +61,7 @@ intrinsic_discrepancy <- function(phi0, mu, phi, S, T){
 #' intrinsic_estimate(x, y, S, T, a, b, c, d)
 #' bounds <- intrinsic_bounds(x, y, S, T, a, b, c, d, conf=0.95); bounds
 #' ppost_phi(bounds[2], a, b, c, d, S, T,  x, y)- ppost_phi(bounds[1], a, b, c, d, S, T, x, y)
+#' @importFrom stats dbeta integrate optimize
 NULL
 #'
 #' @rdname IntrinsicInference

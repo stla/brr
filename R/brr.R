@@ -14,6 +14,8 @@ prior <- function(params){
 
 #' @importFrom stringr str_detect
 #' @importFrom magrittr "%>%"
+#' @importFrom methods formalArgs
+#' @importFrom stats setNames
 brr_generic <- function(fun, model, parameter, ...){
   if(class(model)!="brr") stop("First argument is not a brr class object (see the given example and ?Brr)")
   fun_ <- sprintf("%s_%s", fun, parameter)
@@ -322,6 +324,8 @@ spost <- function(model, parameter, ...){
 #' plot(model, dpost(x))
 #' @importFrom stringr str_sub
 #' @importFrom magrittr "%>%"
+#' @importFrom graphics plot axis barplot
+#' @importFrom stats setNames
 #' @export
 plot.brr <- function(x, what="summary", bounds=NULL, ...){ 
   model <- x
@@ -465,6 +469,7 @@ plot.brr <- function(x, what="summary", bounds=NULL, ...){
 #' 
 #' @importFrom pander pandoc.table.return
 #' @importFrom magrittr "%>%"
+#' @importFrom stats setNames
 NULL
 
 #' @rdname inference_brr

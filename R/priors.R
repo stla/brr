@@ -19,7 +19,7 @@
 #' @examples 
 #' curve(dprior_mu(x, 2, 2), from=0, to=3)
 #' sprior_mu(2, 2, output="pandoc")
-#' 
+#' @importFrom stats dgamma pgamma qgamma rgamma
 NULL
 #'
 #' @rdname Prior_mu
@@ -163,6 +163,7 @@ NULL
 #'
 #' @rdname Prior_lambda
 #' @importFrom gsl lnpoch lnbeta hyperg_U
+#' @importFrom stats rgamma
 #' @export 
 dprior_lambda <- function(lambda, a, b, c, d, S, T){  
   return( dGB2(lambda, a=a, c=d, d=c, tau=b*S/(T+b)) )

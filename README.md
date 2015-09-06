@@ -8,10 +8,18 @@ Suppose you have two counts of events and, assuming each count follows a Poisson
 
 ### Install ###
 
-The `brr` package is still under development. You can install it from `github` using the `devtools` package:
+You can install:
+
+- the latest released version from CRAN with 
 
 ```r
-devtools::install_github('brr', 'stla', build_vignettes=TRUE)
+install.packages("brr")
+```
+
+- the latest development version from `github` using the `devtools` package:
+
+```r
+devtools::install_github('stla/brr', build_vignettes=TRUE)
 ```
 
 ### Basic usage ###

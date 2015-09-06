@@ -27,7 +27,7 @@
 #' barplot(dpost_x(0:10, 10, 2, 3, 4, 5, 3, 10))
 #' qpost_x(0.5, 10, 2, 3, 4, 5, 3, 10)
 #' ppost_x(4, 10, 2, 3, 4, 5, 3, 10)
-#' 
+#' @importFrom stats setNames
 NULL
 #'
 #' @rdname Post_x
@@ -103,7 +103,7 @@ spost_x <- function(Snew, a=0.5, c=0.5, d=0, x, y, S, ...){
 #' @examples 
 #' barplot(dpost_y(0:10, 10, 2, 7, 3, 4, 5, 3, 10))
 #' spost_y(10, 2, 7, 3, 4, 5, 3, 10, output="pandoc")
-#' 
+#' @importFrom stats setNames
 NULL
 #'
 #' @rdname Post_y

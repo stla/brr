@@ -14,7 +14,8 @@ Imports: gsl,
     hypergeo,
     magrittr,
     pander,
-    stringr
+    stringr,
+    methods
 Suggests: testthat,
     R.rsp
 VignetteBuilder: R.rsp

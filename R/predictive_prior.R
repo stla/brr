@@ -26,7 +26,7 @@
 #' @examples 
 #' barplot(dprior_y(0:10, 2, 2, 1))
 #' sprior_y(2, 2, 1, output="pandoc")
-#' 
+#' @importFrom stats setNames dnbinom pnbinom qnbinom rnbinom
 NULL
 #'
 #' @rdname Prior_y
@@ -87,7 +87,7 @@ sprior_y <- function(a, b, T, ...){
 #' @examples 
 #' barplot(dprior_x(0:30, 2, 3, 4, 5, 10))
 #' sprior_x(2, 3, 4, 5, 10, output="pandoc")
-#' 
+#' @importFrom stats setNames
 NULL
 #'
 #' @rdname Prior_x
@@ -151,6 +151,7 @@ sprior_x <- function(a, b, c, d, T, ...){
 #' @examples 
 #' barplot(dprior_x_given_y(0:10, 5, 3, 10, 20))
 #' sprior_x_given_y(5, 3, 10, 20, output="pandoc") 
+#' @importFrom stats setNames
 NULL
 #'
 #' @rdname Prior_x_given_y
