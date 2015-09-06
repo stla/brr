@@ -6,17 +6,19 @@
 Bayesian inference on the ratio of two Poisson rates
 }
 \description{
-Implementation of the Bayesian inference for the two independent Poisson samples model, using the semi-conjugate family of prior distributions. 
+Implementation of the Bayesian inference for the rate ratio of two independent Poisson samples, using the semi-conjugate family of prior distributions, and a default non-informative prior.
 
 To learn more, start with the vignettes:
-\code{browseVignettes(package = "brr")}
+\code{browseVignettes(package="brr")}.
+
+If you encounter a bug, or if you have a suggestion to improve the package, please file an issue on the github repo \url{https://github.com/stla/brr}.
 }
 \details{
 \tabular{ll}{
 Package: \tab brr\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2015-05-10\cr
+Version: \tab 0.0.0\cr
+Date: \tab 2015-09-06\cr
 License: \tab GPL-2\cr
 }
 }
@@ -41,5 +43,5 @@ Journal of Statistical Planning and Inference 142 (2012), 2656--2671.
 \keyword{ package }
 \keyword{ models }
 \keyword{ bayesian }
-\keyword{ poisson }
-\keyword{ distributions }
+\keyword{ htest }
+\keyword{ distribution }
