@@ -1,10 +1,10 @@
 Package: brr
 Type: Package
-Title: Bayesian inference on the ratio of two Poisson rates
+Title: Bayesian Inference on the Ratio of Two Poisson Rates
 Version: 0.0.0
 Date: 2015-09-06
 Author: Stéphane Laurent
-Maintainer: <laurent_step@yahoo.fr>
+Maintainer: Stéphane Laurent <laurent_step@yahoo.fr>
 Description: Implementation of the Bayesian inference for the two independent Poisson samples model, using the semi-conjugate family of prior distributions.
 Depends: R (>= 3.0.0)
 License: GPL-2
