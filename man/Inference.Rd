@@ -6,8 +6,8 @@
 \alias{brr_intervals}
 \title{Inference summaries}
 \usage{
-brr_intervals(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0, conf = 0.95,
-  intervals = "equi-tailed*", ...)
+brr_intervals(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
+  level = 0.95, intervals = "equi-tailed*", ...)
 
 brr_estimates(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
   parameter = "phi", ...)
@@ -19,7 +19,7 @@ brr_estimates(x, y, S, T, a = 0.5, b = 0, c = 0.5, d = 0,
 
 \item{a,b,c,d}{Prior parameters}
 
-\item{conf}{confidence level}
+\item{level}{confidence level}
 
 \item{intervals}{a character vector, the intervals to be returned}
 

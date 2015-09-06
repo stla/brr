@@ -40,7 +40,6 @@ Journal of Statistical Planning and Inference 142 (2012), 2656--2671.
 }
 \keyword{ package }
 \keyword{ models }
-\seealso{
-}
-\examples{
-}
+\keyword{ bayesian }
+\keyword{ poisson }
+\keyword{ distributions }

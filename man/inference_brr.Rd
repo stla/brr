@@ -10,22 +10,25 @@
 \alias{print.predict.brr}
 \title{Credibility intervals and estimates}
 \usage{
-\method{confint}{brr}(model, conf = 0.95, intervals = "all", ...)
+\method{confint}{brr}(object, parm = NULL, level = 0.95,
+  intervals = "all", ...)
 
-\method{print}{confint.brr}(x, style = "grid")
+\method{print}{confint.brr}(x, style = "grid", ...)
 
-\method{coef}{brr}(model, parameter = "phi", ...)
+\method{coef}{brr}(object, parameter = "phi", ...)
 
-\method{print}{coef.brr}(x)
+\method{print}{coef.brr}(x, ...)
 
-\method{predict}{brr}(model, conf = 0.95, ...)
+\method{predict}{brr}(object, level = 0.95, ...)
 
-\method{print}{predict.brr}(x, style = "grid")
+\method{print}{predict.brr}(x, style = "grid", ...)
 }
 \arguments{
-\item{model}{a \code{\link[=Brr]{brr}} object}
+\item{object}{a \code{\link[=Brr]{brr}} object}
 
-\item{conf}{confidence level}
+\item{parm}{ignored}
+
+\item{level}{confidence level}
 
 \item{intervals}{a character vector, the intervals to be returned}
 

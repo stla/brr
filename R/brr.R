@@ -50,7 +50,7 @@ brr_generic <- function(fun, model, parameter, ...){
 #' @param ... prior parameters \code{a}, \code{b}, \code{c}, \code{d}, 
 #' samples sizes \code{S}, \code{T}, observed counts \code{x}, \code{y},  
 #' future sample sizes \code{Snew}, \code{Tnew}, to be set as in a list (see examples) 
-#' @param model an object of class \code{brr}
+#' @param object an object of class \code{brr}
 #' @param phi0 the value of interest of the rate ratio
 #' @param hypothesis \code{"greater"} to return \eqn{Pr(\phi>\phi_0)}, 
 #' \code{"lower"} to return \eqn{Pr(\phi<\phi_0)}  
@@ -108,12 +108,14 @@ Brr <- function(...){
   return(out)
 }
 #'
+
+#'
 #' @rdname Brr
 #' @export 
-summary.brr <- function(model, phi0=1, hypothesis="greater"){
+summary.brr <- function(object, phi0=1, hypothesis="greater", ...){
   out <- list()
   class(out) <- "summary.brr"
-  params <- model()
+  params <- object()
   type <- prior(params)
   out$type <- type
   # remove NULL components
@@ -148,7 +150,7 @@ return(out)
 #' @rdname Brr
 #' @importFrom pander pandoc.table.return
 #' @export
-print.summary.brr <- function(x, table.style="grid"){
+print.summary.brr <- function(x, table.style="grid", ...){
   summary <- x
   #cat("----------\n")
   cat("Type of prior distribution:", type <- summary$type, "prior")
@@ -296,7 +298,7 @@ spost <- function(model, parameter, ...){
 
 #' plot brr
 #' 
-#' @param model an object of class \code{brr} (see \code{\link{Brr}})
+#' @param x an object of class \code{brr} (see \code{\link{Brr}})
 #' @param what \code{"summary"} to plot automatically the priors on \code{mu} and \code{phi} 
 #' and the posterior on \code{phi}, or an expression like \code{dprior(mu)} for a specific plot (see examples)
 #' @param bounds for specific plot only, the range over which the function will be plotted; \code{NULL} for automatic bounds
@@ -321,7 +323,8 @@ spost <- function(model, parameter, ...){
 #' @importFrom stringr str_sub
 #' @importFrom magrittr "%>%"
 #' @export
-plot.brr <- function(model, what="summary", bounds=NULL, ...){ 
+plot.brr <- function(x, what="summary", bounds=NULL, ...){ 
+  model <- x
   params <- model()
   type <- prior(params)
   for(i in seq_along(params)) assign(names(params)[i], params[[i]])
@@ -426,7 +429,7 @@ plot.brr <- function(model, what="summary", bounds=NULL, ...){
     }
     axis(1)
     # end
-    return(invisble())
+    return(invisible())
   }
 }
 
@@ -437,8 +440,9 @@ plot.brr <- function(model, what="summary", bounds=NULL, ...){
 #' @details \code{confint.brr} is a wrapper to \code{\link{brr_intervals}} and 
 #' \code{coef.brr} is a wrapper to \code{\link{brr_estimates}}
 #' 
-#' @param model a \code{\link[=Brr]{brr}} object
-#' @param conf confidence level
+#' @param object a \code{\link[=Brr]{brr}} object
+#' @param parm ignored
+#' @param level confidence level
 #' @param intervals a character vector, the intervals to be returned
 #' @param parameter parameter of interest \code{"phi"} or \code{"VE"} (\code{=1-phi})
 #' @param style the style of the table to print 
@@ -465,8 +469,8 @@ NULL
 
 #' @rdname inference_brr
 #' @export
-confint.brr <- function(model, conf=0.95, intervals="all", ...){
-  params <- model()
+confint.brr <- function(object, parm=NULL, level=0.95, intervals="all", ...){
+  params <- object()
   type <- prior(params)
   if(type=="semi-informative" || type=="non-informative"){
     params$c <- 0.5; params$d <- 0
@@ -476,15 +480,15 @@ confint.brr <- function(model, conf=0.95, intervals="all", ...){
   }
   args <- formalArgs("brr_intervals") %>% subset(!. %in% "...")
   if(identical(intervals,"all")) intervals <- c("equi-tailed", "equi-tailed*", "hpd", "intrinsic", "intrinsic2")
-  confints <- do.call(brr_intervals, c(list(...), params[names(params) %in% args], list(conf=conf, intervals=intervals)))
+  confints <- do.call(brr_intervals, c(list(...), params[names(params) %in% args], list(level=level, intervals=intervals)))
   class(confints) <- "confint.brr"
-  attr(confints, "level") <- conf
+  attr(confints, "level") <- level
   return(confints)
 }
 #'
 #' @rdname inference_brr
 #' @export
-print.confint.brr <- function(x, style="grid"){
+print.confint.brr <- function(x, style="grid", ...){
   cat(sprintf("%s-credibility intervals about %s", paste0(100*attr(x,"level"),"%"), greek_utf8("phi")))
   #cat("\n\n")
   table <- data.frame(t(vapply(x, function(x) x, numeric(2))))
@@ -495,8 +499,8 @@ print.confint.brr <- function(x, style="grid"){
 #'
 #' @rdname inference_brr
 #' @export
-coef.brr <- function(model, parameter="phi", ...){
-  params <- model()
+coef.brr <- function(object, parameter="phi", ...){
+  params <- object()
   type <- prior(params)
   if(type=="semi-informative" || type=="non-informative"){
     params$c <- 0.5; params$d <- 0
@@ -513,7 +517,7 @@ coef.brr <- function(model, parameter="phi", ...){
 #'
 #' @rdname inference_brr
 #' @export
-print.coef.brr <- function(x){
+print.coef.brr <- function(x, ...){
   cat(sprintf("Estimates of %s", greek_utf8(attr(x, "parameter"))))
   cat("\n\n")
   for(i in seq_along(x)){
@@ -524,7 +528,8 @@ print.coef.brr <- function(x){
 }
 #' @rdname inference_brr
 #' @export
-predict.brr <- function(model, conf=0.95, ...){
+predict.brr <- function(object, level=0.95, ...){
+  model <- object
   params <- model()
   if("Snew" %in% names(list(...))) model <- model(Snew=list(...)$Snew)
   if("Tnew" %in% names(list(...))) model <- model(Tnew=list(...)$Tnew)
@@ -539,15 +544,15 @@ predict.brr <- function(model, conf=0.95, ...){
   }
   params <- model()
   out <- data.frame(obs=c("xnew", "ynew"), size=c(params$Snew,params$Tnew), median=NA, lwr=NA, upr=NA)
-  out[1, c("median", "lwr", "upr")] <- qpost(model, "x", c(.5, (1-conf)/2, (conf+1)/2))
-  out[2, c("median", "lwr", "upr")]  <- qpost(model, "y", c(.5, (1-conf)/2, (conf+1)/2))
-  attr(out, "level") <- conf
+  out[1, c("median", "lwr", "upr")] <- qpost(model, "x", c(.5, (1-level)/2, (level+1)/2))
+  out[2, c("median", "lwr", "upr")]  <- qpost(model, "y", c(.5, (1-level)/2, (level+1)/2))
+  attr(out, "level") <- level
   class(out) <- "predict.brr"
   return(out)
 }
 #' @rdname inference_brr
 #' @export
-print.predict.brr <- function(x, style="grid"){
+print.predict.brr <- function(x, style="grid", ...){
   cat(sprintf("Predictions and %s-credibility prediction intervals", paste0(100*attr(x,"level"),"%")))
   cat(pandoc.table.return(data.frame(unclass(x)), style=style))
 }

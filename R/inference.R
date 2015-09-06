@@ -8,7 +8,7 @@
 #' @param a,b,c,d Prior parameters
 #' @param S,T sample sizes
 #' @param x,y Observed counts
-#' @param conf confidence level
+#' @param level confidence level
 #' @param intervals a character vector, the intervals to be returned
 #' @param parameter parameter of interest \code{"phi"} or \code{"VE"} (\code{=1-phi})
 #' @param ... arguments passed to \link{IntrinsicInference} and \link{Intrinsic2Inference}
@@ -24,28 +24,28 @@ NULL
 #' @rdname Inference
 #' @importFrom TeachingDemos hpd
 #' @export
-brr_intervals <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, conf=.95, intervals="equi-tailed*", ...){
+brr_intervals <- function(x, y, S, T, a=0.5, b=0, c=0.5, d=0, level=.95, intervals="equi-tailed*", ...){
   post.icdf <- function(q){
     qpost_phi(q, a, b, c, d, S, T, x, y)
   }
-  hpd2 <- function(x, y, S, T, a, b, c, d, conf){
+  hpd2 <- function(x, y, S, T, a, b, c, d, level){
     if(c+x<1){
-      bounds <- c(0, post.icdf(conf))
+      bounds <- c(0, post.icdf(level))
     }else{
-      bounds <- hpd(post.icdf, conf=conf)
+      bounds <- hpd(post.icdf, conf=level)
     }
     return(bounds)
   }
   bounds <- sapply(intervals, function(interval) setNames(
     switch(interval, 
-           left=c(0, post.icdf(conf)), 
-           right=c(post.icdf(1-conf), Inf),
-           "right*"=c(sign(x)*post.icdf(1-conf), Inf),
-           "equi-tailed"=post.icdf(c((1-conf)/2, (1+conf)/2)),
-           "equi-tailed*"=c(sign(x)*post.icdf((1-conf)/2),post.icdf((1+conf)/2)),
-           hpd=hpd2(x, y, S, T, a, b, c, d, conf), 
-           intrinsic=intrinsic_bounds(x, y, S, T, a, b, c, d, conf, ...),
-           intrinsic2=if(a==0.5 && b==0) c(NA,NA) else intrinsic2_bounds(x, y, S, T, a, b, c, d, conf, ...)
+           left=c(0, post.icdf(level)), 
+           right=c(post.icdf(1-level), Inf),
+           "right*"=c(sign(x)*post.icdf(1-level), Inf),
+           "equi-tailed"=post.icdf(c((1-level)/2, (1+level)/2)),
+           "equi-tailed*"=c(sign(x)*post.icdf((1-level)/2),post.icdf((1+level)/2)),
+           hpd=hpd2(x, y, S, T, a, b, c, d, level), 
+           intrinsic=intrinsic_bounds(x, y, S, T, a, b, c, d, level, ...),
+           intrinsic2=if(a==0.5 && b==0) c(NA,NA) else intrinsic2_bounds(x, y, S, T, a, b, c, d, level, ...)
     ), c("lwr", "upr")
   ), simplify=FALSE)
   if(is.null(bounds)) stop("invalid interval name")

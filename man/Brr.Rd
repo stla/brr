@@ -8,16 +8,16 @@
 \usage{
 Brr(...)
 
-\method{summary}{brr}(model, phi0 = 1, hypothesis = "greater")
+\method{summary}{brr}(object, phi0 = 1, hypothesis = "greater", ...)
 
-\method{print}{summary.brr}(x, table.style = "grid")
+\method{print}{summary.brr}(x, table.style = "grid", ...)
 }
 \arguments{
 \item{...}{prior parameters \code{a}, \code{b}, \code{c}, \code{d},
 samples sizes \code{S}, \code{T}, observed counts \code{x}, \code{y},
 future sample sizes \code{Snew}, \code{Tnew}, to be set as in a list (see examples)}
 
-\item{model}{an object of class \code{brr}}
+\item{object}{an object of class \code{brr}}
 
 \item{phi0}{the value of interest of the rate ratio}
 

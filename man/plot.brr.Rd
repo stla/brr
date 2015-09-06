@@ -4,10 +4,10 @@
 \alias{plot.brr}
 \title{plot brr}
 \usage{
-\method{plot}{brr}(model, what = "summary", bounds = NULL, ...)
+\method{plot}{brr}(x, what = "summary", bounds = NULL, ...)
 }
 \arguments{
-\item{model}{an object of class \code{brr} (see \code{\link{Brr}})}
+\item{x}{an object of class \code{brr} (see \code{\link{Brr}})}
 
 \item{what}{\code{"summary"} to plot automatically the priors on \code{mu} and \code{phi}
 and the posterior on \code{phi}, or an expression like \code{dprior(mu)} for a specific plot (see examples)}
