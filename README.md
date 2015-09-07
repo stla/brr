@@ -11,7 +11,7 @@ Suppose you have two counts of events and, assuming each count follows a Poisson
 
 You can install:
 
-- the latest released version from CRAN with 
+- the latest [released version](https://cran.r-project.org/web/packages/brr/index.html) from CRAN with 
 
 ```r
 install.packages("brr")
