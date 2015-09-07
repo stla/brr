@@ -1,7 +1,7 @@
 Package: brr
 Type: Package
 Title: Bayesian Inference on the Ratio of Two Poisson Rates
-Version: 1.0.0
+Version: 1.0.0.9000
 Date: 2015-09-07
 Author: Stéphane Laurent
 Maintainer: Stéphane Laurent <laurent_step@yahoo.fr>
