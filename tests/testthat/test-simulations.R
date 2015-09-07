@@ -15,7 +15,7 @@ test_that("Check PGB2 using simulations",{
   expect_true(all(dPGB2(0:10, a, c, d, tau=1)==dbeta_nbinom(0:10, a, c, d)))
   tau <- 2
   nsims <- 1e6
-  sims <- rbeta2(nsims, c, d, scale=tau) %>% rgamma(nsims, a, .) %>% rpois(nsims, .)
+  sims <- rpois(nsims, rgamma(nsims, a, rbeta2(nsims, c, d, scale=tau)))
   summ <- summary_PGB2(a,c,d,tau)
   p <- pPGB2(12, a, c, d, tau)
   expect_equal(p, length(sims[sims<=12])/nsims, tolerance=1e-3)
@@ -55,7 +55,7 @@ test_that("Check BNB using simulations", {
   set.seed(666)
   a <- 2 ; c <- 5 ; d <- 30
   nsims <- 1e6
-  sims <- rbeta2(nsims, c, d, scale=1) %>% rgamma(nsims, a, .) %>% rpois(nsims, .)
+  sims <- rpois(nsims, rgamma(nsims, a, rbeta2(nsims, c, d, scale=1)))
   summ <- summary_beta_nbinom(a, c, d)
   expect_equal(mean(sims), summ$mean, tolerance=1e-3)
   expect_equal(sd(sims), summ$sd, tolerance=0.05)

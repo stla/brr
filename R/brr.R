@@ -1,6 +1,11 @@
 prior <- function(params){
   params <- as.list(unlist(params)) # remove NULL components
-  for(i in seq_along(params)) assign(names(params)[i], params[[i]])
+  # get params
+  if(!is.null(params$a)) a <- params$a
+  if(!is.null(params$b)) b <- params$b
+  if(!is.null(params$c)) c <- params$c
+  if(!is.null(params$d)) d <- params$d
+  #
   if((all(c("a","b","c","d") %in% names(params))) && all(c(a,b,c,d)>0)){
     return("informative")
   }
@@ -13,7 +18,6 @@ prior <- function(params){
 }
 
 #' @importFrom stringr str_detect
-#' @importFrom magrittr "%>%"
 #' @importFrom methods formalArgs
 #' @importFrom stats setNames
 brr_generic <- function(fun, model, parameter, ...){
@@ -21,7 +25,7 @@ brr_generic <- function(fun, model, parameter, ...){
   fun_ <- sprintf("%s_%s", fun, parameter)
   if(! fun_ %in% ls(pos = "package:brr")) stop(sprintf("%s does not exist in brr package.", fun_))
   posterior <- stringr::str_detect(fun, "post")
-  args <- formalArgs(fun_) %>% subset(!. %in% "...")
+  args <- subset(formalArgs(fun_), !(formalArgs(fun_) %in% "..."))
   if(!fun %in% c("sprior", "spost")) args <- args[-1] 
   fun <- eval(parse(text=fun_))
   params <- model()
@@ -121,7 +125,7 @@ summary.brr <- function(object, phi0=1, hypothesis="greater", ...){
   type <- prior(params)
   out$type <- type
   # remove NULL components
-  params <- as.list(unlist(params)) # pas necessaire je pense - si pour print
+  params <- as.list(unlist(params)) # necessary for print
   out$params <- params
   if(type!="non-informative"){
     out$prior_mu <- sprior_mu(params$a, params$b)
@@ -323,7 +327,6 @@ spost <- function(model, parameter, ...){
 #' model <- model(Snew=10, Tnew=10)
 #' plot(model, dpost(x))
 #' @importFrom stringr str_sub
-#' @importFrom magrittr "%>%"
 #' @importFrom graphics plot axis barplot
 #' @importFrom stats setNames
 #' @export
@@ -331,7 +334,15 @@ plot.brr <- function(x, what="summary", bounds=NULL, ...){
   model <- x
   params <- model()
   type <- prior(params)
-  for(i in seq_along(params)) assign(names(params)[i], params[[i]])
+  # get params
+  a <- params$a
+  b <- params$b
+  c <- params$c
+  d <- params$d
+  S <- params$S
+  T <- params$T
+  x <- params$x
+  y <- params$y
   # specific plot 
   if(substitute(what)[1] != "summary"){
     what <- as.character(substitute(what)) 
@@ -352,16 +363,15 @@ plot.brr <- function(x, what="summary", bounds=NULL, ...){
         }
       }
       if(!param %in% c("x","y","x_given_y")){
-        seq(bounds[1], bounds[2], length.out=301) %>% {
-          plot(., eval(parse(text=f))(model, param, .), 
+        s <- seq(bounds[1], bounds[2], length.out=301)
+        plot(s, eval(parse(text=f))(model, param, s), 
                type="l", 
                axes=FALSE,
                ylab=ifelse(f %in% c("dprior","dpost"), NA, sprintf("P(%s \u2264 . )", greek_utf8(param))),
                xlab=ifelse(f %in% c("dprior","dpost"), parse(text=param), NA),
                ...
           )
-          if(f %in% c("dprior","dpost")) axis(1, cex.axis=list(...)$cex.axis) else { axis(1); axis(2) }
-        }
+        if(f %in% c("dprior","dpost")) axis(1, cex.axis=list(...)$cex.axis) else { axis(1); axis(2) }
         return(invisible())
       } else {
         barplot(setNames(eval(parse(text=f))(model, param, bounds[1]:bounds[2]), bounds[1]:bounds[2]), 
@@ -370,14 +380,12 @@ plot.brr <- function(x, what="summary", bounds=NULL, ...){
       }
     } else if(f %in% c("qprior", "qpost")){
       seq.p <- if(is.null(bounds)) seq(0, 1-1e-3, length.out=51) else bounds
-      seq.p %>% {
-        plot(., eval(parse(text=f))(model, param, .), 
+        plot(seq.p, eval(parse(text=f))(model, param, seq.p), 
              type="l", 
              xlim=c(0,1), 
              axes=FALSE, ylab="q", xlab=sprintf("P(%s \u2264 . )", greek_utf8(param)),
              ...)
         axis(1); axis(2)
-      }
       return(invisible())
     } else{
       stop("Unvalid 'what' argument.")
@@ -390,13 +398,11 @@ plot.brr <- function(x, what="summary", bounds=NULL, ...){
     if(type != "non-informative"){
       bounds <- qprior_mu(c(1e-4, 1-1e-4), a=a, b=b)
       mu <- seq(bounds[1], bounds[2], length.out=301)
-      mu %>% {
-        plot(., dprior_mu(., a=a, b=b), 
+      plot(mu, dprior_mu(mu, a=a, b=b), 
              lwd=2, 
              type="l", axes=FALSE, 
              xlab=expression(mu), ylab=NA, 
              main=expression(paste("Prior distribution of ", mu)) )
-      }
       axis(1)
       readline(prompt="Press [enter] to continue")
     }
@@ -404,13 +410,11 @@ plot.brr <- function(x, what="summary", bounds=NULL, ...){
     if(type == "informative"){
       bounds <- qprior_phi(c(1e-4, 1-1e-4), b=b, c=c, d=d, S=S, T=T)
       phi <- seq(bounds[1], bounds[2], length.out=301)
-      phi %>% {
-        plot(., dprior_phi(., b=b, c=c, d=d, S=S, T=T), 
+      plot(phi, dprior_phi(phi, b=b, c=c, d=d, S=S, T=T), 
              type="l", axes=FALSE, 
              lwd=2, 
              xlab=expression(phi), ylab=NA, 
              main=expression(paste("Prior distribution of ", phi)) )
-      }
       axis(1)
       readline(prompt="Press [enter] to continue")
     }
@@ -424,13 +428,11 @@ plot.brr <- function(x, what="summary", bounds=NULL, ...){
     }
     bounds <- qpost_phi(c(1e-4, 1-1e-4), a=a, b=b, c=c, d=d, S=S, T=T, x=x, y=y)
     phi <- seq(bounds[1], bounds[2], length.out=301)
-    phi %>% {
-      plot(., dpost_phi(., a=a, b=b, c=c, d=d, S=S, T=T, x=x, y=y), 
+    plot(phi, dpost_phi(phi, a=a, b=b, c=c, d=d, S=S, T=T, x=x, y=y), 
            type="l", axes=FALSE, 
            lwd=2, 
            xlab=expression(phi), ylab=NA, 
            main=expression(paste("Posterior distribution of ", phi)) )
-    }
     axis(1)
     # end
     return(invisible())
@@ -468,8 +470,8 @@ plot.brr <- function(x, what="summary", bounds=NULL, ...){
 #' predict(model)
 #' 
 #' @importFrom pander pandoc.table.return
-#' @importFrom magrittr "%>%"
 #' @importFrom stats setNames
+#' @importFrom methods formalArgs
 NULL
 
 #' @rdname inference_brr
@@ -483,7 +485,7 @@ confint.brr <- function(object, parm=NULL, level=0.95, intervals="all", ...){
       params$a <- 0.5; params$b <- 0
     }
   }
-  args <- formalArgs("brr_intervals") %>% subset(!. %in% "...")
+  args <- subset(formalArgs("brr_intervals"), !formalArgs("brr_intervals") %in% "...")
   if(identical(intervals,"all")) intervals <- c("equi-tailed", "equi-tailed*", "hpd", "intrinsic", "intrinsic2")
   confints <- do.call(brr_intervals, c(list(...), params[names(params) %in% args], list(level=level, intervals=intervals)))
   class(confints) <- "confint.brr"
@@ -513,7 +515,7 @@ coef.brr <- function(object, parameter="phi", ...){
       params$a <- 0.5; params$b <- 0
     }
   }
-  args <- formalArgs("brr_estimates") %>% subset(!. %in% "...")
+  args <- subset(formalArgs("brr_estimates"), !formalArgs("brr_estimates") %in% "...")
   estimates <- do.call(brr_estimates, c(list(...), list(parameter=parameter), params[names(params) %in% args]))
   class(estimates) <- "coef.brr"
   attr(estimates, "parameter") <- parameter

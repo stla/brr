@@ -17,8 +17,8 @@ If you encounter a bug, or if you have a suggestion to improve the package, plea
 \tabular{ll}{
 Package: \tab brr\cr
 Type: \tab Package\cr
-Version: \tab 0.0.0\cr
-Date: \tab 2015-09-06\cr
+Version: \tab 1.0.0\cr
+Date: \tab 2015-09-07\cr
 License: \tab GPL-2\cr
 }
 }

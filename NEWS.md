@@ -1,3 +1,3 @@
-# brr 0.0.0
+# brr 1.0.0
 
 First release.
