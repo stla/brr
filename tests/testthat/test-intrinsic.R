@@ -2,8 +2,8 @@ context("Intrinsic loss")
 
 test_that("Figure 10 JSPI", {
   loss <- intrinsic_phi0(phi0=0.5, x=6, y=15, S=1, T=1, a = 0.5, b = 0, c = 0.5, d = 0)
-  expect_less_than(loss, log(1.713))
-  expect_less_than(log(1.7129), loss)
+  expect_lt(loss, log(1.713))
+  expect_lt(log(1.7129), loss)
   phi0 <- c(0.12, 0.1202, .994, .995)
   loss <- intrinsic_phi0(phi0=phi0, x=6, y=15, S=1, T=1, a = 0.5, b = 0, c = 0.5, d = 0) 
   expect_true(loss[3] < log(10) & loss[4] > log(10))
@@ -22,7 +22,7 @@ test_that("Figure 15 Master", {
   expect_equal(estimate, 0.505509, tolerance=1e-4, check.attributes=FALSE)
   expect_equal(attr(estimate, "loss"), 0.4693625, tolerance=1e-5)
   mode <- spost_phi(x=x, y=y, S=S, T=T, a=a, b=b, c=c, d=d)$mode
-  expect_less_than(mode, estimate)
+  expect_lt(mode, estimate)
 })
 
 test_that("Comparisons with simulations", {
